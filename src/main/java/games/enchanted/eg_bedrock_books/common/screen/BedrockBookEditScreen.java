@@ -96,7 +96,7 @@ public class BedrockBookEditScreen extends Screen {
         .build(this.font, PAGE_EDIT_BOX_WIDTH, PAGE_EDIT_BOX_HEIGHT, CommonComponents.EMPTY);
         this.leftPageEditBox.setCharacterLimit(1024);
         this.leftPageEditBox.setLineLimit(126 / this.font.lineHeight);
-        this.leftPageEditBox.setValueListener(newValue -> setPage(newValue, this.currentLeftPageIndex));
+        this.leftPageEditBox.setValueListener(newValue -> setPageContent(newValue, this.currentLeftPageIndex));
         this.addRenderableWidget(this.leftPageEditBox);
 
         this.turnLeftButton = new CustomSpriteButton(
@@ -123,7 +123,7 @@ public class BedrockBookEditScreen extends Screen {
             .build(this.font, PAGE_EDIT_BOX_WIDTH, PAGE_EDIT_BOX_HEIGHT, CommonComponents.EMPTY);
         this.rightPageEditBox.setCharacterLimit(1024);
         this.rightPageEditBox.setLineLimit(126 / this.font.lineHeight);
-        this.rightPageEditBox.setValueListener(newValue -> setPage(newValue, this.currentLeftPageIndex + 1));
+        this.rightPageEditBox.setValueListener(newValue -> setPageContent(newValue, this.currentLeftPageIndex + 1));
         this.addRenderableWidget(this.rightPageEditBox);
 
         this.turnRightButton = new CustomSpriteButton(
@@ -198,7 +198,7 @@ public class BedrockBookEditScreen extends Screen {
         return this.pages.get(index);
     }
 
-    protected void setPage(String contents, int index) {
+    protected void setPageContent(String contents, int index) {
         if(index > this.pages.size() - 1) {
             this.addPage(contents);
             return;
