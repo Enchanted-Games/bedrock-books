@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.WritableBookContent;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,10 +179,12 @@ public class BedrockBookEditScreen extends Screen {
     }
 
     protected void addPage(String contents) {
+        if(!this.canCreateNewPages) return;
         addPage(contents, this.pages.size());
     }
 
     protected void addPage(String contents, int index) {
+        if(!this.canCreateNewPages) return;
         if(this.pages.size() >= MAX_PAGES) return;
         this.pages.add(index, contents);
     }
@@ -207,13 +210,30 @@ public class BedrockBookEditScreen extends Screen {
         return this.pages.size();
     }
 
+    protected Component getPageIndicatorMessage(boolean forRightPage) {
+        int offsetIndex = this.currentLeftPageIndex + (forRightPage ? 2 : 1);
+        if(offsetIndex > this.getCurrentAmountOfPages()) return CommonComponents.EMPTY;
+        return Component.translatable(BOOK_PAGE_INDICATOR, offsetIndex, this.getCurrentAmountOfPages());
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        assert this.minecraft != null;
+        if (keyCode == GLFW.GLFW_KEY_PAGE_DOWN && this.turnLeftButton.visible) {
+            this.turnLeftButton.onPress();
+            this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
+            return true;
+        } else if (keyCode == GLFW.GLFW_KEY_PAGE_UP && this.turnRightButton.visible) {
+            this.turnRightButton.onPress();
+            this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
     @Override
     public @NotNull Component getNarrationMessage() {
         return CommonComponents.joinForNarration(super.getNarrationMessage(), this.getPageIndicatorMessage(false), this.getPageIndicatorMessage(true));
-    }
-
-    protected Component getPageIndicatorMessage(boolean forRightPage) {
-        return Component.translatable(BOOK_PAGE_INDICATOR, this.currentLeftPageIndex + (forRightPage ? 2 : 1), this.getCurrentAmountOfPages());
     }
 
     @Override
