@@ -4,7 +4,6 @@ import games.enchanted.eg_bedrock_books.common.duck.BookSignScreenAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.MultilineEditBoxView;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -62,7 +61,7 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
         this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
             assert this.minecraft != null;
             this.minecraft.setScreen(null);
-            savePages();
+            savePagesToStack();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SIGN_BUTTON_COMPONENT, button -> {
             assert this.minecraft != null;
@@ -97,14 +96,14 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
     }
 
     @Override
-    protected void savePages() {
+    protected void savePagesToStack() {
         this.removeTrailingEmptyPages();
         this.updateLocalStack();
-        int n = this.hand == InteractionHand.MAIN_HAND ? this.owner.getInventory().getSelectedSlot() : Inventory.SLOT_OFFHAND;
+        int slotId = this.hand == InteractionHand.MAIN_HAND ? this.owner.getInventory().getSelectedSlot() : Inventory.SLOT_OFFHAND;
         assert this.minecraft != null;
         ClientPacketListener clientConnection = this.minecraft.getConnection();
         if(clientConnection != null) {
-            clientConnection.send(new ServerboundEditBookPacket(n, this.pages, Optional.empty()));
+            clientConnection.send(new ServerboundEditBookPacket(slotId, this.pages, Optional.empty()));
         }
     }
     private void removeTrailingEmptyPages() {

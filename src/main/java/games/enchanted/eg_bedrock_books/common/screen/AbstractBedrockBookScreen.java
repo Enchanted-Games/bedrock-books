@@ -21,7 +21,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractBedrockBookScreen<Value, TextView extends TextAreaView<Value>> extends Screen {
+public abstract class AbstractBedrockBookScreen<PageContent, TextView extends TextAreaView<PageContent>> extends Screen {
     // book spacing
     protected static final int BACKGROUND_WIDTH = 512;
     protected static final int BACKGROUND_HEIGHT = 256;
@@ -62,7 +62,7 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
 
     // pagination
     protected int currentLeftPageIndex;
-    protected List<Value> pages = new ArrayList<>();
+    protected List<PageContent> pages = new ArrayList<>();
 
     private CustomSpriteButton turnLeftButton;
     private CustomSpriteButton turnRightButton;
@@ -95,7 +95,7 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
         final int editControlsYPos = (this.height / 2) + 44;
 
         // left page
-        TextViewAndWidget<Value, TextView> leftPageWidget = createTextWidgetAndView((this.width / 2) - (CENTER_PADDING / 2) - PAGE_EDIT_BOX_WIDTH, editBoxYPos, PageSide.LEFT);
+        TextViewAndWidget<PageContent, TextView> leftPageWidget = createTextWidgetAndView((this.width / 2) - (CENTER_PADDING / 2) - PAGE_EDIT_BOX_WIDTH, editBoxYPos, PageSide.LEFT);
         this.leftPageTextView = leftPageWidget.view();
         this.addRenderableWidget(leftPageWidget.widget());
 
@@ -126,7 +126,7 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
         this.addRenderableWidget(turnLeftButton);
 
         // right page
-        TextViewAndWidget<Value, TextView> rightPageWidget = createTextWidgetAndView((this.width / 2) + (CENTER_PADDING / 2), editBoxYPos, PageSide.RIGHT);
+        TextViewAndWidget<PageContent, TextView> rightPageWidget = createTextWidgetAndView((this.width / 2) + (CENTER_PADDING / 2), editBoxYPos, PageSide.RIGHT);
         this.rightPageTextView = rightPageWidget.view();
         this.addRenderableWidget(rightPageWidget.widget());
 
@@ -160,7 +160,7 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
         updateVisibleContents();
     }
 
-    protected abstract TextViewAndWidget<Value, TextView> createTextWidgetAndView(int x, int y, PageSide side);
+    protected abstract TextViewAndWidget<PageContent, TextView> createTextWidgetAndView(int x, int y, PageSide side);
 
     protected void updateVisibleContents() {
         this.turnLeftButton.visible = true;
@@ -173,7 +173,7 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
             this.turnRightButton.visible = false;
         }
 
-        this.leftPageNumberMessage = getPageIndicatorMessage(false);
+        this.leftPageNumberMessage = getPageNumberMessage(false);
         this.leftPageTextView.setValue(getOrCreatePageIfPossible(this.currentLeftPageIndex), true);
 
         int rightPageIndex = this.currentLeftPageIndex + 1;
@@ -182,7 +182,7 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
             this.rightPageTextView.setVisibility(false);
             this.rightPageEditControls.setVisibility(false);
         } else {
-            this.rightPageNumberMessage = getPageIndicatorMessage(true);
+            this.rightPageNumberMessage = getPageNumberMessage(true);
             this.rightPageTextView.setVisibility(true);
             this.rightPageEditControls.setVisibility(true);
             this.rightPageTextView.setValue(getPageOrEmpty(rightPageIndex), true);
@@ -207,20 +207,20 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
 
     protected void handlePageMove(PageMoveDirection direction, int index) {
         if(direction == PageMoveDirection.LEFT && index > 0 && index < this.pages.size()) {
-            Value currentPage = this.pages.get(index);
-            Value previousPage = this.pages.get(index - 1);
+            PageContent currentPage = this.pages.get(index);
+            PageContent previousPage = this.pages.get(index - 1);
             this.pages.set(index, previousPage);
             this.pages.set(index - 1, currentPage);
         } else if(index < this.pages.size() - 1) {
-            Value currentPage = this.pages.get(index);
-            Value nextPage = this.pages.get(index + 1);
+            PageContent currentPage = this.pages.get(index);
+            PageContent nextPage = this.pages.get(index + 1);
             this.pages.set(index, nextPage);
             this.pages.set(index + 1, currentPage);
         }
         updateVisibleContents();
     }
 
-    abstract Value getEmptyPageContent();
+    abstract PageContent getEmptyPageContent();
 
     protected void handleAddPage(int index) {
         this.addPage(this.getEmptyPageContent(), index);
@@ -234,18 +234,18 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
     }
 
     // page adding / editing
-    protected void addPage(Value contents) {
+    protected void addPage(PageContent contents) {
         if(!this.canEditAndCreatePages) return;
         addPage(contents, this.pages.size());
     }
 
-    protected void addPage(Value contents, int index) {
+    protected void addPage(PageContent contents, int index) {
         if(!this.canEditAndCreatePages) return;
         if(this.pages.size() >= MAX_PAGES) return;
         this.pages.add(index, contents);
     }
 
-    protected Value getOrCreatePageIfPossible(int index) {
+    protected PageContent getOrCreatePageIfPossible(int index) {
         if(index > this.pages.size() - 1) {
             if(!this.canEditAndCreatePages) return this.getEmptyPageContent();
             addPage(this.getEmptyPageContent());
@@ -254,14 +254,14 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
         return this.pages.get(index);
     }
 
-    protected Value getPageOrEmpty(int index) {
+    protected PageContent getPageOrEmpty(int index) {
         if(index > this.pages.size() - 1) {
             return this.getEmptyPageContent();
         }
         return this.pages.get(index);
     }
 
-    protected void setPageContent(Value contents, int index) {
+    protected void setPageContent(PageContent contents, int index) {
         if(index > this.pages.size() - 1) {
             this.addPage(contents);
             return;
@@ -309,14 +309,14 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
         return this.pages.size();
     }
 
-    protected Component getPageIndicatorMessage(boolean forRightPage) {
+    protected Component getPageNumberMessage(boolean forRightPage) {
         int offsetIndex = this.currentLeftPageIndex + (forRightPage ? 2 : 1);
         if(offsetIndex > this.getCurrentAmountOfPages()) return CommonComponents.EMPTY;
         return Component.translatable(BOOK_PAGE_INDICATOR, offsetIndex, this.getCurrentAmountOfPages());
     }
 
     // saving
-    protected abstract void savePages();
+    protected abstract void savePagesToStack();
 
     // general visuals and accessibility
     @Override
@@ -336,7 +336,7 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
 
     @Override
     public @NotNull Component getNarrationMessage() {
-        return CommonComponents.joinForNarration(super.getNarrationMessage(), this.getPageIndicatorMessage(false), this.getPageIndicatorMessage(true));
+        return CommonComponents.joinForNarration(super.getNarrationMessage(), this.getPageNumberMessage(false));
     }
 
     @Override
