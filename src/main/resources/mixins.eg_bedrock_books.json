@@ -7,8 +7,7 @@
   ],
   "client": [
     "BookEditScreenMixin",
-    "BookSignScreenMixin",
-    "GuiRenderStateMixin"
+    "BookSignScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
