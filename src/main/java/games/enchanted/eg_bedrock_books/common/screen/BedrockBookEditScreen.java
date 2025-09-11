@@ -1,18 +1,27 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.duck.BookSignScreenAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.*;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.MultiLineEditBox;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.BookSignScreen;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ServerboundEditBookPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.network.Filterable;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.WritableBookContent;
@@ -21,17 +30,29 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Optional;
 
 public class BedrockBookEditScreen extends Screen {
+    // book spacing
     private static final int BACKGROUND_WIDTH = 512;
     private static final int BACKGROUND_HEIGHT = 256;
     private static final int PAGE_EDIT_BOX_WIDTH = 122;
     private static final int PAGE_EDIT_BOX_HEIGHT = 134;
     private static final int CENTER_PADDING = 22;
+
+    // footer button spacing
+    private static final int FOOTER_BUTTON_WIDTH = 90;
+    private static final int FOOTER_BUTTON_SPACING = 8;
+
+    // translations
     private static final String BOOK_EDIT_TITLE = "book.edit.title";
     private static final String BOOK_VIEW_TITLE = "book.view.title";
     private static final String BOOK_PAGE_INDICATOR = "book.pageIndicator";
+    private static final Component SIGN_BUTTON_COMPONENT = Component.translatable("book.signButton");
+    private static final Component SAVE_BUTTON_COMPONENT = Component.translatable("selectWorld.edit.save");
 
+    // textures
     private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/background.png");
     private static final int TURN_PAGE_BUTTON_SIZE = 24;
     private static final Component PAGE_LEFT_BUTTON_LABEL = Component.translatable("book.page_button.previous");
@@ -64,7 +85,16 @@ public class BedrockBookEditScreen extends Screen {
     protected Component rightPageNumberMessage;
     private MultiLineEditBox rightPageEditBox;
 
+    // footer buttons
+    protected LinearLayout footerButtonLayout;
+
     protected final boolean canCreateNewPages = true;
+
+    // player and item
+    protected final Player owner;
+    protected final ItemStack bookStack;
+    protected final InteractionHand hand;
+    protected final BookSignScreen bookSignScreen;
 
     public BedrockBookEditScreen(Player owner, ItemStack book, InteractionHand hand, WritableBookContent writableBookContent) {
         super(Component.translatable(BOOK_EDIT_TITLE));
@@ -77,11 +107,18 @@ public class BedrockBookEditScreen extends Screen {
         } else if (this.pages.size() == 1) {
             addPage("");
         }
+
+        this.owner = owner;
+        this.bookStack = book;
+        this.hand = hand;
+        this.bookSignScreen = new BookSignScreen(null, owner, hand, this.pages);
+        ((BookSignScreenAdditions) this.bookSignScreen).eg_bedrock_books$setReturnScreen(this);
     }
 
     @Override
     protected void init() {
-        final int editBoxYPos = (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 52;
+        final int editBoxYPos = (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 45;
+        final int turnPageButtonYPos = (this.height / 2) + 47;
 
         // left page
 
@@ -101,7 +138,7 @@ public class BedrockBookEditScreen extends Screen {
 
         this.turnLeftButton = new CustomSpriteButton(
             (this.width / 2) - 146,
-            (this.height / 2) + 54,
+            turnPageButtonYPos,
             TURN_PAGE_BUTTON_SIZE,
             TURN_PAGE_BUTTON_SIZE,
             (button) -> this.turnBackPage(),
@@ -128,7 +165,7 @@ public class BedrockBookEditScreen extends Screen {
 
         this.turnRightButton = new CustomSpriteButton(
             (this.width / 2) + 123,
-            (this.height / 2) + 54,
+            turnPageButtonYPos,
             TURN_PAGE_BUTTON_SIZE,
             TURN_PAGE_BUTTON_SIZE,
             (button) -> this.turnForwardPage(),
@@ -138,6 +175,24 @@ public class BedrockBookEditScreen extends Screen {
         this.addRenderableWidget(turnRightButton);
 
         // general setup
+        this.footerButtonLayout = LinearLayout.horizontal().spacing(FOOTER_BUTTON_SPACING);
+        this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> {
+            assert this.minecraft != null;
+            this.minecraft.setScreen(null);
+        }).width(FOOTER_BUTTON_WIDTH).build());
+        this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
+            assert this.minecraft != null;
+            this.minecraft.setScreen(null);
+            savePages();
+        }).width(FOOTER_BUTTON_WIDTH).build());
+        this.footerButtonLayout.addChild(Button.builder(SIGN_BUTTON_COMPONENT, button -> {
+            assert this.minecraft != null;
+            this.minecraft.setScreen(this.bookSignScreen);
+        }).width(FOOTER_BUTTON_WIDTH).build());
+        this.footerButtonLayout.setPosition((this.width / 2) - (FOOTER_BUTTON_WIDTH * 3 + FOOTER_BUTTON_SPACING * 2) / 2, (this.height / 2) + 90);
+        this.footerButtonLayout.arrangeElements();
+        this.footerButtonLayout.visitWidgets(this::addRenderableWidget);
+
         updateVisibleContents();
     }
 
@@ -216,14 +271,34 @@ public class BedrockBookEditScreen extends Screen {
         return Component.translatable(BOOK_PAGE_INDICATOR, offsetIndex, this.getCurrentAmountOfPages());
     }
 
+    protected void savePages() {
+        this.removeTrailingEmptyPages();
+        this.updateLocalStack();
+        int n = this.hand == InteractionHand.MAIN_HAND ? this.owner.getInventory().getSelectedSlot() : Inventory.SLOT_OFFHAND;
+        assert this.minecraft != null;
+        ClientPacketListener clientConnection = this.minecraft.getConnection();
+        if(clientConnection != null) {
+            clientConnection.send(new ServerboundEditBookPacket(n, this.pages, Optional.empty()));
+        }
+    }
+    private void removeTrailingEmptyPages() {
+        ListIterator<String> pageIterator = this.pages.listIterator(this.pages.size());
+        while (pageIterator.hasPrevious() && pageIterator.previous().isEmpty()) {
+            pageIterator.remove();
+        }
+    }
+    private void updateLocalStack() {
+        this.bookStack.set(DataComponents.WRITABLE_BOOK_CONTENT, new WritableBookContent(this.pages.stream().map(Filterable::passThrough).toList()));
+    }
+
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         assert this.minecraft != null;
-        if (keyCode == GLFW.GLFW_KEY_PAGE_DOWN && this.turnLeftButton.visible) {
+        if (keyCode == GLFW.GLFW_KEY_PAGE_UP && this.turnLeftButton.visible) {
             this.turnLeftButton.onPress();
             this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
             return true;
-        } else if (keyCode == GLFW.GLFW_KEY_PAGE_UP && this.turnRightButton.visible) {
+        } else if (keyCode == GLFW.GLFW_KEY_PAGE_DOWN && this.turnRightButton.visible) {
             this.turnRightButton.onPress();
             this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
             return true;
@@ -240,7 +315,7 @@ public class BedrockBookEditScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        final int pageNumberYPos = (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 42;
+        final int pageNumberYPos = (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 35;
 
         final int leftPageNumberWidth = this.font.width(this.leftPageNumberMessage);
         guiGraphics.drawString(

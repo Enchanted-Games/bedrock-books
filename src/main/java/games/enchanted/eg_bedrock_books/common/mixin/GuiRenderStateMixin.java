@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiRenderState.class)
 public abstract class GuiRenderStateMixin {
+    //? if fabric {
     @Shadow public abstract void up();
 
     @Shadow private GuiRenderState.Node current;
@@ -32,4 +33,5 @@ public abstract class GuiRenderStateMixin {
         this.up();
         this.current.submitGuiElement(new ColoredRectangleRenderState(RenderPipelines.GUI, TextureSetup.noTexture(), new Matrix3x2f(), 0, 0, 10000, 10000, 0x774444FF, 0x774444FF, debugRectangle));
     }
+    //?}
 }
