@@ -258,33 +258,12 @@ public class BedrockBookEditScreen extends Screen {
         }
     }
 
-    // edit controls
+    // page edit controls
     protected void resetEditControls() {
         if(this.canEditAndCreatePages) {
             this.leftPageEditControls.toggleControls(false);
             this.rightPageEditControls.toggleControls(false);
         }
-    }
-
-    protected void turnForwardPage() {
-        if(this.currentLeftPageIndex + 2 >= MAX_PAGES) return;
-        if(this.currentLeftPageIndex + 2 > this.getCurrentAmountOfPages() && this.canEditAndCreatePages) {
-            addPage("");
-            addPage("");
-        }
-        this.currentLeftPageIndex += 2;
-        resetEditControls();
-        updateVisibleContents();
-    }
-
-    protected void turnBackPage() {
-        if(this.currentLeftPageIndex - 2 < 0) {
-            this.currentLeftPageIndex = 0;
-        } else {
-            this.currentLeftPageIndex -= 2;
-        }
-        resetEditControls();
-        updateVisibleContents();
     }
 
     protected void handlePageMove(PageMoveDirection direction, int index) {
@@ -331,6 +310,27 @@ public class BedrockBookEditScreen extends Screen {
         this.pages.set(index, contents);
     }
 
+    // page viewing
+    protected void turnForwardPage() {
+        if(this.currentLeftPageIndex + 2 >= MAX_PAGES) return;
+        if(this.currentLeftPageIndex + 2 > this.getCurrentAmountOfPages() && this.canEditAndCreatePages) {
+            addPage("");
+            addPage("");
+        }
+        this.currentLeftPageIndex += 2;
+        resetEditControls();
+        updateVisibleContents();
+    }
+
+    protected void turnBackPage() {
+        if(this.currentLeftPageIndex - 2 < 0) {
+            this.currentLeftPageIndex = 0;
+        } else {
+            this.currentLeftPageIndex -= 2;
+        }
+        resetEditControls();
+        updateVisibleContents();
+    }
 
     protected int getCurrentAmountOfPages() {
         return this.pages.size();
@@ -342,6 +342,7 @@ public class BedrockBookEditScreen extends Screen {
         return Component.translatable(BOOK_PAGE_INDICATOR, offsetIndex, this.getCurrentAmountOfPages());
     }
 
+    // saving
     protected void savePages() {
         this.removeTrailingEmptyPages();
         this.updateLocalStack();
