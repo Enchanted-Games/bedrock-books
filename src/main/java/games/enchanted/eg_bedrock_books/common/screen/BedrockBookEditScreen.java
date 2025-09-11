@@ -147,8 +147,8 @@ public class BedrockBookEditScreen extends Screen {
                 editControlsYPos,
                 new EditControls.Actions(
                     () -> this.handlePageMove(PageMoveDirection.LEFT, this.currentLeftPageIndex),
-                    () -> {},
-                    () -> {},
+                    () -> this.handleAddPage(this.currentLeftPageIndex),
+                    () -> this.handlePageDelete(this.currentLeftPageIndex),
                     () -> this.handlePageMove(PageMoveDirection.RIGHT, this.currentLeftPageIndex)
                 )
             );
@@ -189,8 +189,8 @@ public class BedrockBookEditScreen extends Screen {
                 editControlsYPos,
                 new EditControls.Actions(
                     () -> this.handlePageMove(PageMoveDirection.LEFT, this.currentLeftPageIndex + 1),
-                    () -> {},
-                    () -> {},
+                    () -> this.handleAddPage(this.currentLeftPageIndex + 1),
+                    () -> this.handlePageDelete(this.currentLeftPageIndex + 1),
                     () -> this.handlePageMove(PageMoveDirection.RIGHT, this.currentLeftPageIndex + 1)
                 )
             );
@@ -246,12 +246,20 @@ public class BedrockBookEditScreen extends Screen {
         this.leftPageEditBox.setValue(getOrCreatePageIfPossible(this.currentLeftPageIndex), true);
 
         int rightPageIndex = this.currentLeftPageIndex + 1;
-        this.rightPageNumberMessage = getPageIndicatorMessage(true);
-        this.rightPageEditBox.setValue(getOrCreatePageIfPossible(rightPageIndex), true);
+        if(this.pages.size() <= 1) {
+            this.rightPageNumberMessage = Component.empty();
+            this.rightPageEditBox.visible = false;
+            this.rightPageEditControls.setVisibility(false);
+        } else {
+            this.rightPageNumberMessage = getPageIndicatorMessage(true);
+            this.rightPageEditBox.visible = true;
+            this.rightPageEditControls.setVisibility(true);
+            this.rightPageEditBox.setValue(getOrCreatePageIfPossible(rightPageIndex), true);
+        }
 
         if(this.canEditAndCreatePages) {
             this.leftPageEditControls.setMoveBackButtonVisible(this.currentLeftPageIndex > 0);
-            this.leftPageEditControls.setMoveForwardButtonVisible(this.currentLeftPageIndex <= this.getCurrentAmountOfPages());
+            this.leftPageEditControls.setMoveForwardButtonVisible(this.currentLeftPageIndex < this.getCurrentAmountOfPages() - 1);
 
             this.rightPageEditControls.setMoveBackButtonVisible(rightPageIndex > 0);
             this.rightPageEditControls.setMoveForwardButtonVisible(rightPageIndex < this.getCurrentAmountOfPages() - 1);
@@ -272,12 +280,23 @@ public class BedrockBookEditScreen extends Screen {
             String previousPage = this.pages.get(index - 1);
             this.pages.set(index, previousPage);
             this.pages.set(index - 1, currentPage);
-        } else if(index - 1 < this.pages.size()) {
+        } else if(index < this.pages.size() - 1) {
             String currentPage = this.pages.get(index);
             String nextPage = this.pages.get(index + 1);
             this.pages.set(index, nextPage);
             this.pages.set(index + 1, currentPage);
         }
+        updateVisibleContents();
+    }
+
+    protected void handleAddPage(int index) {
+        this.addPage("", index);
+        updateVisibleContents();
+    }
+
+    protected void handlePageDelete(int index) {
+        if(index >= this.pages.size()) return;
+        this.pages.remove(index);
         updateVisibleContents();
     }
 

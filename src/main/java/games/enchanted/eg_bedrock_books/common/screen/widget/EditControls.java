@@ -57,7 +57,8 @@ public class EditControls implements Renderable, LayoutElement {
 
     protected int x;
     protected int y;
-    protected boolean controlsVisible = false;
+    protected boolean preventVisibilityUpdates = false;
+    private boolean controlsVisible = false;
     protected boolean moveBackButtonVisible = true;
     protected boolean moveForwardButtonVisible = true;
 
@@ -100,6 +101,8 @@ public class EditControls implements Renderable, LayoutElement {
     }
 
     public void toggleControls(boolean showControls) {
+        if(this.preventVisibilityUpdates) return;
+
         this.controlsVisible = showControls;
 
         this.pencilButton.visible = !showControls;
@@ -133,6 +136,15 @@ public class EditControls implements Renderable, LayoutElement {
 
     protected int getVisibleButtons() {
         return 2 + (this.moveBackButtonVisible ? 1 : 0) + (this.moveForwardButtonVisible ? 1 : 0);
+    }
+
+    public void setVisibility(boolean visibility) {
+        this.preventVisibilityUpdates = !visibility;
+        if(!visibility) {
+            visitWidgets(widget -> widget.visible = false);
+        } else {
+            toggleControls(this.controlsVisible);
+        }
     }
 
     @Override
