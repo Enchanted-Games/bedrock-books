@@ -273,13 +273,20 @@ public abstract class AbstractBedrockBookScreen<Value, TextView extends TextArea
     protected void turnForwardPage() {
         if(this.currentLeftPageIndex + 2 >= MAX_PAGES) return;
         if(this.currentLeftPageIndex + 3 >= this.getCurrentAmountOfPages() && this.canEditAndCreatePages) {
-            // will at the end of the book and can create pages
-            if(this.getCurrentAmountOfPages() % 2 == 1) {
-                // odd amount of pages, so only add 1
+            // at the end of the book and can create pages
+            if(this.getCurrentAmountOfPages() % 2 == 0) {
+                // even amount of pages, add two new
+                addPage(this.getEmptyPageContent());
                 addPage(this.getEmptyPageContent());
             }
-            else {
+            else if(this.currentLeftPageIndex + 1 == this.getCurrentAmountOfPages()) {
+                // started on odd amount of pages, add 1 for prev double page, 2 new
                 addPage(this.getEmptyPageContent());
+                addPage(this.getEmptyPageContent());
+                addPage(this.getEmptyPageContent());
+            }
+            else if(this.getCurrentAmountOfPages() % 2 == 1) {
+                // turned onto a double page with 1 page, add 1 to even it out
                 addPage(this.getEmptyPageContent());
             }
         }
