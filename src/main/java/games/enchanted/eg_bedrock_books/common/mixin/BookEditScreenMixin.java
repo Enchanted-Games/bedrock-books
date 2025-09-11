@@ -1,22 +1,10 @@
 package games.enchanted.eg_bedrock_books.common.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.screen.AbstractBedrockBookScreen;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockBookEditScreen;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
-import net.minecraft.client.gui.screens.inventory.BookSignScreen;
-import net.minecraft.client.gui.screens.inventory.PageButton;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.CommonColors;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,9 +13,6 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
-import java.util.Objects;
 
 @Mixin(BookEditScreen.class)
 public abstract class BookEditScreenMixin extends Screen {
@@ -56,7 +41,7 @@ public abstract class BookEditScreenMixin extends Screen {
     )
     private void eg_bedrock_books$replaceBookEditScreen(CallbackInfo ci) {
         assert this.minecraft != null;
-        if(!(this.minecraft.screen instanceof BedrockBookEditScreen)) {
+        if(!(this.minecraft.screen instanceof AbstractBedrockBookScreen)) {
             this.minecraft.setScreen(new BedrockBookEditScreen(this.owner, this.book, this.hand, this.bookContent));
         }
     }
