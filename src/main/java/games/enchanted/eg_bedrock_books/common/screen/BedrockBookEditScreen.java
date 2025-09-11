@@ -3,6 +3,7 @@ package games.enchanted.eg_bedrock_books.common.screen;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.duck.BookSignScreenAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
+import games.enchanted.eg_bedrock_books.common.screen.widget.EditControls;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -82,13 +83,16 @@ public class BedrockBookEditScreen extends Screen {
     // two visible pages
     protected Component leftPageNumberMessage;
     private MultiLineEditBox leftPageEditBox;
+    private EditControls leftPageEditControls = null;
+
     protected Component rightPageNumberMessage;
     private MultiLineEditBox rightPageEditBox;
+    private EditControls rightPageEditControls = null;
 
     // footer buttons
     protected LinearLayout footerButtonLayout;
 
-    protected final boolean canCreateNewPages = true;
+    protected final boolean canEditAndCreatePages = true;
 
     // player and item
     protected final Player owner;
@@ -119,6 +123,7 @@ public class BedrockBookEditScreen extends Screen {
     protected void init() {
         final int editBoxYPos = (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 45;
         final int turnPageButtonYPos = (this.height / 2) + 47;
+        final int editControlsYPos = (this.height / 2) + 44;
 
         // left page
 
@@ -135,6 +140,21 @@ public class BedrockBookEditScreen extends Screen {
         this.leftPageEditBox.setLineLimit(126 / this.font.lineHeight);
         this.leftPageEditBox.setValueListener(newValue -> setPageContent(newValue, this.currentLeftPageIndex));
         this.addRenderableWidget(this.leftPageEditBox);
+
+        if(this.canEditAndCreatePages) {
+            this.leftPageEditControls = new EditControls(
+                (this.width / 2) - (CENTER_PADDING / 2) - (PAGE_EDIT_BOX_WIDTH / 2) - 42,
+                editControlsYPos,
+                new EditControls.Actions(
+                    () -> this.handlePageMove(PageMoveDirection.LEFT, this.currentLeftPageIndex),
+                    () -> {},
+                    () -> {},
+                    () -> this.handlePageMove(PageMoveDirection.RIGHT, this.currentLeftPageIndex)
+                )
+            );
+            this.leftPageEditControls.visitWidgets(this::addRenderableWidget);
+            this.addRenderableOnly(this.leftPageEditControls);
+        }
 
         this.turnLeftButton = new CustomSpriteButton(
             (this.width / 2) - 146,
@@ -162,6 +182,21 @@ public class BedrockBookEditScreen extends Screen {
         this.rightPageEditBox.setLineLimit(126 / this.font.lineHeight);
         this.rightPageEditBox.setValueListener(newValue -> setPageContent(newValue, this.currentLeftPageIndex + 1));
         this.addRenderableWidget(this.rightPageEditBox);
+
+        if(this.canEditAndCreatePages) {
+            this.rightPageEditControls = new EditControls(
+                (this.width / 2) - (CENTER_PADDING / 2) + 42,
+                editControlsYPos,
+                new EditControls.Actions(
+                    () -> this.handlePageMove(PageMoveDirection.LEFT, this.currentLeftPageIndex + 1),
+                    () -> {},
+                    () -> {},
+                    () -> this.handlePageMove(PageMoveDirection.RIGHT, this.currentLeftPageIndex + 1)
+                )
+            );
+            this.rightPageEditControls.visitWidgets(this::addRenderableWidget);
+            this.addRenderableOnly(this.rightPageEditControls);
+        }
 
         this.turnRightButton = new CustomSpriteButton(
             (this.width / 2) + 123,
@@ -203,24 +238,42 @@ public class BedrockBookEditScreen extends Screen {
         if(this.currentLeftPageIndex <= 1) {
             this.turnLeftButton.visible = false;
         }
-        if((this.currentLeftPageIndex + 1 >= this.getCurrentAmountOfPages() && !this.canCreateNewPages) || this.currentLeftPageIndex + 2 >= MAX_PAGES) {
+        if((this.currentLeftPageIndex + 1 >= this.getCurrentAmountOfPages() && !this.canEditAndCreatePages) || this.currentLeftPageIndex + 2 >= MAX_PAGES) {
             this.turnRightButton.visible = false;
         }
 
         this.leftPageNumberMessage = getPageIndicatorMessage(false);
         this.leftPageEditBox.setValue(getOrCreatePageIfPossible(this.currentLeftPageIndex), true);
 
+        int rightPageIndex = this.currentLeftPageIndex + 1;
         this.rightPageNumberMessage = getPageIndicatorMessage(true);
-        this.rightPageEditBox.setValue(getOrCreatePageIfPossible(this.currentLeftPageIndex + 1), true);
+        this.rightPageEditBox.setValue(getOrCreatePageIfPossible(rightPageIndex), true);
+
+        if(this.canEditAndCreatePages) {
+            this.leftPageEditControls.setMoveBackButtonVisible(this.currentLeftPageIndex > 0);
+            this.leftPageEditControls.setMoveForwardButtonVisible(this.currentLeftPageIndex <= this.getCurrentAmountOfPages());
+
+            this.rightPageEditControls.setMoveBackButtonVisible(rightPageIndex > 0);
+            this.rightPageEditControls.setMoveForwardButtonVisible(rightPageIndex < this.getCurrentAmountOfPages() - 1);
+        }
+    }
+
+    // edit controls
+    protected void resetEditControls() {
+        if(this.canEditAndCreatePages) {
+            this.leftPageEditControls.toggleControls(false);
+            this.rightPageEditControls.toggleControls(false);
+        }
     }
 
     protected void turnForwardPage() {
         if(this.currentLeftPageIndex + 2 >= MAX_PAGES) return;
-        if(this.currentLeftPageIndex + 2 > this.getCurrentAmountOfPages() && this.canCreateNewPages) {
+        if(this.currentLeftPageIndex + 2 > this.getCurrentAmountOfPages() && this.canEditAndCreatePages) {
             addPage("");
             addPage("");
         }
         this.currentLeftPageIndex += 2;
+        resetEditControls();
         updateVisibleContents();
     }
 
@@ -230,23 +283,40 @@ public class BedrockBookEditScreen extends Screen {
         } else {
             this.currentLeftPageIndex -= 2;
         }
+        resetEditControls();
         updateVisibleContents();
     }
 
+    protected void handlePageMove(PageMoveDirection direction, int index) {
+        if(direction == PageMoveDirection.LEFT && index > 0 && index < this.pages.size()) {
+            String currentPage = this.pages.get(index);
+            String previousPage = this.pages.get(index - 1);
+            this.pages.set(index, previousPage);
+            this.pages.set(index - 1, currentPage);
+        } else if(index - 1 < this.pages.size()) {
+            String currentPage = this.pages.get(index);
+            String nextPage = this.pages.get(index + 1);
+            this.pages.set(index, nextPage);
+            this.pages.set(index + 1, currentPage);
+        }
+        updateVisibleContents();
+    }
+
+    // page adding / editing
     protected void addPage(String contents) {
-        if(!this.canCreateNewPages) return;
+        if(!this.canEditAndCreatePages) return;
         addPage(contents, this.pages.size());
     }
 
     protected void addPage(String contents, int index) {
-        if(!this.canCreateNewPages) return;
+        if(!this.canEditAndCreatePages) return;
         if(this.pages.size() >= MAX_PAGES) return;
         this.pages.add(index, contents);
     }
 
     protected String getOrCreatePageIfPossible(int index) {
         if(index > this.pages.size() - 1) {
-            if(!this.canCreateNewPages) return "";
+            if(!this.canEditAndCreatePages) return "";
             addPage("");
             updateVisibleContents();
         }
@@ -260,6 +330,7 @@ public class BedrockBookEditScreen extends Screen {
         }
         this.pages.set(index, contents);
     }
+
 
     protected int getCurrentAmountOfPages() {
         return this.pages.size();
@@ -291,6 +362,7 @@ public class BedrockBookEditScreen extends Screen {
         this.bookStack.set(DataComponents.WRITABLE_BOOK_CONTENT, new WritableBookContent(this.pages.stream().map(Filterable::passThrough).toList()));
     }
 
+    // general visuals and accessibility
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         assert this.minecraft != null;
@@ -353,5 +425,10 @@ public class BedrockBookEditScreen extends Screen {
             BACKGROUND_WIDTH,
             BACKGROUND_HEIGHT
         );
+    }
+
+    public enum PageMoveDirection {
+        LEFT,
+        RIGHT;
     }
 }
