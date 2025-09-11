@@ -6,8 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "BookEditScreenMixin",
-    "BookSignScreenMixin"
+    "BookSignScreenMixin",
+    "LocalPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
