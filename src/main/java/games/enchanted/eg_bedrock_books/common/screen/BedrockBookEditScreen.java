@@ -89,7 +89,7 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
             .build(this.font, PAGE_EDIT_BOX_WIDTH, PAGE_EDIT_BOX_HEIGHT, CommonComponents.EMPTY);
         editBox.setCharacterLimit(1024);
         editBox.setLineLimit(126 / this.font.lineHeight);
-        editBox.setValueListener(newValue -> setPageContent(newValue, this.currentLeftPageIndex + (side == PageSide.RIGHT ? 1 : 0)));
+        editBox.setValueListener(newValue -> setPageContent(newValue, this.getCurrentLeftPageIndex() + (side == PageSide.RIGHT ? 1 : 0)));
 
         return new TextViewAndWidget<>(new MultilineEditBoxView(editBox), editBox);
     }

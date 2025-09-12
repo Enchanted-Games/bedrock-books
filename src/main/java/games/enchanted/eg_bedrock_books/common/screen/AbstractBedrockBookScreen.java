@@ -68,7 +68,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     // pagination
     protected static final int MAX_PAGES = WritableBookContent.MAX_PAGES;
 
-    protected int currentLeftPageIndex;
+    private int currentLeftPageIndex;
     protected List<PageContent> pages = new ArrayList<>();
 
     private CustomSpriteButton turnLeftButton;
@@ -217,6 +217,19 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         }
     }
 
+    protected void ensureEvenPageIndex(int newPageIndex) {
+        newPageIndex = Math.max(0, newPageIndex);
+        if(newPageIndex % 2 == 1) {
+            this.currentLeftPageIndex = newPageIndex - 1;
+            return;
+        }
+        this.currentLeftPageIndex = newPageIndex;
+    }
+
+    protected int getCurrentLeftPageIndex() {
+        return this.currentLeftPageIndex;
+    }
+
     // page edit controls
     protected void resetEditControls() {
         if(this.canEditAndCreatePages) {
@@ -314,17 +327,13 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
                 addPage(this.getEmptyPageContent());
             }
         }
-        this.currentLeftPageIndex += 2;
+        ensureEvenPageIndex(this.currentLeftPageIndex + 2);
         resetEditControls();
         updateVisibleContents();
     }
 
     protected void turnBackPage() {
-        if(this.currentLeftPageIndex - 2 < 0) {
-            this.currentLeftPageIndex = 0;
-        } else {
-            this.currentLeftPageIndex -= 2;
-        }
+        ensureEvenPageIndex(Math.max(this.currentLeftPageIndex - 2, 0));
         resetEditControls();
         updateVisibleContents();
     }
