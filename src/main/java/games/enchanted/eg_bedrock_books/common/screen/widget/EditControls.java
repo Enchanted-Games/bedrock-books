@@ -23,32 +23,32 @@ public class EditControls implements Renderable, LayoutElement {
     private static final int EDIT_BUTTON_SIZE = 20;
     private static final int MAX_VISIBLE_BUTTONS = 4;
 
-    private static final Component PENCIL_BUTTON_LABEL = Component.literal("");
-    private static final CustomSpriteButton.ButtonConfig PENCIL_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
+    protected static final Component PENCIL_BUTTON_LABEL = Component.literal("");
+    protected static final CustomSpriteButton.ButtonConfig PENCIL_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button_focus")
     );
-    private static final CustomSpriteButton.ButtonConfig MOVE_BACK_BUTTON = new CustomSpriteButton.ButtonConfig(
+    protected static final CustomSpriteButton.ButtonConfig MOVE_BACK_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_focus")
     );
-    private static final CustomSpriteButton.ButtonConfig ADD_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
+    protected static final CustomSpriteButton.ButtonConfig ADD_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button_focus")
     );
-    private static final CustomSpriteButton.ButtonConfig DELETE_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
+    protected static final CustomSpriteButton.ButtonConfig DELETE_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button_focus")
     );
-    private static final CustomSpriteButton.ButtonConfig MOVE_RIGHT_BUTTON = new CustomSpriteButton.ButtonConfig(
+    protected static final CustomSpriteButton.ButtonConfig MOVE_RIGHT_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button_hover"),
