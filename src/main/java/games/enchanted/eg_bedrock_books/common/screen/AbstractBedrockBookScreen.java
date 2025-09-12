@@ -123,17 +123,6 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.addRenderableOnly(this.leftPageEditControls);
         }
 
-        this.turnLeftButton = new CustomSpriteButton(
-            (this.width / 2) - 146,
-            turnPageButtonYPos,
-            TURN_PAGE_BUTTON_SIZE,
-            TURN_PAGE_BUTTON_SIZE,
-            (button) -> this.turnBackPage(),
-            PAGE_LEFT_BUTTON_LABEL,
-            PAGE_LEFT_BUTTON_CONFIG
-        );
-        this.addRenderableWidget(turnLeftButton);
-
         // right page
         TextViewAndWidget<PageContent, TextView> rightPageWidget = createTextWidgetAndView((this.width / 2) + (CENTER_PADDING / 2), editBoxYPos, PageSide.RIGHT);
         this.rightPageTextView = rightPageWidget.view();
@@ -155,6 +144,18 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.rightPageEditControls.visitWidgets(this::addRenderableWidget);
             this.addRenderableOnly(this.rightPageEditControls);
         }
+
+        // navigation buttons
+        this.turnLeftButton = new CustomSpriteButton(
+            (this.width / 2) - 146,
+            turnPageButtonYPos,
+            TURN_PAGE_BUTTON_SIZE,
+            TURN_PAGE_BUTTON_SIZE,
+            (button) -> this.turnBackPage(),
+            PAGE_LEFT_BUTTON_LABEL,
+            PAGE_LEFT_BUTTON_CONFIG
+        );
+        this.addRenderableWidget(turnLeftButton);
 
         this.turnRightButton = new CustomSpriteButton(
             (this.width / 2) + 123,
