@@ -1,5 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
+import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.duck.BookSignScreenAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.MultilineEditBoxView;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
@@ -12,6 +13,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.protocol.game.ServerboundEditBookPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,6 +25,8 @@ import java.util.ListIterator;
 import java.util.Optional;
 
 public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, TextAreaView<String>> {
+    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/edit_background.png");;
+
     // player and item
     protected final Player owner;
     protected final ItemStack bookStack;
@@ -95,7 +99,6 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
         return "";
     }
 
-    @Override
     protected void savePagesToStack() {
         this.removeTrailingEmptyPages();
         this.updateLocalStack();
@@ -114,5 +117,10 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
     }
     private void updateLocalStack() {
         this.bookStack.set(DataComponents.WRITABLE_BOOK_CONTENT, new WritableBookContent(this.pages.stream().map(Filterable::passThrough).toList()));
+    }
+
+    @Override
+    protected ResourceLocation getBackgroundTexture() {
+        return BACKGROUND_TEXTURE;
     }
 }

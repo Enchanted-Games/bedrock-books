@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.component.WritableBookContent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     protected static final int BACKGROUND_HEIGHT = 256;
     protected static final int PAGE_EDIT_BOX_WIDTH = 122;
     protected static final int PAGE_EDIT_BOX_HEIGHT = 134;
+    protected static final int PAGE_TEXT_WIDTH = 114;
+    protected static final int PAGE_TEXT_HEIGHT = 128;
     protected static final int CENTER_PADDING = 22;
 
     // footer button spacing
@@ -41,7 +44,6 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     protected static final Component SAVE_BUTTON_COMPONENT = Component.translatable("selectWorld.edit.save");
 
     // textures
-    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/background.png");
     private static final int TURN_PAGE_BUTTON_SIZE = 24;
     private static final Component PAGE_LEFT_BUTTON_LABEL = Component.translatable("book.page_button.previous");
     private static final CustomSpriteButton.ButtonConfig PAGE_LEFT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
@@ -70,13 +72,13 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     protected final boolean canEditAndCreatePages;
 
     // two visible pages
-    protected Component leftPageNumberMessage;
+    protected Component leftPageNumberMessage = CommonComponents.EMPTY;
     protected TextView leftPageTextView;
-    private EditControls leftPageEditControls = null;
+    @Nullable private EditControls leftPageEditControls = null;
 
-    protected Component rightPageNumberMessage;
+    protected Component rightPageNumberMessage = CommonComponents.EMPTY;
     protected TextView rightPageTextView;
-    private EditControls rightPageEditControls = null;
+    @Nullable private EditControls rightPageEditControls = null;
 
     // footer buttons
     protected LinearLayout footerButtonLayout;
@@ -97,7 +99,9 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         // left page
         TextViewAndWidget<PageContent, TextView> leftPageWidget = createTextWidgetAndView((this.width / 2) - (CENTER_PADDING / 2) - PAGE_EDIT_BOX_WIDTH, editBoxYPos, PageSide.LEFT);
         this.leftPageTextView = leftPageWidget.view();
-        this.addRenderableWidget(leftPageWidget.widget());
+        if(leftPageWidget.widget() != null) {
+            this.addRenderableWidget(leftPageWidget.widget());
+        }
 
         if(this.canEditAndCreatePages) {
             this.leftPageEditControls = new EditControls(
@@ -128,7 +132,9 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         // right page
         TextViewAndWidget<PageContent, TextView> rightPageWidget = createTextWidgetAndView((this.width / 2) + (CENTER_PADDING / 2), editBoxYPos, PageSide.RIGHT);
         this.rightPageTextView = rightPageWidget.view();
-        this.addRenderableWidget(rightPageWidget.widget());
+        if(rightPageWidget.widget() != null) {
+            this.addRenderableWidget(rightPageWidget.widget());
+        }
 
         if(this.canEditAndCreatePages) {
             this.rightPageEditControls = new EditControls(
@@ -169,7 +175,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         if(this.currentLeftPageIndex <= 1) {
             this.turnLeftButton.visible = false;
         }
-        if((this.currentLeftPageIndex + 1 >= this.getCurrentAmountOfPages() && !this.canEditAndCreatePages) || this.currentLeftPageIndex + 2 >= MAX_PAGES) {
+        if((this.currentLeftPageIndex + 2 >= this.getCurrentAmountOfPages() && !this.canEditAndCreatePages) || this.currentLeftPageIndex + 2 >= MAX_PAGES) {
             this.turnRightButton.visible = false;
         }
 
@@ -180,28 +186,40 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         if(this.getCurrentAmountOfPages() % 2 == 1 && this.currentLeftPageIndex >= this.getCurrentAmountOfPages() - 1) {
             this.rightPageNumberMessage = Component.empty();
             this.rightPageTextView.setVisibility(false);
-            this.rightPageEditControls.setVisibility(false);
+            if(this.rightPageEditControls != null) {
+                this.rightPageEditControls.setVisibility(false);
+            }
         } else {
             this.rightPageNumberMessage = getPageNumberMessage(true);
             this.rightPageTextView.setVisibility(true);
-            this.rightPageEditControls.setVisibility(true);
             this.rightPageTextView.setValue(getPageOrEmpty(rightPageIndex), true);
+            if(this.rightPageEditControls != null) {
+                this.rightPageEditControls.setVisibility(true);
+            }
         }
 
         if(this.canEditAndCreatePages) {
-            this.leftPageEditControls.setMoveBackButtonVisible(this.currentLeftPageIndex > 0);
-            this.leftPageEditControls.setMoveForwardButtonVisible(this.currentLeftPageIndex < this.getCurrentAmountOfPages() - 1);
+            if(this.leftPageEditControls != null) {
+                this.leftPageEditControls.setMoveBackButtonVisible(this.currentLeftPageIndex > 0);
+                this.leftPageEditControls.setMoveForwardButtonVisible(this.currentLeftPageIndex < this.getCurrentAmountOfPages() - 1);
+            }
 
-            this.rightPageEditControls.setMoveBackButtonVisible(rightPageIndex > 0);
-            this.rightPageEditControls.setMoveForwardButtonVisible(rightPageIndex < this.getCurrentAmountOfPages() - 1);
+            if(this.rightPageEditControls != null) {
+                this.rightPageEditControls.setMoveBackButtonVisible(rightPageIndex > 0);
+                this.rightPageEditControls.setMoveForwardButtonVisible(rightPageIndex < this.getCurrentAmountOfPages() - 1);
+            }
         }
     }
 
     // page edit controls
     protected void resetEditControls() {
         if(this.canEditAndCreatePages) {
-            this.leftPageEditControls.toggleControls(false);
-            this.rightPageEditControls.toggleControls(false);
+            if(this.leftPageEditControls != null) {
+                this.leftPageEditControls.toggleControls(false);
+            }
+            if(this.rightPageEditControls != null) {
+                this.rightPageEditControls.toggleControls(false);
+            }
         }
     }
 
@@ -315,9 +333,6 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         return Component.translatable(BOOK_PAGE_INDICATOR, offsetIndex, this.getCurrentAmountOfPages());
     }
 
-    // saving
-    protected abstract void savePagesToStack();
-
     // general visuals and accessibility
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
@@ -366,9 +381,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         );
     }
 
-    protected ResourceLocation getBackgroundTexture() {
-        return BACKGROUND_TEXTURE;
-    }
+    protected abstract ResourceLocation getBackgroundTexture();
 
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -395,6 +408,6 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         LEFT,
         RIGHT;
     }
-    public record TextViewAndWidget<Value, TextView extends TextAreaView<Value>>(TextView view, AbstractWidget widget) {
+    public record TextViewAndWidget<Value, TextView extends TextAreaView<Value>>(TextView view, @Nullable AbstractWidget widget) {
     }
 }

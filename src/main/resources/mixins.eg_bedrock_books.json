@@ -7,6 +7,7 @@
   ],
   "client": [
     "BookSignScreenMixin",
+    "ClientPacketListenerMixin",
     "LocalPlayerMixin"
   ],
   "injectors": {
