@@ -32,9 +32,9 @@ public class EditControls implements Renderable, LayoutElement {
     );
     private static final CustomSpriteButton.ButtonConfig MOVE_BACK_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_left"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_left_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_left_focus")
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_focus")
     );
     private static final CustomSpriteButton.ButtonConfig ADD_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
@@ -50,9 +50,9 @@ public class EditControls implements Renderable, LayoutElement {
     );
     private static final CustomSpriteButton.ButtonConfig MOVE_RIGHT_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_right"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_right_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_right_focus")
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button_focus")
     );
 
     protected int x;

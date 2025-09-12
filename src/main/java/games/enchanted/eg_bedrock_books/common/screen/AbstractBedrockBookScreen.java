@@ -53,16 +53,16 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     private static final Component PAGE_LEFT_BUTTON_LABEL = Component.translatable("book.page_button.previous");
     private static final CustomSpriteButton.ButtonConfig PAGE_LEFT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_left"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_left_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_left_focus")
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward_focus")
     );
     private static final Component PAGE_RIGHT_BUTTON_LABEL = Component.translatable("book.page_button.next");
     private static final CustomSpriteButton.ButtonConfig PAGE_RIGHT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_right"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_right_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_right_focus")
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward_focus")
     );
 
     // pagination
