@@ -19,7 +19,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
 
     protected static final int FOOTER_BUTTON_WIDTH = 200;
     protected static final int TEXT_OFFSET_LEFT = 4;
-    protected static final int TEXT_OFFSET_TOP = 7;
+    protected static final int TEXT_OFFSET_TOP = 10;
 
     protected int splitPagesAt;
     protected int leftPageX = 0;
@@ -87,12 +87,12 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         int leftLines = Math.min(PAGE_TEXT_HEIGHT / this.font.lineHeight, this.leftPageSplitLines.size());
         for (int i = 0; i < leftLines; ++i) {
             FormattedCharSequence formattedCharSequence = this.leftPageSplitLines.get(i);
-            guiGraphics.drawString(this.font, formattedCharSequence, this.leftPageX, this.leftPageY + i * this.font.lineHeight, -16777216, false);
+            guiGraphics.drawString(this.font, formattedCharSequence, this.leftPageX, this.leftPageY + i * this.font.lineHeight, TEXT_COLOUR, TEXT_SHADOW);
         }
         int rightLines = Math.min(PAGE_TEXT_HEIGHT / this.font.lineHeight, this.rightPageSplitLines.size());
         for (int i = 0; i < rightLines; ++i) {
             FormattedCharSequence formattedCharSequence = this.rightPageSplitLines.get(i);
-            guiGraphics.drawString(this.font, formattedCharSequence, this.rightPageX, this.rightPageY + i * this.font.lineHeight, -16777216, false);
+            guiGraphics.drawString(this.font, formattedCharSequence, this.rightPageX, this.rightPageY + i * this.font.lineHeight, TEXT_COLOUR, TEXT_SHADOW);
         }
     }
 

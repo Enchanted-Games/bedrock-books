@@ -32,6 +32,11 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     protected static final int PAGE_TEXT_HEIGHT = 128;
     protected static final int CENTER_PADDING = 22;
 
+    // text style
+    protected static final int CURSOR_COLOUR = 0xff000000;
+    protected static final int TEXT_COLOUR = 0xff000000;
+    protected static final boolean TEXT_SHADOW = false;
+
     // footer button spacing
     protected static final int FOOTER_BUTTON_WIDTH = 90;
     protected static final int FOOTER_BUTTON_SPACING = 8;
@@ -60,9 +65,9 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_right_focus")
     );
 
+    // pagination
     protected static final int MAX_PAGES = WritableBookContent.MAX_PAGES;
 
-    // pagination
     protected int currentLeftPageIndex;
     protected List<PageContent> pages = new ArrayList<>();
 
