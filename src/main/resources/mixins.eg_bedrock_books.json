@@ -8,7 +8,8 @@
   "client": [
     "BookSignScreenMixin",
     "ClientPacketListenerMixin",
-    "LocalPlayerMixin"
+    "LocalPlayerMixin",
+    "MenuScreensMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -26,9 +26,10 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
 
     protected static final int FOOTER_BUTTON_WIDTH = 200;
     protected static final int TEXT_OFFSET_LEFT = 4;
+    protected static final int TEXT_OFFSET_RIGHT = 4;
     protected static final int TEXT_OFFSET_TOP = 10;
 
-    protected static final int PAGE_CLICK_BOUNDS_EXTRA_PADDING = 4;
+    protected static final int PAGE_CLICK_BOUNDS_EXTRA_PADDING = 2;
 
     protected int leftPageX = 0;
     protected int leftPageY = 0;
@@ -43,28 +44,36 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         this.pages = bookAccess.pages();
     }
 
+    public BedrockBookViewScreen() {
+        this(BookViewScreen.EMPTY_ACCESS);
+    }
+
     @Override
     protected void init() {
         super.init();
 
         // footer buttons
         this.footerButtonLayout = LinearLayout.horizontal().spacing(FOOTER_BUTTON_SPACING);
+        makeFooterButtons();
+        this.footerButtonLayout.arrangeElements();
+        this.footerButtonLayout.visitWidgets(this::addRenderableWidget);
+    }
+
+    protected void makeFooterButtons() {
         this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_DONE, button -> {
             saveAndClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.setPosition((this.width / 2) - FOOTER_BUTTON_WIDTH / 2, (this.height / 2) + 90);
-        this.footerButtonLayout.arrangeElements();
-        this.footerButtonLayout.visitWidgets(this::addRenderableWidget);
     }
 
     @Override
     protected TextViewAndWidget<Component, TextAreaView<Component>> createTextWidgetAndView(int x, int y, PageSide side) {
         if(side == PageSide.LEFT) {
-            this.leftPageX = x + TEXT_OFFSET_LEFT;
-            this.leftPageY = y + TEXT_OFFSET_TOP;
+            this.leftPageX = x + 8 - getHorizontalLeftPageTextOffset();
+            this.leftPageY = y + getVerticalTextOffset();
         } else {
-            this.rightPageX = x + TEXT_OFFSET_LEFT;
-            this.rightPageY = y + TEXT_OFFSET_TOP;
+            this.rightPageX = x + getHorizontalRightPageTextOffset();
+            this.rightPageY = y + getVerticalTextOffset();
         }
 
         return new TextViewAndWidget<>(new ComponentTextAreaView(component -> {
@@ -75,6 +84,16 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
                 this.rightPageSplitLines = this.splitPage(offsetIndex);
             }
         }), null);
+    }
+
+    protected int getHorizontalLeftPageTextOffset() {
+        return TEXT_OFFSET_LEFT;
+    }
+    protected int getHorizontalRightPageTextOffset() {
+        return TEXT_OFFSET_RIGHT;
+    }
+    protected int getVerticalTextOffset() {
+        return TEXT_OFFSET_TOP;
     }
 
     protected List<FormattedCharSequence> splitPage(int index) {
@@ -177,8 +196,8 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         }
 
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) {
-            guiGraphics.fillGradient(this.leftPageX, this.leftPageY, this.leftPageX + PAGE_TEXT_WIDTH, this.leftPageY + PAGE_TEXT_HEIGHT, 0x22000000, 0x22000000);
-            guiGraphics.fillGradient(this.rightPageX, this.rightPageY, this.rightPageX + PAGE_TEXT_WIDTH, this.rightPageY + PAGE_TEXT_HEIGHT, 0x22000000, 0x22000000);
+            guiGraphics.fillGradient(this.leftPageX - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageY - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageX + PAGE_TEXT_WIDTH + PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageY + PAGE_TEXT_HEIGHT + PAGE_CLICK_BOUNDS_EXTRA_PADDING, 0x22000000, 0x22000000);
+            guiGraphics.fillGradient(this.rightPageX - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageY - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageX + PAGE_TEXT_WIDTH + PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageY + PAGE_TEXT_HEIGHT + PAGE_CLICK_BOUNDS_EXTRA_PADDING, 0x22000000, 0x22000000);
         }
 
         guiGraphics.renderComponentHoverEffect(this.font, getStyleAt(mouseX, mouseY, guiGraphics), mouseX, mouseY);
