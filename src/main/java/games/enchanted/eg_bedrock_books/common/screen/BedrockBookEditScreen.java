@@ -59,13 +59,10 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
         // footer buttons
         this.footerButtonLayout = LinearLayout.horizontal().spacing(FOOTER_BUTTON_SPACING);
         this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> {
-            assert this.minecraft != null;
-            this.minecraft.setScreen(null);
+            this.onClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
-            assert this.minecraft != null;
-            this.minecraft.setScreen(null);
-            savePagesToStack();
+            this.saveAndClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SIGN_BUTTON_COMPONENT, button -> {
             assert this.minecraft != null;
@@ -92,6 +89,12 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
         editBox.setValueListener(newValue -> setPageContent(newValue, this.getCurrentLeftPageIndex() + (side == PageSide.RIGHT ? 1 : 0)));
 
         return new TextViewAndWidget<>(new MultilineEditBoxView(editBox), editBox);
+    }
+
+    @Override
+    protected void saveAndClose() {
+        super.saveAndClose();
+        savePagesToStack();
     }
 
     @Override

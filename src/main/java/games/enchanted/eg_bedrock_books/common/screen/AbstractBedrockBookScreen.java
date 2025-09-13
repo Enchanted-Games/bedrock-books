@@ -64,6 +64,14 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward_focus")
     );
+    private static final int CLOSE_BUTTON_SIZE = 9;
+    private static final Component CLOSE_BUTTON_LABEL = CommonComponents.GUI_DONE;
+    private static final CustomSpriteButton.ButtonConfig CLOSE_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close_focus")
+    );
 
     // pagination
     protected static final int MAX_PAGES = WritableBookContent.MAX_PAGES;
@@ -101,11 +109,23 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         final int turnPageButtonYPos = (this.height / 2) + 47;
         final int editControlsYPos = (this.height / 2) + 44;
 
+        CustomSpriteButton closeButton = new CustomSpriteButton(
+            (this.width / 2) + (CENTER_PADDING / 2) + 120,
+            (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 33,
+            CLOSE_BUTTON_SIZE,
+            CLOSE_BUTTON_SIZE,
+            button -> this.saveAndClose(),
+            CLOSE_BUTTON_LABEL,
+            CLOSE_BUTTON_CONFIG
+        );
+        this.addRenderableWidget(closeButton);
+
         // left page
         TextViewAndWidget<PageContent, TextView> leftPageWidget = createTextWidgetAndView((this.width / 2) - (CENTER_PADDING / 2) - PAGE_EDIT_BOX_WIDTH, editBoxYPos, PageSide.LEFT);
         this.leftPageTextView = leftPageWidget.view();
         if(leftPageWidget.widget() != null) {
             this.addRenderableWidget(leftPageWidget.widget());
+            this.setInitialFocus(leftPageWidget.widget());
         }
 
         if(this.canEditAndCreatePages) {
@@ -215,6 +235,10 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
                 this.rightPageEditControls.setMoveForwardButtonVisible(rightPageIndex < this.getCurrentAmountOfPages() - 1);
             }
         }
+    }
+
+    protected void saveAndClose() {
+        this.onClose();
     }
 
     protected void ensureEvenPageIndex(int newPageIndex) {

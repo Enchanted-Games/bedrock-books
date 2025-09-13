@@ -50,8 +50,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         // footer buttons
         this.footerButtonLayout = LinearLayout.horizontal().spacing(FOOTER_BUTTON_SPACING);
         this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_DONE, button -> {
-            assert this.minecraft != null;
-            this.minecraft.setScreen(null);
+            saveAndClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.setPosition((this.width / 2) - FOOTER_BUTTON_WIDTH / 2, (this.height / 2) + 90);
         this.footerButtonLayout.arrangeElements();
