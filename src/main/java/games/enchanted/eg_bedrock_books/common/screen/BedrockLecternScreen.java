@@ -33,7 +33,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     protected static final Component TAKE_BOOK_COMPONENT = Component.translatable("lectern.take_book");
 
     protected static final int RIBBON_WIDTH = 20;
-    protected static final int RIBBON_HEIGHT = 112;
+    protected static final int RIBBON_HEIGHT = 116;
     protected static final CustomSpriteButton.ButtonConfig LEFT_RIBBON_SELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon"),
@@ -76,16 +76,16 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
     @Override
     protected void init() {
-        final int ribbonYOffset = 107;
+        final int ribbonYOffset = 111;
 
         this.leftPageRibbon = new TogglableSpriteButton(
             this.width / 2 - RIBBON_WIDTH,
             (this.height / 2) - ribbonYOffset,
             RIBBON_WIDTH,
             RIBBON_HEIGHT,
-            (button, isActive) -> {
+            button -> {
                 this.setPageIndex(this.getCurrentLeftPageIndex());
-                this.leftPageRibbon.setToggle(!isActive);
+                this.updateVisibleContents();
             },
             Component.literal(""),
             LEFT_RIBBON_UNSELECTED_CONFIG,
@@ -98,9 +98,9 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
             (this.height / 2) - ribbonYOffset,
             RIBBON_WIDTH,
             RIBBON_HEIGHT,
-            (button, toggle) -> {
+            button -> {
                 this.setPageIndex(this.getCurrentLeftPageIndex() + 1);
-                this.rightPageRibbon.setToggle(!toggle);
+                this.updateVisibleContents();
             },
             Component.literal(""),
             LEFT_RIBBON_UNSELECTED_CONFIG,
