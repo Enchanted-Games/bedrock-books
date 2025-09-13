@@ -177,6 +177,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     protected void turnBackPage() {
         if(isContainerOnLeftPage()) {
             // container is on 'left page', increment back to next double page
+            setContainerPageIndex(getCurrentLeftPageIndex() - 1);
             super.turnBackPage();
         } else {
             if(this.getContainerPageIndex() <= 0) return;

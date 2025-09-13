@@ -190,6 +190,12 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         );
         this.addRenderableWidget(turnRightButton);
 
+        // footer buttons
+        this.footerButtonLayout = LinearLayout.horizontal().spacing(FOOTER_BUTTON_SPACING);
+        makeFooterButtons();
+        this.footerButtonLayout.arrangeElements();
+        this.footerButtonLayout.visitWidgets(this::addRenderableWidget);
+
         // general setup
         updateVisibleContents();
     }
@@ -197,6 +203,9 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     protected abstract TextViewAndWidget<PageContent, TextView> createTextWidgetAndView(int x, int y, PageSide side);
 
     protected void addWidgetsBetweenPages() {
+    }
+
+    protected void makeFooterButtons() {
     }
 
     protected void updateVisibleContents() {

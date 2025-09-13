@@ -53,11 +53,7 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
     }
 
     @Override
-    protected void init() {
-        super.init();
-
-        // footer buttons
-        this.footerButtonLayout = LinearLayout.horizontal().spacing(FOOTER_BUTTON_SPACING);
+    protected void makeFooterButtons() {
         this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> {
             this.onClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
@@ -69,8 +65,6 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
             this.minecraft.setScreen(this.bookSignScreen);
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.setPosition((this.width / 2) - (FOOTER_BUTTON_WIDTH * 3 + FOOTER_BUTTON_SPACING * 2) / 2, (this.height / 2) + 90);
-        this.footerButtonLayout.arrangeElements();
-        this.footerButtonLayout.visitWidgets(this::addRenderableWidget);
     }
 
     @Override
