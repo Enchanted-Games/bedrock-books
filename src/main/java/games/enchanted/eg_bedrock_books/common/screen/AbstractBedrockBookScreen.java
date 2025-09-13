@@ -79,8 +79,8 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     private int currentLeftPageIndex;
     protected List<PageContent> pages = new ArrayList<>();
 
-    private CustomSpriteButton turnLeftButton;
-    private CustomSpriteButton turnRightButton;
+    protected CustomSpriteButton turnLeftButton;
+    protected CustomSpriteButton turnRightButton;
 
     protected final boolean canEditAndCreatePages;
 
@@ -143,6 +143,8 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.addRenderableOnly(this.leftPageEditControls);
         }
 
+        addWidgetsBetweenPages();
+
         // right page
         TextViewAndWidget<PageContent, TextView> rightPageWidget = createTextWidgetAndView((this.width / 2) + (CENTER_PADDING / 2), editBoxYPos, PageSide.RIGHT);
         this.rightPageTextView = rightPageWidget.view();
@@ -193,6 +195,9 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     }
 
     protected abstract TextViewAndWidget<PageContent, TextView> createTextWidgetAndView(int x, int y, PageSide side);
+
+    protected void addWidgetsBetweenPages() {
+    }
 
     protected void updateVisibleContents() {
         this.turnLeftButton.visible = true;

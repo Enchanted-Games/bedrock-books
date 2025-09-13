@@ -12,11 +12,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 public class CustomSpriteButton extends Button {
-    protected final ButtonConfig buttonConfig;
+    protected ButtonConfig buttonConfig;
 
     public CustomSpriteButton(int x, int y, int width, int height, OnPress onPress, Component message, ButtonConfig buttonConfig) {
         super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
         this.buttonConfig = buttonConfig;
+    }
+
+    public void setButtonConfig(ButtonConfig config) {
+        this.buttonConfig = config;
     }
 
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {

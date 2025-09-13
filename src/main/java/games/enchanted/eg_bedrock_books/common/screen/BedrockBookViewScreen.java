@@ -210,12 +210,12 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
 
     protected void setBookAccess(BookViewScreen.BookAccess bookAccess) {
         this.pages = bookAccess.pages();
-        ensureEvenPageIndex(Math.clamp(this.getCurrentLeftPageIndex(), 0, bookAccess.getPageCount() - 1));
+        ensureEvenPageIndex(Math.clamp(this.getCurrentLeftPageIndex(), 0, Math.max(0, bookAccess.getPageCount() - 1)));
         updateVisibleContents();
     }
 
     protected void setPageIndex(int index) {
-        ensureEvenPageIndex(Math.clamp(index, 0, getCurrentAmountOfPages() - 1));
+        ensureEvenPageIndex(Math.clamp(index, 0, Math.max(0, getCurrentAmountOfPages() - 1)));
         updateVisibleContents();
     }
 

@@ -2,14 +2,18 @@ package games.enchanted.eg_bedrock_books.common.screen;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
+import games.enchanted.eg_bedrock_books.common.screen.widget.TogglableSpriteButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.LecternMenu;
@@ -28,6 +32,27 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
     protected static final Component TAKE_BOOK_COMPONENT = Component.translatable("lectern.take_book");
 
+    protected static final int RIBBON_WIDTH = 20;
+    protected static final int RIBBON_HEIGHT = 112;
+    protected static final CustomSpriteButton.ButtonConfig LEFT_RIBBON_SELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon_focus")
+    );
+    protected static final CustomSpriteButton.ButtonConfig LEFT_RIBBON_UNSELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon_focus")
+    );
+    protected static final CustomSpriteButton.ButtonConfig RIGHT_RIBBON_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_ribbon"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_ribbon_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_ribbon_focus")
+    );
+
     private final LecternMenu menu;
     private final ContainerListener containerListener = new ContainerListener() {
         @Override
@@ -42,6 +67,8 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
             }
         }
     };
+    protected TogglableSpriteButton leftPageRibbon;
+    protected TogglableSpriteButton rightPageRibbon;
 
     public BedrockLecternScreen(LecternMenu menu) {
         this.menu = menu;
@@ -49,9 +76,47 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
     @Override
     protected void init() {
+        final int ribbonYOffset = 107;
+
+        this.leftPageRibbon = new TogglableSpriteButton(
+            this.width / 2 - RIBBON_WIDTH,
+            (this.height / 2) - ribbonYOffset,
+            RIBBON_WIDTH,
+            RIBBON_HEIGHT,
+            (button, isActive) -> {
+                this.setPageIndex(this.getCurrentLeftPageIndex());
+                this.leftPageRibbon.setToggle(!isActive);
+            },
+            Component.literal(""),
+            LEFT_RIBBON_UNSELECTED_CONFIG,
+            LEFT_RIBBON_SELECTED_CONFIG
+        );
+        this.leftPageRibbon.setToggle(true);
+
+        this.rightPageRibbon = new TogglableSpriteButton(
+            this.width / 2,
+            (this.height / 2) - ribbonYOffset,
+            RIBBON_WIDTH,
+            RIBBON_HEIGHT,
+            (button, toggle) -> {
+                this.setPageIndex(this.getCurrentLeftPageIndex() + 1);
+                this.rightPageRibbon.setToggle(!toggle);
+            },
+            Component.literal(""),
+            LEFT_RIBBON_UNSELECTED_CONFIG,
+            LEFT_RIBBON_SELECTED_CONFIG
+        );
+
         super.init();
 
         this.menu.addSlotListener(containerListener);
+    }
+
+    @Override
+    protected void addWidgetsBetweenPages() {
+        super.addWidgetsBetweenPages();
+        addRenderableWidget(this.leftPageRibbon);
+        addRenderableWidget(this.rightPageRibbon);
     }
 
     @Override
@@ -76,15 +141,53 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     }
 
     @Override
+    protected void updateVisibleContents() {
+        super.updateVisibleContents();
+
+        if(isContainerOnLeftPage()) {
+            this.leftPageRibbon.setToggle(true);
+            this.rightPageRibbon.setToggle(false);
+            // more pages after current selected container page
+            this.turnRightButton.visible = this.getContainerPageIndex() < this.getCurrentAmountOfPages() - 1;
+        } else {
+            this.leftPageRibbon.setToggle(false);
+            this.rightPageRibbon.setToggle(true);
+            this.turnLeftButton.visible = true;
+        }
+
+        boolean morePagesAfterLeft = this.getCurrentLeftPageIndex() < this.getCurrentAmountOfPages() - 1;
+        this.rightPageRibbon.visible = morePagesAfterLeft;
+    }
+
+    @Override
     protected void turnForwardPage() {
-        super.turnForwardPage();
-        setContainerPageIndex(this.getCurrentLeftPageIndex());
+        if(isContainerOnLeftPage()) {
+            if(this.getContainerPageIndex() > this.getCurrentAmountOfPages() - 1) return;
+            // container is on 'left page', dont increment screen page index
+            setContainerPageIndex(getCurrentLeftPageIndex() + 1);
+            updateVisibleContents();
+        } else {
+            // container is on 'right page', increment to next double page
+            super.turnForwardPage();
+            setContainerPageIndex(getCurrentLeftPageIndex());
+        }
     }
 
     @Override
     protected void turnBackPage() {
-        super.turnBackPage();
-        setContainerPageIndex(this.getCurrentLeftPageIndex());
+        if(isContainerOnLeftPage()) {
+            // container is on 'left page', increment back to next double page
+            super.turnBackPage();
+        } else {
+            if(this.getContainerPageIndex() <= 0) return;
+            // container is on 'right page', turn back by 1
+            setContainerPageIndex(getCurrentLeftPageIndex());
+            updateVisibleContents();
+        }
+    }
+
+    protected boolean isContainerOnLeftPage() {
+        return this.getCurrentLeftPageIndex() == this.getContainerPageIndex();
     }
 
     @Override
@@ -97,6 +200,10 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
         if (index != this.menu.getPage()) {
             this.sendContainerButtonClick(LecternMenu.BUTTON_PAGE_JUMP_RANGE_START + index);
         }
+    }
+
+    protected int getContainerPageIndex() {
+        return this.menu.getPage();
     }
 
     protected void bookDataChanged() {
