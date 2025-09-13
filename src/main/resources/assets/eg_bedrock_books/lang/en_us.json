@@ -1,0 +1,10 @@
+{
+  "ui.eg_bedrock_books.lectern.bookmark_left_label": "Bookmark left page",
+  "ui.eg_bedrock_books.lectern.bookmark_right_label": "Bookmark right page",
+
+  "ui.eg_bedrock_books.edit.open_edit_controls_label": "Toggle edit controls",
+  "ui.eg_bedrock_books.edit.move_page_back_label": "Move page backward",
+  "ui.eg_bedrock_books.edit.add_page_label": "Insert page",
+  "ui.eg_bedrock_books.edit.delete_page_label": "Delete page",
+  "ui.eg_bedrock_books.edit.move_page_forward_label": "Move page forward"
+}

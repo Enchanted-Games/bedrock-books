@@ -23,32 +23,40 @@ public class EditControls implements Renderable, LayoutElement {
     private static final int EDIT_BUTTON_SIZE = 20;
     private static final int MAX_VISIBLE_BUTTONS = 4;
 
-    protected static final Component PENCIL_BUTTON_LABEL = Component.literal("");
+    protected static final Component PENCIL_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.open_edit_controls_label");
     protected static final CustomSpriteButton.ButtonConfig PENCIL_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button_focus")
     );
+
+    protected static final Component MOVE_BACK_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.move_page_back_label");
     protected static final CustomSpriteButton.ButtonConfig MOVE_BACK_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_focus")
     );
+
+    protected static final Component ADD_PAGE_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.add_page_label");
     protected static final CustomSpriteButton.ButtonConfig ADD_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button_focus")
     );
+
+    protected static final Component DELETE_PAGE_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.delete_page_label");
     protected static final CustomSpriteButton.ButtonConfig DELETE_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button_focus")
     );
-    protected static final CustomSpriteButton.ButtonConfig MOVE_RIGHT_BUTTON = new CustomSpriteButton.ButtonConfig(
+
+    protected static final Component MOVE_FORWARD_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.move_page_forward_label");
+    protected static final CustomSpriteButton.ButtonConfig MOVE_FORWARD_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button_hover"),
@@ -80,19 +88,19 @@ public class EditControls implements Renderable, LayoutElement {
 
         this.pencilButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.toggleControls(true), PENCIL_BUTTON_LABEL, PENCIL_BUTTON_CONFIG);
 
-        this.moveBackButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.moveBackPressed().run(), PENCIL_BUTTON_LABEL, MOVE_BACK_BUTTON);
+        this.moveBackButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.moveBackPressed().run(), MOVE_BACK_BUTTON_LABEL, MOVE_BACK_BUTTON);
         this.moveBackButton.visible = false;
         this.layout.addChild(this.moveBackButton);
 
-        this.addButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.addPressed().run(), PENCIL_BUTTON_LABEL, ADD_PAGE_BUTTON);
+        this.addButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.addPressed().run(), ADD_PAGE_BUTTON_LABEL, ADD_PAGE_BUTTON);
         this.addButton.visible = false;
         this.layout.addChild(this.addButton);
 
-        this.deleteButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.deletePressed().run(), PENCIL_BUTTON_LABEL, DELETE_PAGE_BUTTON);
+        this.deleteButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.deletePressed().run(), DELETE_PAGE_BUTTON_LABEL, DELETE_PAGE_BUTTON);
         this.deleteButton.visible = false;
         this.layout.addChild(this.deleteButton);
 
-        this.moveForwardButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.moveForwardPressed().run(), PENCIL_BUTTON_LABEL, MOVE_RIGHT_BUTTON);
+        this.moveForwardButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.moveForwardPressed().run(), MOVE_FORWARD_BUTTON_LABEL, MOVE_FORWARD_BUTTON);
         this.moveForwardButton.visible = false;
         this.layout.addChild(this.moveForwardButton);
 

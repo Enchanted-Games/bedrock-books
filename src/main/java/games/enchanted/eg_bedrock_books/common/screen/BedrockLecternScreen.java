@@ -34,6 +34,8 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
     protected static final int RIBBON_WIDTH = 20;
     protected static final int RIBBON_HEIGHT = 116;
+
+    Component LEFT_RIBBON_LABEL = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_left_label");
     protected static final CustomSpriteButton.ButtonConfig LEFT_RIBBON_SELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon"),
@@ -46,11 +48,19 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon_focus")
     );
-    protected static final CustomSpriteButton.ButtonConfig RIGHT_RIBBON_CONFIG = new CustomSpriteButton.ButtonConfig(
+
+    Component RIGHT_RIBBON_LABEL = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_right_label");
+    protected static final CustomSpriteButton.ButtonConfig RIGHT_RIBBON_SELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_ribbon"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_ribbon_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_ribbon_focus")
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon_focus")
+    );
+    protected static final CustomSpriteButton.ButtonConfig RIGHT_RIBBON_UNSELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon_focus")
     );
 
     private final LecternMenu menu;
@@ -87,7 +97,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
                 this.setPageIndex(this.getCurrentLeftPageIndex());
                 this.updateVisibleContents();
             },
-            Component.literal(""),
+            LEFT_RIBBON_LABEL,
             LEFT_RIBBON_UNSELECTED_CONFIG,
             LEFT_RIBBON_SELECTED_CONFIG
         );
@@ -102,9 +112,9 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
                 this.setPageIndex(this.getCurrentLeftPageIndex() + 1);
                 this.updateVisibleContents();
             },
-            Component.literal(""),
-            LEFT_RIBBON_UNSELECTED_CONFIG,
-            LEFT_RIBBON_SELECTED_CONFIG
+            RIGHT_RIBBON_LABEL,
+            RIGHT_RIBBON_UNSELECTED_CONFIG,
+            RIGHT_RIBBON_SELECTED_CONFIG
         );
 
         super.init();
@@ -157,6 +167,8 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
         boolean morePagesAfterLeft = this.getCurrentLeftPageIndex() < this.getCurrentAmountOfPages() - 1;
         this.rightPageRibbon.visible = morePagesAfterLeft;
+
+        this.leftPageRibbon.visible = !this.pages.isEmpty();
     }
 
     @Override
