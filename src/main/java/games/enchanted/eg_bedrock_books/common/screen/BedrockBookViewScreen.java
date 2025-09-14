@@ -7,7 +7,6 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.CommonComponents;
@@ -37,6 +36,8 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     protected int rightPageX = 0;
     protected int rightPageY = 0;
     protected List<FormattedCharSequence> rightPageSplitLines = List.of();
+
+    @Nullable protected Style styleUnderMouseCursor = null;
 
     public BedrockBookViewScreen(BookViewScreen.BookAccess bookAccess) {
         super(BOOK_VIEW_TITLE, false);
@@ -106,6 +107,12 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
 
         if (button == GLFW.GLFW_MOUSE_BUTTON_1 && clickedStyle != null && handleComponentClicked(clickedStyle)) return true;
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        super.mouseMoved(mouseX, mouseY);
+        this.styleUnderMouseCursor = getStyleAt(mouseX, mouseY, null);
     }
 
     @Nullable
@@ -190,12 +197,13 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
             );
         }
 
+        guiGraphics.renderComponentHoverEffect(this.font, this.styleUnderMouseCursor, mouseX, mouseY);
+
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) {
             guiGraphics.fillGradient(this.leftPageX - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageY - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageX + PAGE_TEXT_WIDTH + PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageY + PAGE_TEXT_HEIGHT + PAGE_CLICK_BOUNDS_EXTRA_PADDING, 0x22000000, 0x22000000);
             guiGraphics.fillGradient(this.rightPageX - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageY - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageX + PAGE_TEXT_WIDTH + PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageY + PAGE_TEXT_HEIGHT + PAGE_CLICK_BOUNDS_EXTRA_PADDING, 0x22000000, 0x22000000);
+            guiGraphics.drawString(this.font, this.styleUnderMouseCursor == null ? "" : this.styleUnderMouseCursor.toString(), 0, this.height - this.font.lineHeight, -1);
         }
-
-        guiGraphics.renderComponentHoverEffect(this.font, getStyleAt(mouseX, mouseY, guiGraphics), mouseX, mouseY);
     }
 
     @Override

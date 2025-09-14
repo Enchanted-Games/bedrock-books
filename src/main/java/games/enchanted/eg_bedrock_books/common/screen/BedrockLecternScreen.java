@@ -7,6 +7,7 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.TogglableSpriteButt
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
+import java.time.Duration;
 import java.util.Objects;
 
 public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuAccess<LecternMenu> {
@@ -35,6 +37,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     protected static final int RIBBON_WIDTH = 20;
     protected static final int RIBBON_HEIGHT = 116;
 
+    Component RIBBON_TOOLTIP = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_tooltip");
     Component LEFT_RIBBON_LABEL = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_left_label");
     protected static final CustomSpriteButton.ButtonConfig LEFT_RIBBON_SELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
@@ -101,7 +104,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
             LEFT_RIBBON_UNSELECTED_CONFIG,
             LEFT_RIBBON_SELECTED_CONFIG
         );
-        this.leftPageRibbon.setToggle(true);
+        this.leftPageRibbon.setTooltip(Tooltip.create(RIBBON_TOOLTIP));
 
         this.rightPageRibbon = new TogglableSpriteButton(
             this.width / 2,
@@ -116,6 +119,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
             RIGHT_RIBBON_UNSELECTED_CONFIG,
             RIGHT_RIBBON_SELECTED_CONFIG
         );
+        this.rightPageRibbon.setTooltip(Tooltip.create(RIBBON_TOOLTIP));
 
         super.init();
 
