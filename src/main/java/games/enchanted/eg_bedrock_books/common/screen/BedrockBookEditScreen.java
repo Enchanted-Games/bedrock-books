@@ -25,7 +25,7 @@ import java.util.ListIterator;
 import java.util.Optional;
 
 public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, TextAreaView<String>> {
-    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/edit_background.png");;
+    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/edit_background.png");
 
     // player and item
     protected final Player owner;
