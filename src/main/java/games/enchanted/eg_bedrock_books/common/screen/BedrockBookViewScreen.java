@@ -57,7 +57,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     @Override
     protected void makeFooterButtons() {
         this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_DONE, button -> {
-            saveAndClose();
+            this.onClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.setPosition((this.width / 2) - FOOTER_BUTTON_WIDTH / 2, (this.height / 2) + 90);
     }

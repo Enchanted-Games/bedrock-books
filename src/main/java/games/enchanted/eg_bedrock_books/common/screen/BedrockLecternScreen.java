@@ -22,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
-import java.time.Duration;
 import java.util.Objects;
 
 public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuAccess<LecternMenu> {
@@ -34,7 +33,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
     protected static final Component TAKE_BOOK_COMPONENT = Component.translatable("lectern.take_book");
 
-    protected static final int RIBBON_WIDTH = 20;
+    protected static final int RIBBON_WIDTH = 18;
     protected static final int RIBBON_HEIGHT = 116;
 
     Component RIBBON_TOOLTIP = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_tooltip");

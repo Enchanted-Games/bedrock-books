@@ -55,10 +55,11 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
     @Override
     protected void makeFooterButtons() {
         this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> {
-            this.onClose();
+            assert this.minecraft != null;
+            this.minecraft.setScreen(null);
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
-            this.saveAndClose();
+            this.onClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SIGN_BUTTON_COMPONENT, button -> {
             assert this.minecraft != null;
@@ -86,9 +87,9 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
     }
 
     @Override
-    protected void saveAndClose() {
-        super.saveAndClose();
-        savePagesToStack();
+    public void onClose() {
+        super.onClose();
+        this.savePagesToStack();
     }
 
     @Override

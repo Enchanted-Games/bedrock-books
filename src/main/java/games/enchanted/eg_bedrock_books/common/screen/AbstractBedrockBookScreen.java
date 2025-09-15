@@ -114,7 +114,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 33,
             CLOSE_BUTTON_SIZE,
             CLOSE_BUTTON_SIZE,
-            button -> this.saveAndClose(),
+            button -> this.onClose(),
             CLOSE_BUTTON_LABEL,
             CLOSE_BUTTON_CONFIG
         );
@@ -249,10 +249,6 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
                 this.rightPageEditControls.setMoveForwardButtonVisible(rightPageIndex < this.getCurrentAmountOfPages() - 1);
             }
         }
-    }
-
-    protected void saveAndClose() {
-        this.onClose();
     }
 
     protected void ensureEvenPageIndex(int newPageIndex) {
