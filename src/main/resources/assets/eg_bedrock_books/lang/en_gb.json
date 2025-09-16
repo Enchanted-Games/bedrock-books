@@ -7,5 +7,9 @@
   "ui.eg_bedrock_books.edit.move_page_back_label": "Move page backward",
   "ui.eg_bedrock_books.edit.add_page_label": "Insert page",
   "ui.eg_bedrock_books.edit.delete_page_label": "Delete page",
-  "ui.eg_bedrock_books.edit.move_page_forward_label": "Move page forward"
+  "ui.eg_bedrock_books.edit.move_page_forward_label": "Move page forward",
+
+  "ui.eg_bedrock_books.config.title": "Bedrock Books Config",
+  "ui.eg_bedrock_books.config.page.general": "General options",
+  "ui.eg_bedrock_books.config.page.debug": "Debug options"
 }

@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screens.inventory.BookSignScreen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundEditBookPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
@@ -25,6 +26,7 @@ import java.util.ListIterator;
 import java.util.Optional;
 
 public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, TextAreaView<String>> {
+    protected static final Component BOOK_EDIT_TITLE = Component.translatable("book.edit.title");
     private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/edit_background.png");
 
     // player and item
@@ -93,7 +95,7 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
     }
 
     @Override
-    String getEmptyPageContent() {
+    protected String getEmptyPageContent() {
         return "";
     }
 

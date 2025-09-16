@@ -27,6 +27,11 @@ repositories {
     maven("https://maven.neoforged.net/releases/")
     maven("https://maven.architectury.dev/")
     maven("https://modmaven.dev/")
+
+    // modmenu
+    maven("https://maven.terraformersmc.com/") {
+        name = "Terraformers"
+    }
 }
 
 fun bool(str: String) : Boolean {
@@ -219,6 +224,11 @@ class APISource(val type: DepType, val modInfo: APIModInfo, val mavenLocation: S
 // add any hardcoded apis here. Hardcoded APIs should be used in most if not all your versions.
 val apis = arrayListOf(
     APISource(DepType.API, APIModInfo(if(env.atMost("1.16.5")) "fabric" else "fabric-api","fabric-api"), "net.fabricmc.fabric-api:fabric-api",optionalVersionProperty("deps.api.fabric"))
+    { src ->
+        src.versionRange.isPresent && env.isFabric
+    },
+
+    APISource(DepType.IMPL, APIModInfo("modmenu"), "com.terraformersmc:modmenu",optionalVersionProperty("deps.api.modmenu"))
     { src ->
         src.versionRange.isPresent && env.isFabric
     }

@@ -1,6 +1,7 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreen;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.EditControls;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
@@ -42,8 +43,6 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     protected static final int FOOTER_BUTTON_SPACING = 8;
 
     // translations
-    protected static final Component BOOK_EDIT_TITLE = Component.translatable("book.edit.title");
-    protected static final Component BOOK_VIEW_TITLE = Component.translatable("book.view.title");
     protected static final String BOOK_PAGE_INDICATOR = "book.pageIndicator";
     protected static final Component SIGN_BUTTON_COMPONENT = Component.translatable("book.signButton");
     protected static final Component SAVE_BUTTON_COMPONENT = Component.translatable("selectWorld.edit.save");
@@ -73,6 +72,15 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close_focus")
     );
 
+    private static final int CONFIG_BUTTON_SIZE = 24;
+    private static final Component CONFIG_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.config.title");
+    private static final CustomSpriteButton.ButtonConfig CONFIG_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button_focus")
+    );
+
     // pagination
     protected static final int MAX_PAGES = WritableBookContent.MAX_PAGES;
 
@@ -95,6 +103,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
 
     // footer buttons
     protected LinearLayout footerButtonLayout;
+    protected CustomSpriteButton configButton;
 
     public AbstractBedrockBookScreen(Component message, boolean editable) {
         super(message);
@@ -198,6 +207,8 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
 
         // general setup
         updateVisibleContents();
+
+        this.addConfigButton();
     }
 
     protected abstract TextViewAndWidget<PageContent, TextView> createTextWidgetAndView(int x, int y, PageSide side);
@@ -206,6 +217,19 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     }
 
     protected void makeFooterButtons() {
+    }
+
+    protected void addConfigButton() {
+        this.configButton = new CustomSpriteButton(
+            4,
+            this.height - CONFIG_BUTTON_SIZE - 4,
+            CONFIG_BUTTON_SIZE,
+            CONFIG_BUTTON_SIZE,
+            (button) -> ConfigScreen.openConfigScreen(this),
+            CONFIG_BUTTON_LABEL,
+            CONFIG_BUTTON_CONFIG
+        );
+        this.addRenderableWidget(configButton);
     }
 
     protected void updateVisibleContents() {
@@ -219,7 +243,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.turnRightButton.visible = false;
         }
 
-        this.leftPageNumberMessage = getPageNumberMessage(false);
+        this.leftPageNumberMessage = getPageIndicatorMessage(this.currentLeftPageIndex);
         this.leftPageTextView.setValue(getOrCreatePageIfPossible(this.currentLeftPageIndex), true);
 
         int rightPageIndex = this.currentLeftPageIndex + 1;
@@ -230,7 +254,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
                 this.rightPageEditControls.setVisibility(false);
             }
         } else {
-            this.rightPageNumberMessage = getPageNumberMessage(true);
+            this.rightPageNumberMessage = getPageIndicatorMessage(this.currentLeftPageIndex + 1);
             this.rightPageTextView.setVisibility(true);
             this.rightPageTextView.setValue(getPageOrEmpty(rightPageIndex), true);
             if(this.rightPageEditControls != null) {
@@ -291,7 +315,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         updateVisibleContents();
     }
 
-    abstract PageContent getEmptyPageContent();
+    protected abstract PageContent getEmptyPageContent();
 
     protected void handleAddPage(int index) {
         this.addPage(this.getEmptyPageContent(), index);
@@ -376,8 +400,8 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         return this.pages.size();
     }
 
-    protected Component getPageNumberMessage(boolean forRightPage) {
-        int offsetIndex = this.currentLeftPageIndex + (forRightPage ? 2 : 1);
+    protected Component getPageIndicatorMessage(int index) {
+        int offsetIndex = index + 1;
         if(offsetIndex > this.getCurrentAmountOfPages()) return CommonComponents.EMPTY;
         return Component.translatable(BOOK_PAGE_INDICATOR, offsetIndex, this.getCurrentAmountOfPages());
     }
@@ -400,7 +424,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
 
     @Override
     public @NotNull Component getNarrationMessage() {
-        return CommonComponents.joinForNarration(super.getNarrationMessage(), this.getPageNumberMessage(false));
+        return CommonComponents.joinForNarration(super.getNarrationMessage(), this.getPageIndicatorMessage(this.currentLeftPageIndex));
     }
 
     @Override
@@ -434,7 +458,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
 
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderTransparentBackground(guiGraphics);
+        this.renderMinecraftBackgrounds(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(
             RenderPipelines.GUI_TEXTURED,
             getBackgroundTexture(),
@@ -447,6 +471,16 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             BACKGROUND_WIDTH,
             BACKGROUND_HEIGHT
         );
+    }
+
+    protected void renderMinecraftBackgrounds(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        if (this.minecraft != null && this.minecraft.level == null) {
+            this.renderPanorama(guiGraphics, partialTick);
+            this.renderBlurredBackground(guiGraphics);
+            this.renderMenuBackground(guiGraphics);
+        } else {
+            this.renderTransparentBackground(guiGraphics);
+        }
     }
 
     public enum PageMoveDirection {

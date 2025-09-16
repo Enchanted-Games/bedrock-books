@@ -21,6 +21,9 @@
     ],
     "client": [
       "${fabric_client_entry}"
+    ],
+    "modmenu": [
+      "games.enchanted.eg_bedrock_books.fabric.ModMenuIntegration"
     ]
   },
 ${mixin_field}

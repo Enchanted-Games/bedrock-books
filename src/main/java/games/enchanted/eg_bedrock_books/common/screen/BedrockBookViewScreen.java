@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, TextAreaView<Component>> {
+    protected static final Component BOOK_VIEW_TITLE = Component.translatable("book.view.title");
     private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/view_background.png");;
 
     protected static final int FOOTER_BUTTON_WIDTH = 200;
@@ -50,11 +51,6 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
 
     public BedrockBookViewScreen() {
         this(BookViewScreen.EMPTY_ACCESS);
-    }
-
-    @Override
-    protected void init() {
-        super.init();
     }
 
     @Override
@@ -100,7 +96,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     }
 
     @Override
-    Component getEmptyPageContent() {
+    protected Component getEmptyPageContent() {
         return CommonComponents.EMPTY;
     }
 
