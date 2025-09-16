@@ -37,6 +37,9 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     protected int rightPageY = 0;
     protected List<FormattedCharSequence> rightPageSplitLines = List.of();
 
+    protected double mouseX = 0;
+    protected double mouseY = 0;
+
     @Nullable protected Style styleUnderMouseCursor = null;
 
     public BedrockBookViewScreen(BookViewScreen.BookAccess bookAccess) {
@@ -102,6 +105,18 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     }
 
     @Override
+    protected void turnForwardPage() {
+        super.turnForwardPage();
+        refreshStyleUnderMouse();
+    }
+
+    @Override
+    protected void turnBackPage() {
+        super.turnBackPage();
+        refreshStyleUnderMouse();
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Style clickedStyle = getStyleAt(mouseX, mouseY, null);
 
@@ -112,7 +127,13 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
         super.mouseMoved(mouseX, mouseY);
-        this.styleUnderMouseCursor = getStyleAt(mouseX, mouseY, null);
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+        refreshStyleUnderMouse();
+    }
+
+    protected void refreshStyleUnderMouse() {
+        this.styleUnderMouseCursor = getStyleAt(this.mouseX, this.mouseY, null);
     }
 
     @Nullable
