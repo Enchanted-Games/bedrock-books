@@ -1,7 +1,7 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
-import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreen;
+import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreenBehaviour;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.EditControls;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
@@ -36,6 +36,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     // text style
     protected static final int CURSOR_COLOUR = 0xff000000;
     protected static final int TEXT_COLOUR = 0xff000000;
+    protected static final int PAGE_INDICATOR_COLOUR = 0xffbca387;
     protected static final boolean TEXT_SHADOW = false;
 
     // footer button spacing
@@ -225,7 +226,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.height - CONFIG_BUTTON_SIZE - 4,
             CONFIG_BUTTON_SIZE,
             CONFIG_BUTTON_SIZE,
-            (button) -> ConfigScreen.openConfigScreen(this),
+            (button) -> ConfigScreenBehaviour.openConfigScreen(this),
             CONFIG_BUTTON_LABEL,
             CONFIG_BUTTON_CONFIG
         );
@@ -439,7 +440,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.leftPageNumberMessage,
             (this.width / 2) - (CENTER_PADDING / 2) - (PAGE_EDIT_BOX_WIDTH / 2) - (leftPageNumberWidth / 2),
             pageNumberYPos,
-            0xffbca387,
+            PAGE_INDICATOR_COLOUR,
             false
         );
 
@@ -449,7 +450,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.rightPageNumberMessage,
             (this.width / 2) + (CENTER_PADDING / 2) + (PAGE_EDIT_BOX_WIDTH / 2) - (rightPageNumberWidth / 2),
             pageNumberYPos,
-            0xffbca387,
+            PAGE_INDICATOR_COLOUR,
             false
         );
     }

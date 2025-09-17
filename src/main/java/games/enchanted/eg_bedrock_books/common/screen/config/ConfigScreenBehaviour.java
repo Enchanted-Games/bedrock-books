@@ -1,45 +1,117 @@
 package games.enchanted.eg_bedrock_books.common.screen.config;
 
+import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
+import games.enchanted.eg_bedrock_books.common.screen.AbstractBedrockBookScreen;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
+import games.enchanted.eg_bedrock_books.common.screen.widget.text.DummyTextAreaView;
+import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ConfigScreenBehaviour extends ConfigScreen {
+import java.util.List;
+
+public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, TextAreaView<String>> {
+    protected static final Component CONFIG_TITLE = Component.translatable("ui.eg_bedrock_books.config.title");
+    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/config_background.png");
+
+    protected static final int FOOTER_BUTTON_WIDTH = 120;
+
+    protected final @Nullable Screen returnScreen;
+    protected final boolean alwaysBlurBackground;
+
     protected ConfigScreenBehaviour(@Nullable Screen returnScreen, boolean alwaysBlurBackground) {
-        super(returnScreen, alwaysBlurBackground);
-    }
+        super(CONFIG_TITLE, false);
+        this.returnScreen = returnScreen;
+        this.alwaysBlurBackground = alwaysBlurBackground;
 
-    protected ConfigScreenBehaviour(@Nullable Screen returnScreen) {
-        super(returnScreen, false);
-    }
-
-    @Override
-    protected void addWidgetsBetweenPages() {
-        super.addWidgetsBetweenPages();
-
-        this.addRenderableWidget(new KeyBox(
-            20,
-            20,
-            ConfigOptions.VANILLA_BOOK_KEY.getValue(),
-            ConfigOptions.VANILLA_BOOK_KEY::setPendingValue,
-            Component.translatable("ui.eg_bedrock_books.config.key.open_vanilla_screen_key")
-        ));
+        this.pages = List.of(getEmptyPageContent(), getEmptyPageContent(), getEmptyPageContent());
     }
 
     @Override
+    protected void makeFooterButtons() {
+        this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> {
+            this.onClose();
+        }).width(FOOTER_BUTTON_WIDTH).build());
+        this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
+            this.saveConfig();
+            this.onClose();
+        }).width(FOOTER_BUTTON_WIDTH).build());
+        this.footerButtonLayout.setPosition((this.width / 2) - (FOOTER_BUTTON_WIDTH * 2 + FOOTER_BUTTON_SPACING) / 2, (this.height / 2) + 90);
+    }
+
     protected void saveConfig() {
         ConfigOptions.saveIfAnyDirtyOptions();
     }
 
     @Override
-    protected Component getPageIndicatorMessage(int index) {
-        return switch (index) {
-            case 0 -> Component.translatable("ui.eg_bedrock_books.config.page.general");
-            case 1 -> Component.translatable("ui.eg_bedrock_books.config.page.visual");
-            case 2 -> Component.translatable("ui.eg_bedrock_books.config.page.debug");
-            default -> super.getPageIndicatorMessage(index);
-        };
+    public void onClose() {
+        if(this.minecraft != null && this.returnScreen != null) {
+            this.minecraft.setScreen(returnScreen);
+        }
+    }
+
+    @Override
+    protected void addConfigButton() {
+    }
+
+    @Override
+    protected TextViewAndWidget<String, TextAreaView<String>> createTextWidgetAndView(int x, int y, PageSide side) {
+        return new TextViewAndWidget<>(new DummyTextAreaView(), null);
+    }
+
+    @Override
+    protected String getEmptyPageContent() {
+        return "";
+    }
+
+    @Override
+    public @NotNull Component getNarrationMessage() {
+        return CONFIG_TITLE;
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        if(this.getFocused() instanceof KeyBox keyBox && keyBox.isListeningForInput()) {
+            return false;
+        }
+        return super.shouldCloseOnEsc();
+    }
+
+    @Override
+    protected ResourceLocation getBackgroundTexture() {
+        return BACKGROUND_TEXTURE;
+    }
+
+    @Override
+    protected void renderMinecraftBackgrounds(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        if(!this.alwaysBlurBackground) {
+            super.renderMinecraftBackgrounds(guiGraphics, mouseX, mouseY, partialTick);
+            return;
+        }
+        if (this.minecraft != null && this.minecraft.level == null) {
+            this.renderPanorama(guiGraphics, partialTick);
+        }
+        this.renderBlurredBackground(guiGraphics);
+        this.renderMenuBackground(guiGraphics);
+    }
+
+    public static Screen makeScreenForModMenu(@Nullable Screen returnScreen) {
+        return new ConfigScreenVisual(returnScreen, true);
+    }
+
+    public static Screen makeScreen(@Nullable Screen returnScreen) {
+        return new ConfigScreenVisual(returnScreen);
+    }
+
+    public static void openConfigScreen(@Nullable Screen returnScreen) {
+        Minecraft.getInstance().setScreen(makeScreen(returnScreen));
     }
 }

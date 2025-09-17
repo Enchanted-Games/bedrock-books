@@ -14,12 +14,15 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyBox extends AbstractButton {
+    public static final int TEXT_COLOUR = 0xff987457;
+
     public static final CustomSpriteButton.ButtonConfig DEFAULT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_box"),
@@ -85,15 +88,15 @@ public class KeyBox extends AbstractButton {
         Font font = Minecraft.getInstance().font;
         if(this.acceptingKey) {
             int leftWidth = font.width(">");
-            guiGraphics.drawString(font, ">", this.getX() - leftWidth - leftWidth / 2, this.getY() + font.lineHeight / 2, -1);
+            guiGraphics.drawString(font, ">", this.getX() - leftWidth - leftWidth / 2, this.getY() + font.lineHeight / 2, TEXT_COLOUR, false);
             int rightWidth = font.width("<");
-            guiGraphics.drawString(font, "<", this.getX() + this.getWidth() + rightWidth / 2, this.getY() + font.lineHeight / 2, -1);
+            guiGraphics.drawString(font, "<", this.getX() + this.getWidth() + rightWidth / 2, this.getY() + font.lineHeight / 2, TEXT_COLOUR, false);
         }
     }
 
     protected void drawKeyLabel(GuiGraphics guiGraphics, Component keyName, int minX, int minY, int maxX, int maxY) {
         Font font = Minecraft.getInstance().font;
-        AbstractWidget.renderScrollingString(guiGraphics, font, keyName, minX, minY, maxX, maxY, -1);
+        AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY, TEXT_COLOUR);
 
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) {
             guiGraphics.fill(minX, minY, maxX, maxY, 0xbb00ff00);
