@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockBookEditScreen;
+import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -27,6 +28,10 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         method = "openItemGui"
     )
     private void eg_bedrock_books$modifyBookScreen(Minecraft instance, Screen old, Operation<Void> original, ItemStack stack, InteractionHand hand, @Local WritableBookContent writableBookContent) {
+        if(InputUtil.shouldOpenVanillaBook()) {
+            original.call(instance, old);
+            return;
+        }
         original.call(instance, new BedrockBookEditScreen(this, stack, hand, writableBookContent));
     }
 }

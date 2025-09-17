@@ -2,23 +2,32 @@ package games.enchanted.eg_bedrock_books.common.config;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.Logging;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.option.BoolOption;
 import games.enchanted.eg_bedrock_books.common.config.option.ConfigOption;
 import games.enchanted.eg_bedrock_books.common.config.option.IntOption;
+import games.enchanted.eg_bedrock_books.common.config.option.KeyOption;
 import games.enchanted.eg_bedrock_books.platform.PlatformHelper;
 
 import java.io.*;
 import java.util.List;
 
 public class ConfigOptions {
+    // general
     public static final ConfigOption<Boolean> KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND = new BoolOption(
         false,
         false,
         "keep_book_open_when_running_command"
     );
+    public static final ConfigOption<InputConstants.Key> VANILLA_BOOK_KEY = new KeyOption(
+        InputConstants.getKey(InputConstants.KEY_LALT, 0),
+        InputConstants.getKey(InputConstants.KEY_LALT, 0),
+        "vanilla_book_key"
+    );
 
+    // visual
     public static final ConfigOption<Integer> RIBBON_HEIGHT = new IntOption(
         22,
         22,
@@ -28,6 +37,7 @@ public class ConfigOptions {
 
     private static final List<ConfigOption<?>> OPTIONS = List.of(
         KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND,
+        VANILLA_BOOK_KEY,
         RIBBON_HEIGHT
     );
 
@@ -38,7 +48,10 @@ public class ConfigOptions {
     }
 
     public static void saveIfAnyDirtyOptions() {
-        if(OPTIONS.stream().noneMatch((ConfigOption::isDirty))) return;
+        if(OPTIONS.stream().noneMatch(ConfigOption::isDirty)) return;
+        for (ConfigOption<?> option : OPTIONS) {
+            if(option.isDirty()) option.applyPendingValue();
+        }
         saveConfig();
     }
 

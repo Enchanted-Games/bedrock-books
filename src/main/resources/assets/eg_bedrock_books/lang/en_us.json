@@ -11,5 +11,8 @@
 
   "ui.eg_bedrock_books.config.title": "Bedrock Books Config",
   "ui.eg_bedrock_books.config.page.general": "General options",
-  "ui.eg_bedrock_books.config.page.debug": "Debug options"
+  "ui.eg_bedrock_books.config.page.visual": "Visual options",
+  "ui.eg_bedrock_books.config.page.debug": "Debug options",
+
+  "ui.eg_bedrock_books.config.key.open_vanilla_screen_key": "Open vanilla book screen (hold)"
 }

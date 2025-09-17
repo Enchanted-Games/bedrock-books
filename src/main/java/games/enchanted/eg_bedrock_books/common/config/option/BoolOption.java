@@ -17,10 +17,6 @@ public class BoolOption extends ConfigOption<Boolean> {
     @Override
     public void fromJson(JsonObject json) {
         Boolean value = json.has(getJsonKey()) ? json.get(getJsonKey()).getAsBoolean() : getDefaultValue();
-        if(isDirty()) {
-            this.setPendingValue(value);
-        } else {
-            this.value = value;
-        }
+        this.setValueOrPending(value);
     }
 }

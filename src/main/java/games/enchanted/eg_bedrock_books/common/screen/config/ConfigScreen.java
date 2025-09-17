@@ -2,6 +2,7 @@ package games.enchanted.eg_bedrock_books.common.screen.config;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.screen.AbstractBedrockBookScreen;
+import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.DummyTextAreaView;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView<String>> {
     protected static final Component CONFIG_TITLE = Component.translatable("ui.eg_bedrock_books.config.title");
@@ -27,15 +30,17 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
         super(CONFIG_TITLE, false);
         this.returnScreen = returnScreen;
         this.alwaysBlurBackground = alwaysBlurBackground;
+
+        this.pages = List.of(getEmptyPageContent(), getEmptyPageContent(), getEmptyPageContent());
     }
 
     @Override
     protected void makeFooterButtons() {
         this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> {
-            this.saveConfig();
             this.onClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
+            this.saveConfig();
             this.onClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.setPosition((this.width / 2) - (FOOTER_BUTTON_WIDTH * 2 + FOOTER_BUTTON_SPACING) / 2, (this.height / 2) + 90);
@@ -68,6 +73,14 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
     @Override
     public @NotNull Component getNarrationMessage() {
         return CONFIG_TITLE;
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        if(this.getFocused() instanceof KeyBox keyBox && keyBox.isListeningForInput()) {
+            return false;
+        }
+        return super.shouldCloseOnEsc();
     }
 
     @Override

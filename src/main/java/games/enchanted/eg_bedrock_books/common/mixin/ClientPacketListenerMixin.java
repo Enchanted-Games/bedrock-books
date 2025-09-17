@@ -3,13 +3,12 @@ package games.enchanted.eg_bedrock_books.common.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockBookViewScreen;
+import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -20,7 +19,7 @@ public class ClientPacketListenerMixin {
         method = "handleOpenBook"
     )
     private void eg_bedrock_books$modifyBookViewScreen(Minecraft instance, Screen old, Operation<Void> original, @Local BookViewScreen.BookAccess bookAccess) {
-        if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_ALT)) {
+        if(InputUtil.shouldOpenVanillaBook()) {
             original.call(instance, old);
             return;
         }

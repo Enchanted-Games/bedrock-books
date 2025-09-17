@@ -17,10 +17,6 @@ public class IntOption extends ConfigOption<Integer> {
     @Override
     public void fromJson(JsonObject json) {
         Integer value = json.has(getJsonKey()) ? json.get(getJsonKey()).getAsInt() : getDefaultValue();
-        if(isDirty()) {
-            this.setPendingValue(value);
-        } else {
-            this.value = value;
-        }
+        this.setValueOrPending(value);
     }
 }

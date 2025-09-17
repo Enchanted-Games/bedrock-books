@@ -38,6 +38,14 @@ public abstract class ConfigOption<T> {
         this.pendingValue = value;
     }
 
+    protected void setValueOrPending(T value) {
+        if(isDirty()) {
+            this.setPendingValue(value);
+        } else {
+            this.value = value;
+        }
+    }
+
     public void clearPendingValue() {
         this.pendingValue = null;
     }
