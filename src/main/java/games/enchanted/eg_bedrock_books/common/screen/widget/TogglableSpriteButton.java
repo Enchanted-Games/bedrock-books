@@ -18,4 +18,8 @@ public class TogglableSpriteButton extends CustomSpriteButton {
         this.toggle = toggle;
         this.setButtonConfig(toggle ? this.secondConfig : this.firstConfig);
     }
+
+    public boolean getToggle() {
+        return this.toggle;
+    }
 }

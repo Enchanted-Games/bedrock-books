@@ -22,14 +22,16 @@ import org.lwjgl.glfw.GLFW;
 
 public class KeyBox extends AbstractButton {
     public static final int TEXT_COLOUR = 0xff987457;
+    public static final int WIDTH = 52;
+    public static final int HEIGHT = 16;
+    protected static final int INLINE_PADDING = 3;
 
     public static final CustomSpriteButton.ButtonConfig DEFAULT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_box"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_box_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_box_focus")
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input_focus")
     );
-    protected static final int INLINE_PADDING = 3;
 
     private final KeyPress onKeyPress;
     private final CustomSpriteButton.ButtonConfig buttonConfig;
@@ -38,7 +40,7 @@ public class KeyBox extends AbstractButton {
     private boolean acceptingKey = false;
 
     public KeyBox(int x, int y, InputConstants.Key initialKey, KeyPress onKeyPress, Component message, CustomSpriteButton.ButtonConfig buttonConfig) {
-        super(x, y, 54, 16, message);
+        super(x, y, WIDTH, HEIGHT, message);
         this.onKeyPress = onKeyPress;
         this.buttonConfig = buttonConfig;
 
@@ -52,9 +54,12 @@ public class KeyBox extends AbstractButton {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if(this.acceptingKey) {
+            this.acceptingKey = false;
+            if(keyCode == GLFW.GLFW_KEY_ESCAPE) {
+                return super.keyPressed(keyCode, scanCode, modifiers);
+            }
             this.selectedKey = InputConstants.getKey(keyCode, scanCode);
             this.onKeyPress.keyPress(this.selectedKey);
-            this.acceptingKey = false;
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -96,7 +101,7 @@ public class KeyBox extends AbstractButton {
 
     protected void drawKeyLabel(GuiGraphics guiGraphics, Component keyName, int minX, int minY, int maxX, int maxY) {
         Font font = Minecraft.getInstance().font;
-        AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY, TEXT_COLOUR);
+        AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY    , maxX, maxY + 1, TEXT_COLOUR);
 
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) {
             guiGraphics.fill(minX, minY, maxX, maxY, 0xbb00ff00);

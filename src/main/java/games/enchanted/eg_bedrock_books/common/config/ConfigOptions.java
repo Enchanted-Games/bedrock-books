@@ -12,34 +12,54 @@ import games.enchanted.eg_bedrock_books.common.config.option.KeyOption;
 import games.enchanted.eg_bedrock_books.platform.PlatformHelper;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigOptions {
     // general
-    public static final ConfigOption<Boolean> KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND = new BoolOption(
-        false,
-        false,
-        "keep_book_open_when_running_command"
-    );
-    public static final ConfigOption<InputConstants.Key> VANILLA_BOOK_KEY = new KeyOption(
-        InputConstants.getKey(InputConstants.KEY_LALT, 0),
-        InputConstants.getKey(InputConstants.KEY_LALT, 0),
-        "vanilla_book_key"
-    );
+    public static final ConfigOption<Boolean> KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND;
+    public static final ConfigOption<Boolean> VANILLA_BOOK_KEY_ENABLED;
+    public static final ConfigOption<InputConstants.Key> VANILLA_BOOK_KEY;
 
     // visual
-    public static final ConfigOption<Integer> RIBBON_HEIGHT = new IntOption(
-        22,
-        22,
-        "ribbon_height"
-    );
+    public static final ConfigOption<Integer> RIBBON_HEIGHT;
+
+    private static final List<ConfigOption<?>> OPTIONS = new ArrayList<>();
+
+    static {
+        KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND = new BoolOption(
+            false,
+            false,
+            "keep_book_open_when_running_command"
+        );
+        registerOption(KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND);
+
+        VANILLA_BOOK_KEY_ENABLED = new BoolOption(
+            true,
+            true,
+            "vanilla_book_key_enabled"
+        );
+        registerOption(VANILLA_BOOK_KEY_ENABLED);
+
+        VANILLA_BOOK_KEY = new KeyOption(
+            InputConstants.getKey(InputConstants.KEY_LALT, 0),
+            InputConstants.getKey(InputConstants.KEY_LALT, 0),
+            "vanilla_book_key"
+        );
+        registerOption(VANILLA_BOOK_KEY);
 
 
-    private static final List<ConfigOption<?>> OPTIONS = List.of(
-        KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND,
-        VANILLA_BOOK_KEY,
-        RIBBON_HEIGHT
-    );
+        RIBBON_HEIGHT = new IntOption(
+            22,
+            22,
+            "ribbon_height"
+        );
+        registerOption(RIBBON_HEIGHT);
+    }
+
+    private static void registerOption(ConfigOption<?> option) {
+        OPTIONS.add(option);
+    }
 
     private static final String FILE_NAME = ModConstants.MOD_ID + ".json";
 

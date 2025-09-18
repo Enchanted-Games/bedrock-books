@@ -14,5 +14,7 @@
   "ui.eg_bedrock_books.config.page.visual": "Visual options",
   "ui.eg_bedrock_books.config.page.debug": "Debug options",
 
-  "ui.eg_bedrock_books.config.key.open_vanilla_screen_key": "Open vanilla book screen (hold)"
+  "ui.eg_bedrock_books.config.option.open_vanilla_screen_key": "Vanilla book screen key enabled",
+  "ui.eg_bedrock_books.config.key.open_vanilla_screen_key": "Vanilla book screen key",
+  "ui.eg_bedrock_books.config.option.close_when_running_command": "Close when running command"
 }

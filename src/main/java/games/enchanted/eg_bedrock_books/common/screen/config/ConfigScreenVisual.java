@@ -1,6 +1,9 @@
 package games.enchanted.eg_bedrock_books.common.screen.config;
 
+import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
+import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
+import games.enchanted.eg_bedrock_books.common.screen.widget.config.CheckBox;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -9,18 +12,34 @@ import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.Nullable;
 
 public class ConfigScreenVisual extends ConfigScreenBehaviour {
-    protected static final int MAX_LAYOUT_WIDTH = 130;
+    protected static final int MAX_LAYOUT_WIDTH = 126;
     protected static final int MAX_LAYOUT_HEIGHT = 140;
-    protected static final int CENTER_PADDING = 14;
+    protected static final int CENTER_PADDING = 18;
     protected static final int COLUMN_GAP = 4;
-    protected static final int ROW_GAP = 4;
+    protected static final int ROW_GAP = 5;
 
     protected static final int PAGE_TEXT_COLOUR = 0xff987457;
+
+    public static final CustomSpriteButton.ButtonConfig CHECKBOX_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked_focus")
+    );
+    public static final CustomSpriteButton.ButtonConfig CHECKBOX_UNCHECKED_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked_focus")
+    );
 
     protected ConfigScreenVisual(@Nullable Screen returnScreen, boolean alwaysBlurBackground) {
         super(returnScreen, alwaysBlurBackground);
@@ -38,6 +57,40 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
 
         this.generalGridLayout = createPageLayout(PageSide.LEFT);
 
+        final Component closeOnCommandRun = translatableComponentForPage("ui.eg_bedrock_books.config.option.close_when_running_command");
+        addOptionToLayout(
+            new CheckBox(
+                0,
+                0,
+                ConfigOptions.KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND.getValue(),
+                ConfigOptions.KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND::setPendingValue,
+                closeOnCommandRun,
+                CHECKBOX_CONFIG,
+                CHECKBOX_UNCHECKED_CONFIG
+            ),
+            closeOnCommandRun,
+            this.generalGridLayout,
+            0,
+            1
+        );
+
+        final Component vanillaScreenKeybindEnabledLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.open_vanilla_screen_key");
+        addOptionToLayout(
+            new CheckBox(
+                0,
+                0,
+                ConfigOptions.VANILLA_BOOK_KEY_ENABLED.getValue(),
+                ConfigOptions.VANILLA_BOOK_KEY_ENABLED::setPendingValue,
+                vanillaScreenKeybindEnabledLabel,
+                CHECKBOX_CONFIG,
+                CHECKBOX_UNCHECKED_CONFIG
+            ),
+            vanillaScreenKeybindEnabledLabel,
+            this.generalGridLayout,
+            1,
+            1
+        );
+
         final Component vanillaScreenLabel = translatableComponentForPage("ui.eg_bedrock_books.config.key.open_vanilla_screen_key");
         addOptionToLayout(
             new KeyBox(
@@ -49,20 +102,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             ),
             vanillaScreenLabel,
             this.generalGridLayout,
-            0,
-            1
-        );
-        addOptionToLayout(
-            new KeyBox(
-                0,
-                0,
-                ConfigOptions.VANILLA_BOOK_KEY.getValue(),
-                ConfigOptions.VANILLA_BOOK_KEY::setPendingValue,
-                Component.translatable("ui.eg_bedrock_books.config.key.open_vanilla_screen_key")
-            ),
-            Component.translatable("ui.eg_bedrock_books.config.key.open_vanilla_screen_key"),
-            this.generalGridLayout,
-            1,
+            2,
             1
         );
 
@@ -74,10 +114,10 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     }
 
     protected GridLayout createPageLayout(PageSide side) {
-        GridLayout layout = new GridLayout(
-            side == PageSide.LEFT ? (this.width / 2) - (CENTER_PADDING / 2) - MAX_LAYOUT_WIDTH : (this.width / 2) + (CENTER_PADDING / 2),
-            (this.height / 2) - MAX_LAYOUT_HEIGHT + 55
-        );
+        int x = side == PageSide.LEFT ? (this.width / 2) - (CENTER_PADDING / 2) - MAX_LAYOUT_WIDTH : (this.width / 2) + (CENTER_PADDING / 2);
+        int y = (this.height / 2) - MAX_LAYOUT_HEIGHT + 55;
+
+        GridLayout layout = new GridLayout(x, y);
         layout.columnSpacing(COLUMN_GAP);
         layout.defaultCellSetting().alignVerticallyTop();
 
@@ -120,5 +160,15 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             case 2 -> Component.translatable("ui.eg_bedrock_books.config.page.debug");
             default -> super.getPageIndicatorMessage(index);
         };
+    }
+
+    @Override
+    protected void updateVisibleContents() {
+        super.updateVisibleContents();
+        if(this.getCurrentLeftPageIndex() == 0) {
+            this.generalGridLayout.visitWidgets(widget -> widget.visible = true);
+        } else {
+            this.generalGridLayout.visitWidgets(widget -> widget.visible = false);
+        }
     }
 }
