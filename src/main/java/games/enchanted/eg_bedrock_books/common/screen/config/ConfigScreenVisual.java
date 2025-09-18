@@ -2,6 +2,7 @@ package games.enchanted.eg_bedrock_books.common.screen.config;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
+import games.enchanted.eg_bedrock_books.common.config.option.ConfigOption;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.CheckBox;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
@@ -18,6 +19,8 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ConfigScreenVisual extends ConfigScreenBehaviour {
     protected static final int MAX_LAYOUT_WIDTH = 126;
@@ -41,6 +44,13 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked_focus")
     );
 
+    protected static final List<ConfigOption<Boolean>> DEBUG_OPTIONS = List.of(
+        ConfigOptions.DEBUG_WIDGET_BOUNDS,
+        ConfigOptions.DEBUG_TEXT_BOUNDS,
+        ConfigOptions.DEBUG_CONTAINER_DATA,
+        ConfigOptions.DEBUG_VARIABLES
+    );
+
     protected ConfigScreenVisual(@Nullable Screen returnScreen, boolean alwaysBlurBackground) {
         super(returnScreen, alwaysBlurBackground);
     }
@@ -50,12 +60,14 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     }
 
     protected GridLayout generalGridLayout;
+    protected GridLayout debugGridLayout;
 
     @Override
     protected void addWidgetsBetweenPages() {
         super.addWidgetsBetweenPages();
 
         this.generalGridLayout = createPageLayout(PageSide.LEFT);
+        this.debugGridLayout = createPageLayout(PageSide.LEFT);
 
         final Component closeOnCommandRun = translatableComponentForPage("ui.eg_bedrock_books.config.option.close_when_running_command");
         addOptionToLayout(
@@ -106,11 +118,36 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             1
         );
 
+        for (int i = 0; i < DEBUG_OPTIONS.size(); i++) {
+            ConfigOption<Boolean> option = DEBUG_OPTIONS.get(i);
+            final Component optionLabel = literalComponentForPage(option.getJsonKey());
+            addOptionToLayout(
+                new CheckBox(
+                    0,
+                    0,
+                    option.getValue(),
+                    option::setPendingValue,
+                    optionLabel,
+                    CHECKBOX_CONFIG,
+                    CHECKBOX_UNCHECKED_CONFIG
+                ),
+                optionLabel,
+                this.debugGridLayout,
+                i,
+                1
+            );
+        }
+
         this.generalGridLayout.arrangeElements();
+        this.debugGridLayout.arrangeElements();
     }
 
     protected Component translatableComponentForPage(String translationKey) {
         return Component.translatable(translationKey).withStyle(Style.EMPTY.withColor(PAGE_TEXT_COLOUR).withShadowColor(0));
+    }
+
+    protected Component literalComponentForPage(String literal) {
+        return Component.literal(literal).withStyle(Style.EMPTY.withColor(PAGE_TEXT_COLOUR).withShadowColor(0));
     }
 
     protected GridLayout createPageLayout(PageSide side) {
@@ -167,8 +204,10 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         super.updateVisibleContents();
         if(this.getCurrentLeftPageIndex() == 0) {
             this.generalGridLayout.visitWidgets(widget -> widget.visible = true);
+            this.debugGridLayout.visitWidgets(widget -> widget.visible = false);
         } else {
             this.generalGridLayout.visitWidgets(widget -> widget.visible = false);
+            this.debugGridLayout.visitWidgets(widget -> widget.visible = true);
         }
     }
 }

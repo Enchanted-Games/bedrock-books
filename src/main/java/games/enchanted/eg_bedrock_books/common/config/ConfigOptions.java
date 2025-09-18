@@ -28,6 +28,7 @@ public class ConfigOptions {
     public static final ConfigOption<Boolean> DEBUG_TEXT_BOUNDS;
     public static final ConfigOption<Boolean> DEBUG_WIDGET_BOUNDS;
     public static final ConfigOption<Boolean> DEBUG_CONTAINER_DATA;
+    public static final ConfigOption<Boolean> DEBUG_VARIABLES;
 
     private static final List<ConfigOption<?>> OPTIONS = new ArrayList<>();
 
@@ -79,9 +80,16 @@ public class ConfigOptions {
         DEBUG_CONTAINER_DATA = new BoolOption(
             false,
             false,
-            "debug_container_Data"
+            "debug_container_data"
         );
         registerOption(DEBUG_CONTAINER_DATA);
+
+        DEBUG_VARIABLES = new BoolOption(
+            false,
+            false,
+            "debug_variables"
+        );
+        registerOption(DEBUG_VARIABLES);
     }
 
     private static void registerOption(ConfigOption<?> option) {
