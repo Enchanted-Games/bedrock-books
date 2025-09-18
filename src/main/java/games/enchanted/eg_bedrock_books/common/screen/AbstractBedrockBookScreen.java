@@ -1,6 +1,7 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreenBehaviour;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.EditControls;
@@ -103,9 +104,10 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     protected TextView rightPageTextView;
     @Nullable private EditControls rightPageEditControls = null;
 
-    // footer buttons
+    // buttons
     protected LinearLayout footerButtonLayout;
     protected CustomSpriteButton configButton;
+    protected CustomSpriteButton xButton;
 
     public AbstractBedrockBookScreen(Component message, boolean editable) {
         super(message);
@@ -120,7 +122,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         final int turnPageButtonYPos = (this.height / 2) + 47;
         final int editControlsYPos = (this.height / 2) + 44;
 
-        CustomSpriteButton closeButton = new CustomSpriteButton(
+        this.xButton = new CustomSpriteButton(
             (this.width / 2) + (CENTER_PADDING / 2) + 120,
             (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 33,
             CLOSE_BUTTON_SIZE,
@@ -129,7 +131,8 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             CLOSE_BUTTON_LABEL,
             CLOSE_BUTTON_CONFIG
         );
-        this.addRenderableWidget(closeButton);
+        this.addRenderableWidget(this.xButton);
+        this.xButton.visible = ConfigOptions.SHOW_X_BUTTON.getValue();
 
         // left page
         TextViewAndWidget<PageContent, TextView> leftPageWidget = createTextWidgetAndView((this.width / 2) - (CENTER_PADDING / 2) - PAGE_EDIT_BOX_WIDTH, editBoxYPos, PageSide.LEFT);
@@ -180,7 +183,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
 
         // navigation buttons
         this.turnLeftButton = new CustomSpriteButton(
-            (this.width / 2) - 146,
+            (this.width / 2) - 147,
             turnPageButtonYPos,
             TURN_PAGE_BUTTON_SIZE,
             TURN_PAGE_BUTTON_SIZE,

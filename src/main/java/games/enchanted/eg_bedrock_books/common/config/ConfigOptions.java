@@ -23,6 +23,7 @@ public class ConfigOptions {
 
     // visual
     public static final ConfigOption<Integer> RIBBON_HEIGHT;
+    public static final ConfigOption<Boolean> SHOW_X_BUTTON;
 
     // debug
     public static final ConfigOption<Boolean> DEBUG_TEXT_BOUNDS;
@@ -35,14 +36,14 @@ public class ConfigOptions {
     static {
         CLOSE_BOOK_WHEN_RUNNING_COMMAND = new BoolOption(
             true,
-            false,
+            true,
             "close_book_when_running_command"
         );
         registerOption(CLOSE_BOOK_WHEN_RUNNING_COMMAND);
 
         VANILLA_BOOK_KEY_ENABLED = new BoolOption(
-            true,
-            true,
+            false,
+            false,
             "vanilla_book_key_enabled"
         );
         registerOption(VANILLA_BOOK_KEY_ENABLED);
@@ -61,6 +62,13 @@ public class ConfigOptions {
             "ribbon_height"
         );
         registerOption(RIBBON_HEIGHT);
+
+        SHOW_X_BUTTON = new BoolOption(
+            true,
+            true,
+            "show_x_button"
+        );
+        registerOption(SHOW_X_BUTTON);
 
 
         DEBUG_TEXT_BOUNDS = new BoolOption(

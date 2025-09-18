@@ -14,9 +14,11 @@
   "ui.eg_bedrock_books.config.page.visual": "Visual options",
   "ui.eg_bedrock_books.config.page.debug": "Debug options",
 
+  "ui.eg_bedrock_books.config.option.close_when_running_command": "Close when running command",
+  "ui.eg_bedrock_books.config.option.close_when_running_command.tooltip": "Should the current book screen be closed when clicking a piece of text in the book that will run a command",
   "ui.eg_bedrock_books.config.option.open_vanilla_screen_key": "Vanilla book screen key enabled",
   "ui.eg_bedrock_books.config.key.open_vanilla_screen_key": "Vanilla book screen key",
-  "ui.eg_bedrock_books.config.option.close_when_running_command": "Close when running command",
+  "ui.eg_bedrock_books.config.option.show_x_button": "Show 'x' button",
 
   "ui.eg_bedrock_books.widget.checkbox.checked.narration": "is set to true",
   "ui.eg_bedrock_books.widget.checkbox.unchecked.narration": "is set to false"

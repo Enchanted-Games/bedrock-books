@@ -9,6 +9,7 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
@@ -60,6 +61,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     }
 
     protected GridLayout generalGridLayout;
+    protected GridLayout visualGridLayout;
     protected GridLayout debugGridLayout;
 
     @Override
@@ -67,19 +69,23 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         super.addWidgetsBetweenPages();
 
         this.generalGridLayout = createPageLayout(PageSide.LEFT);
+        this.visualGridLayout = createPageLayout(PageSide.RIGHT);
         this.debugGridLayout = createPageLayout(PageSide.LEFT);
 
+        // general
         final Component closeOnCommandRun = translatableComponentForPage("ui.eg_bedrock_books.config.option.close_when_running_command");
+        final CheckBox closeOnCommandRunWidget = new CheckBox(
+            0,
+            0,
+            ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND.getValue(),
+            ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND::setPendingValue,
+            closeOnCommandRun,
+            CHECKBOX_CONFIG,
+            CHECKBOX_UNCHECKED_CONFIG
+        );
+        closeOnCommandRunWidget.setTooltip(Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.option.close_when_running_command.tooltip")));
         addOptionToLayout(
-            new CheckBox(
-                0,
-                0,
-                ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND.getValue(),
-                ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND::setPendingValue,
-                closeOnCommandRun,
-                CHECKBOX_CONFIG,
-                CHECKBOX_UNCHECKED_CONFIG
-            ),
+            closeOnCommandRunWidget,
             closeOnCommandRun,
             this.generalGridLayout,
             0,
@@ -118,6 +124,28 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             1
         );
 
+        // visual
+        final Component showXButtonLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.show_x_button");
+        addOptionToLayout(
+            new CheckBox(
+                0,
+                0,
+                ConfigOptions.SHOW_X_BUTTON.getValue(),
+                value -> {
+                    ConfigOptions.SHOW_X_BUTTON.setPendingValue(value);
+                    this.xButton.visible = value;
+                },
+                showXButtonLabel,
+                CHECKBOX_CONFIG,
+                CHECKBOX_UNCHECKED_CONFIG
+            ),
+            showXButtonLabel,
+            this.visualGridLayout,
+            0,
+            1
+        );
+
+        // debug
         for (int i = 0; i < DEBUG_OPTIONS.size(); i++) {
             ConfigOption<Boolean> option = DEBUG_OPTIONS.get(i);
             final Component optionLabel = literalComponentForPage(option.getJsonKey());
@@ -139,6 +167,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         }
 
         this.generalGridLayout.arrangeElements();
+        this.visualGridLayout.arrangeElements();
         this.debugGridLayout.arrangeElements();
     }
 
@@ -204,9 +233,11 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         super.updateVisibleContents();
         if(this.getCurrentLeftPageIndex() == 0) {
             this.generalGridLayout.visitWidgets(widget -> widget.visible = true);
+            this.visualGridLayout.visitWidgets(widget -> widget.visible = true);
             this.debugGridLayout.visitWidgets(widget -> widget.visible = false);
         } else {
             this.generalGridLayout.visitWidgets(widget -> widget.visible = false);
+            this.visualGridLayout.visitWidgets(widget -> widget.visible = false);
             this.debugGridLayout.visitWidgets(widget -> widget.visible = true);
         }
     }
