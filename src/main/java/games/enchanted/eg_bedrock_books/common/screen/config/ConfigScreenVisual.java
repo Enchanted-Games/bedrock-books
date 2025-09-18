@@ -62,8 +62,8 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             new CheckBox(
                 0,
                 0,
-                ConfigOptions.KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND.getValue(),
-                ConfigOptions.KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND::setPendingValue,
+                ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND.getValue(),
+                ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND::setPendingValue,
                 closeOnCommandRun,
                 CHECKBOX_CONFIG,
                 CHECKBOX_UNCHECKED_CONFIG

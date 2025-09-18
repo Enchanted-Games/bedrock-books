@@ -5,6 +5,7 @@ import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreenBehavio
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.EditControls;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
+import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -453,6 +454,10 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             PAGE_INDICATOR_COLOUR,
             false
         );
+
+        if(InputUtil.shouldShowDebugVariables()) {
+            guiGraphics.drawString(font, "leftPageIndex: " + this.getCurrentLeftPageIndex(), 0, 56, -1);
+        }
     }
 
     protected abstract ResourceLocation getBackgroundTexture();

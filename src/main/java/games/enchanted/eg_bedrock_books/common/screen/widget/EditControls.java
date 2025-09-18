@@ -1,8 +1,7 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
-import net.minecraft.client.Minecraft;
+import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
@@ -15,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Consumer;
 
@@ -207,7 +205,7 @@ public class EditControls implements Renderable, LayoutElement {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if(!InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) return;
+        if(!InputUtil.shouldShowDebugWidgetBound()) return;
         guiGraphics.fillGradient(getRectangle().left(), getRectangle().top(), getRectangle().right(), getRectangle().bottom(), 0xaa00ffff, 0xaa00ffff);
         guiGraphics.fillGradient(this.layout.getX(), this.layout.getY(), this.layout.getX() + 12, this.layout.getY() + 12, 0xaa00ff00, 0xaa00ff00);
     }

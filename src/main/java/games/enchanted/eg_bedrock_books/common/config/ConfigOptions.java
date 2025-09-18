@@ -17,22 +17,27 @@ import java.util.List;
 
 public class ConfigOptions {
     // general
-    public static final ConfigOption<Boolean> KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND;
+    public static final ConfigOption<Boolean> CLOSE_BOOK_WHEN_RUNNING_COMMAND;
     public static final ConfigOption<Boolean> VANILLA_BOOK_KEY_ENABLED;
     public static final ConfigOption<InputConstants.Key> VANILLA_BOOK_KEY;
 
     // visual
     public static final ConfigOption<Integer> RIBBON_HEIGHT;
 
+    // debug
+    public static final ConfigOption<Boolean> DEBUG_TEXT_BOUNDS;
+    public static final ConfigOption<Boolean> DEBUG_WIDGET_BOUNDS;
+    public static final ConfigOption<Boolean> DEBUG_CONTAINER_DATA;
+
     private static final List<ConfigOption<?>> OPTIONS = new ArrayList<>();
 
     static {
-        KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND = new BoolOption(
+        CLOSE_BOOK_WHEN_RUNNING_COMMAND = new BoolOption(
+            true,
             false,
-            false,
-            "keep_book_open_when_running_command"
+            "close_book_when_running_command"
         );
-        registerOption(KEEP_BOOK_OPEN_WHEN_RUNNING_COMMAND);
+        registerOption(CLOSE_BOOK_WHEN_RUNNING_COMMAND);
 
         VANILLA_BOOK_KEY_ENABLED = new BoolOption(
             true,
@@ -55,6 +60,28 @@ public class ConfigOptions {
             "ribbon_height"
         );
         registerOption(RIBBON_HEIGHT);
+
+
+        DEBUG_TEXT_BOUNDS = new BoolOption(
+            false,
+            false,
+            "debug_text_bounds"
+        );
+        registerOption(DEBUG_TEXT_BOUNDS);
+
+        DEBUG_WIDGET_BOUNDS = new BoolOption(
+            false,
+            false,
+            "debug_widget_bounds"
+        );
+        registerOption(DEBUG_WIDGET_BOUNDS);
+
+        DEBUG_CONTAINER_DATA = new BoolOption(
+            false,
+            false,
+            "debug_container_Data"
+        );
+        registerOption(DEBUG_CONTAINER_DATA);
     }
 
     private static void registerOption(ConfigOption<?> option) {

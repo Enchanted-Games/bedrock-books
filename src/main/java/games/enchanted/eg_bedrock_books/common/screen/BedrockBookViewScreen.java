@@ -1,9 +1,10 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.ComponentTextAreaView;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
+import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -150,7 +151,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         int clampedRelativeX = (int) Math.clamp(x - closestPageX, 0, closestPageX + PAGE_TEXT_WIDTH);
         int clampedRelativeY = (int) Math.clamp(y - closestPageY, 0, closestPageY + PAGE_TEXT_HEIGHT);
 
-        if(guiGraphics != null && InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) {
+        if(guiGraphics != null && InputUtil.shouldShowDebugTextBound()) {
             drawXY(closestToLeftHorizontally ? 0 : 1, closestToLeftHorizontally ? 0 : 1, 0, guiGraphics);
             drawXY(closestPageX, closestPageY, 8, guiGraphics);
             drawXY(clampedRelativeX, clampedRelativeY, 16, guiGraphics);
@@ -170,9 +171,11 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     protected void handleClickEvent(Minecraft minecraft, ClickEvent clickEvent) {
         switch (clickEvent) {
             case ClickEvent.RunCommand(String string):
-                closeServerContainer();
+                if(ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND.getValue()) {
+                    closeServerContainer();
+                }
                 if(minecraft.player != null) {
-                    clickCommandAction(minecraft.player, string, null);
+                    clickCommandAction(minecraft.player, string, ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND.getValue() ? null : this);
                 }
                 break;
             case ClickEvent.ChangePage(int i):
@@ -216,10 +219,13 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
 
         guiGraphics.renderComponentHoverEffect(this.font, this.styleUnderMouseCursor, mouseX, mouseY);
 
-        if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) {
+        if(InputUtil.shouldShowDebugTextBound()) {
             guiGraphics.fillGradient(this.leftPageX - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageY - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageX + PAGE_TEXT_WIDTH + PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageY + PAGE_TEXT_HEIGHT + PAGE_CLICK_BOUNDS_EXTRA_PADDING, 0x22000000, 0x22000000);
             guiGraphics.fillGradient(this.rightPageX - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageY - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageX + PAGE_TEXT_WIDTH + PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageY + PAGE_TEXT_HEIGHT + PAGE_CLICK_BOUNDS_EXTRA_PADDING, 0x22000000, 0x22000000);
-            guiGraphics.drawString(this.font, this.styleUnderMouseCursor == null ? "" : this.styleUnderMouseCursor.toString(), 0, this.height - this.font.lineHeight, -1);
+        }
+        if(InputUtil.shouldShowDebugVariables()) {
+            guiGraphics.drawString(this.font, "style under cursor: ", 0, this.height - this.font.lineHeight * 2, -1);
+            guiGraphics.drawString(this.font, this.styleUnderMouseCursor == null ? "<none>" : this.styleUnderMouseCursor.toString(), 0, this.height - this.font.lineHeight, -1);
         }
     }
 

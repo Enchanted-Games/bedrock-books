@@ -1,10 +1,9 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.TogglableSpriteButton;
-import net.minecraft.client.Minecraft;
+import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -20,7 +19,6 @@ import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.LecternMenu;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Objects;
 
@@ -274,8 +272,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) {
-            guiGraphics.drawString(font, "clientLeftPageIndex: " + this.getCurrentLeftPageIndex(), 0, 56, -1);
+        if(InputUtil.shouldShowDebugContainerData()) {
             guiGraphics.drawString(font, "containerIndex: " + this.menu.getPage(), 0, 64, -1);
         }
     }

@@ -3,6 +3,7 @@ package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
+import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -103,7 +104,7 @@ public class KeyBox extends AbstractButton {
         Font font = Minecraft.getInstance().font;
         AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY    , maxX, maxY + 1, TEXT_COLOUR);
 
-        if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT)) {
+        if(InputUtil.shouldShowDebugTextBound()) {
             guiGraphics.fill(minX, minY, maxX, maxY, 0xbb00ff00);
         }
     }
