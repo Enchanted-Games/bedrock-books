@@ -49,6 +49,14 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked_focus")
     );
 
+    public static ResourceLocation SLIDER_BACKGROUND_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_background");
+    public static final CustomSpriteButton.ButtonConfig SLIDER_HANDLE_CONFIG = new CustomSpriteButton.ButtonConfig(
+        () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle_hover"),
+        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle_focus")
+    );
+
     protected static final List<ConfigOption<Boolean>> DEBUG_OPTIONS = List.of(
         ConfigOptions.DEBUG_WIDGET_BOUNDS,
         ConfigOptions.DEBUG_TEXT_BOUNDS,
@@ -160,7 +168,9 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
                 ConfigOptions.RIBBON_HEIGHT.getPendingOrCurrentValue(),
                 ConfigOptions.RIBBON_HEIGHT::setPendingValue,
                 0,
-                130
+                130,
+                SLIDER_BACKGROUND_SPRITE,
+                SLIDER_HANDLE_CONFIG
             ),
             ribbonHeightLabel,
             this.visualGridLayout,
