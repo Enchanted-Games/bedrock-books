@@ -56,7 +56,7 @@ public class KeyBox extends AbstractButton {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if(this.acceptingKey) {
             this.acceptingKey = false;
-            if(keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            if(keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_TAB) {
                 return super.keyPressed(keyCode, scanCode, modifiers);
             }
             this.selectedKey = InputConstants.getKey(keyCode, scanCode);
@@ -102,7 +102,7 @@ public class KeyBox extends AbstractButton {
 
     protected void drawKeyLabel(GuiGraphics guiGraphics, Component keyName, int minX, int minY, int maxX, int maxY) {
         Font font = Minecraft.getInstance().font;
-        AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY    , maxX, maxY + 1, TEXT_COLOUR);
+        AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY + 1, TEXT_COLOUR);
 
         if(InputUtil.shouldShowDebugTextBound()) {
             guiGraphics.fill(minX, minY, maxX, maxY, 0xbb00ff00);
