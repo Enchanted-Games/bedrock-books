@@ -10,16 +10,21 @@
   "ui.eg_bedrock_books.edit.move_page_forward_label": "Move page forward",
 
   "ui.eg_bedrock_books.config.title": "Bedrock Books Config",
+  "ui.eg_bedrock_books.config.reset": "Reset",
+  "ui.eg_bedrock_books.config.reset.title": "Reset the config?",
+  "ui.eg_bedrock_books.config.reset.warning": "This action CANNOT be undone, all Bedrock Books config options will be reset to their default values",
   "ui.eg_bedrock_books.config.page.general": "General options",
   "ui.eg_bedrock_books.config.page.visual": "Visual options",
   "ui.eg_bedrock_books.config.page.debug": "Debug options",
 
   "ui.eg_bedrock_books.config.option.close_when_running_command": "Close when running command",
-  "ui.eg_bedrock_books.config.option.close_when_running_command.tooltip": "Should the current book screen be closed when clicking a piece of text in the book that will run a command",
+  "ui.eg_bedrock_books.config.option.close_when_running_command.tooltip": "Should the current book screen be closed when clicking a piece of text in the book that will run a command. Enable this for vanilla behaviour",
   "ui.eg_bedrock_books.config.option.open_vanilla_screen_key": "Vanilla book screen key enabled",
   "ui.eg_bedrock_books.config.key.open_vanilla_screen_key": "Vanilla book screen key",
   "ui.eg_bedrock_books.config.option.show_x_button": "Show 'x' button",
+  "ui.eg_bedrock_books.config.option.ribbon_height": "Ribbon Height",
 
   "ui.eg_bedrock_books.widget.checkbox.checked.narration": "is set to true",
-  "ui.eg_bedrock_books.widget.checkbox.unchecked.narration": "is set to false"
+  "ui.eg_bedrock_books.widget.checkbox.unchecked.narration": "is set to false",
+  "ui.eg_bedrock_books.widget.slider.narration": "is set to %s"
 }

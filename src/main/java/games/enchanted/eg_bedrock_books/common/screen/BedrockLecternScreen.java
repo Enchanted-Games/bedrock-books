@@ -1,6 +1,7 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.TogglableSpriteButton;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
@@ -31,8 +32,10 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
     protected static final Component TAKE_BOOK_COMPONENT = Component.translatable("lectern.take_book");
 
-    protected static final int RIBBON_WIDTH = 18;
-    protected static final int RIBBON_HEIGHT = 116;
+    public static final int RIBBON_WIDTH = 18;
+    public static final int RIBBON_TOP_HEIGHT = 11;
+    public static final int RIBBON_BOTTOM_HEIGHT = 29;
+    public static final int RIBBON_Y_OFFSET = 111;
 
     Component RIBBON_TOOLTIP = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_tooltip");
     Component LEFT_RIBBON_LABEL = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_left_label");
@@ -50,9 +53,10 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     );
 
     Component RIGHT_RIBBON_LABEL = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_right_label");
+    public static final ResourceLocation RIGHT_RIBBON_SELECTED_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon");
     protected static final CustomSpriteButton.ButtonConfig RIGHT_RIBBON_SELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon"),
+        RIGHT_RIBBON_SELECTED_SPRITE,
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon_hover"),
         ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon_focus")
     );
@@ -86,13 +90,13 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
     @Override
     protected void init() {
-        final int ribbonYOffset = 111;
+        final int totalRibbonHeight = RIBBON_TOP_HEIGHT + ConfigOptions.RIBBON_HEIGHT.getValue() + RIBBON_BOTTOM_HEIGHT;
 
         this.leftPageRibbon = new TogglableSpriteButton(
             this.width / 2 - RIBBON_WIDTH,
-            (this.height / 2) - ribbonYOffset,
+            (this.height / 2) - RIBBON_Y_OFFSET,
             RIBBON_WIDTH,
-            RIBBON_HEIGHT,
+            totalRibbonHeight,
             button -> {
                 this.setPageIndex(this.getCurrentLeftPageIndex());
                 this.updateVisibleContents();
@@ -105,9 +109,9 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
 
         this.rightPageRibbon = new TogglableSpriteButton(
             this.width / 2,
-            (this.height / 2) - ribbonYOffset,
+            (this.height / 2) - RIBBON_Y_OFFSET,
             RIBBON_WIDTH,
-            RIBBON_HEIGHT,
+            totalRibbonHeight,
             button -> {
                 this.setPageIndex(this.getCurrentLeftPageIndex() + 1);
                 this.updateVisibleContents();

@@ -22,8 +22,8 @@ public class ConfigOptions {
     public static final ConfigOption<InputConstants.Key> VANILLA_BOOK_KEY;
 
     // visual
-    public static final ConfigOption<Integer> RIBBON_HEIGHT;
     public static final ConfigOption<Boolean> SHOW_X_BUTTON;
+    public static final ConfigOption<Integer> RIBBON_HEIGHT;
 
     // debug
     public static final ConfigOption<Boolean> DEBUG_TEXT_BOUNDS;
@@ -56,19 +56,19 @@ public class ConfigOptions {
         registerOption(VANILLA_BOOK_KEY);
 
 
-        RIBBON_HEIGHT = new IntOption(
-            22,
-            22,
-            "ribbon_height"
-        );
-        registerOption(RIBBON_HEIGHT);
-
         SHOW_X_BUTTON = new BoolOption(
             true,
             true,
             "show_x_button"
         );
         registerOption(SHOW_X_BUTTON);
+
+        RIBBON_HEIGHT = new IntOption(
+            76,
+            76,
+            "ribbon_height"
+        );
+        registerOption(RIBBON_HEIGHT);
 
 
         DEBUG_TEXT_BOUNDS = new BoolOption(
@@ -152,6 +152,19 @@ public class ConfigOptions {
 
         for (ConfigOption<?> option : OPTIONS) {
             option.fromJson(decodedConfig);
+        }
+    }
+
+    public static void resetAndSaveAllOptions() {
+        for (ConfigOption<?> option : OPTIONS) {
+            option.resetToDefault(true);
+        }
+        saveConfig();
+    }
+
+    public static void clearAllPendingValues() {
+        for (ConfigOption<?> option : OPTIONS) {
+            option.clearPendingValue();
         }
     }
 }

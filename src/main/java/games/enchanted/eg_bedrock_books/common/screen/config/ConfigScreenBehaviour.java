@@ -9,9 +9,11 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,9 +22,10 @@ import java.util.List;
 
 public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, TextAreaView<String>> {
     protected static final Component CONFIG_TITLE = Component.translatable("ui.eg_bedrock_books.config.title");
+    protected static final Component RESET_BUTTON_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset");
+    protected static final Component RESET_TITLE_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset.title").withStyle(Style.EMPTY.withBold(true));
+    protected static final Component RESET_MESSAGE_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset.warning");
     private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/config_background.png");
-
-    protected static final int FOOTER_BUTTON_WIDTH = 120;
 
     protected final @Nullable Screen returnScreen;
     protected final boolean alwaysBlurBackground;
@@ -37,18 +40,44 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
 
     @Override
     protected void makeFooterButtons() {
-        this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> {
-            this.onClose();
-        }).width(FOOTER_BUTTON_WIDTH).build());
-        this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
-            this.saveConfig();
-            this.onClose();
-        }).width(FOOTER_BUTTON_WIDTH).build());
-        this.footerButtonLayout.setPosition((this.width / 2) - (FOOTER_BUTTON_WIDTH * 2 + FOOTER_BUTTON_SPACING) / 2, (this.height / 2) + 90);
+        this.footerButtonLayout.addChild(
+            Button.builder(CommonComponents.GUI_CANCEL, button -> this.cancelAndClose())
+                .width(FOOTER_BUTTON_WIDTH)
+            .build()
+        );
+        this.footerButtonLayout.addChild(
+            Button.builder(RESET_BUTTON_COMPONENT, button -> this.resetWithConfirmation())
+                .width(FOOTER_BUTTON_WIDTH)
+            .build()
+        );
+        this.footerButtonLayout.addChild(
+            Button.builder(SAVE_BUTTON_COMPONENT, button -> this.saveAndClose())
+                .width(FOOTER_BUTTON_WIDTH)
+            .build()
+        );
+        this.footerButtonLayout.setPosition((this.width / 2) - (FOOTER_BUTTON_WIDTH * 3 + FOOTER_BUTTON_SPACING * 2) / 2, (this.height / 2) + 90);
     }
 
-    protected void saveConfig() {
+    protected void cancelAndClose() {
+        ConfigOptions.clearAllPendingValues();
+        this.onClose();
+    }
+
+    protected void saveAndClose() {
         ConfigOptions.saveIfAnyDirtyOptions();
+        this.onClose();
+    }
+
+    protected void resetWithConfirmation() {
+        ConfirmScreen confirmScreen = new ConfirmScreen(confirmed -> {
+            Minecraft.getInstance().setScreen(this);
+            if(!confirmed) {
+                return;
+            }
+            ConfigOptions.resetAndSaveAllOptions();
+            this.onClose();
+        }, RESET_TITLE_COMPONENT, RESET_MESSAGE_COMPONENT);
+        Minecraft.getInstance().setScreen(confirmScreen);
     }
 
     @Override

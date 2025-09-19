@@ -60,12 +60,12 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
             assert this.minecraft != null;
             this.minecraft.setScreen(null);
         }).width(FOOTER_BUTTON_WIDTH).build());
-        this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
-            this.onClose();
-        }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SIGN_BUTTON_COMPONENT, button -> {
             assert this.minecraft != null;
             this.minecraft.setScreen(this.bookSignScreen);
+        }).width(FOOTER_BUTTON_WIDTH).build());
+        this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
+            this.onClose();
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.setPosition((this.width / 2) - (FOOTER_BUTTON_WIDTH * 3 + FOOTER_BUTTON_SPACING * 2) / 2, (this.height / 2) + 90);
     }

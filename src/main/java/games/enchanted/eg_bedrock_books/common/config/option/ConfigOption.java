@@ -31,7 +31,11 @@ public abstract class ConfigOption<T> {
     }
 
     public @Nullable T getPendingValue() {
-        return pendingValue;
+        return this.pendingValue;
+    }
+
+    public T getPendingOrCurrentValue() {
+        return this.pendingValue == null ? this.value : this.pendingValue;
     }
 
     public void setPendingValue(@NotNull T value) {
@@ -54,6 +58,21 @@ public abstract class ConfigOption<T> {
         if(this.pendingValue == null) return;
         this.value = this.pendingValue;
         this.pendingValue = null;
+    }
+
+    /**
+     * Resets value to default
+     *
+     * @param force if true, clears pending value and set current value to default. If false, sets pending value
+     *              to default if one is already present, otherwise set current value to default
+     */
+    public void resetToDefault(boolean force) {
+        if(force) {
+            this.clearPendingValue();
+            this.value = this.getDefaultValue();
+        } else {
+            this.setValueOrPending(getDefaultValue());
+        }
     }
 
     public abstract JsonElement toJson();
