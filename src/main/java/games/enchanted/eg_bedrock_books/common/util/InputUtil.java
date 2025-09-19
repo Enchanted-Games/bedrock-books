@@ -18,7 +18,7 @@ public class InputUtil {
     }
 
     public static boolean shouldShowDebugWidgetBound() {
-        if(!ConfigOptions.DEBUG_TEXT_BOUNDS.getValue()) return false;
+        if(!ConfigOptions.DEBUG_WIDGET_BOUNDS.getValue()) return false;
         return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_ALT);
     }
 
@@ -28,7 +28,7 @@ public class InputUtil {
     }
 
     public static boolean shouldShowDebugVariables() {
-        if(!ConfigOptions.DEBUG_CONTAINER_DATA.getValue()) return false;
+        if(!ConfigOptions.DEBUG_VARIABLES.getValue()) return false;
         return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 }

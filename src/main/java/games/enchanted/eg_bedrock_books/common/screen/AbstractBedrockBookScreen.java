@@ -415,11 +415,11 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         assert this.minecraft != null;
-        if (keyCode == GLFW.GLFW_KEY_PAGE_UP && this.turnLeftButton.visible) {
+        if (keyCode == ConfigOptions.MOVE_BACKWARD_PAGE_KEY.getPendingOrCurrentValue().getValue() && this.turnLeftButton.visible) {
             this.turnLeftButton.onPress();
             this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
             return true;
-        } else if (keyCode == GLFW.GLFW_KEY_PAGE_DOWN && this.turnRightButton.visible) {
+        } else if (keyCode == ConfigOptions.MOVE_FORWARD_PAGE_KEY.getPendingOrCurrentValue().getValue() && this.turnRightButton.visible) {
             this.turnRightButton.onPress();
             this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
             return true;

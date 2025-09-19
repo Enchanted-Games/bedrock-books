@@ -18,6 +18,8 @@ import java.util.List;
 public class ConfigOptions {
     // general
     public static final ConfigOption<Boolean> CLOSE_BOOK_WHEN_RUNNING_COMMAND;
+    public static final ConfigOption<InputConstants.Key> MOVE_FORWARD_PAGE_KEY;
+    public static final ConfigOption<InputConstants.Key> MOVE_BACKWARD_PAGE_KEY;
     public static final ConfigOption<Boolean> VANILLA_BOOK_KEY_ENABLED;
     public static final ConfigOption<InputConstants.Key> VANILLA_BOOK_KEY;
 
@@ -40,6 +42,20 @@ public class ConfigOptions {
             "close_book_when_running_command"
         );
         registerOption(CLOSE_BOOK_WHEN_RUNNING_COMMAND);
+
+        MOVE_FORWARD_PAGE_KEY = new KeyOption(
+            InputConstants.getKey(InputConstants.KEY_PAGEDOWN, 0),
+            InputConstants.getKey(InputConstants.KEY_PAGEDOWN, 0),
+            "move_forward_page_key"
+        );
+        registerOption(MOVE_FORWARD_PAGE_KEY);
+
+        MOVE_BACKWARD_PAGE_KEY = new KeyOption(
+            InputConstants.getKey(InputConstants.KEY_PAGEUP, 0),
+            InputConstants.getKey(InputConstants.KEY_PAGEUP, 0),
+            "move_backward_page_key"
+        );
+        registerOption(MOVE_BACKWARD_PAGE_KEY);
 
         VANILLA_BOOK_KEY_ENABLED = new BoolOption(
             false,

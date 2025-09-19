@@ -104,35 +104,71 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             1
         );
 
-        final Component vanillaScreenKeybindEnabledLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.open_vanilla_screen_key");
+        final Component turnForwardPageLabel = translatableComponentForPage("ui.eg_bedrock_books.config.key.turn_forward_page");
         addLabeledOptionToLayout(
-            new CheckBox(
+            new KeyBox(
                 0,
                 0,
-                ConfigOptions.VANILLA_BOOK_KEY_ENABLED.getPendingOrCurrentValue(),
-                ConfigOptions.VANILLA_BOOK_KEY_ENABLED::setPendingValue,
-                vanillaScreenKeybindEnabledLabel,
-                CHECKBOX_CONFIG,
-                CHECKBOX_UNCHECKED_CONFIG
+                ConfigOptions.MOVE_FORWARD_PAGE_KEY.getPendingOrCurrentValue(),
+                ConfigOptions.MOVE_FORWARD_PAGE_KEY::setPendingValue,
+                turnForwardPageLabel
             ),
-            vanillaScreenKeybindEnabledLabel,
+            turnForwardPageLabel,
             this.generalGridLayout,
             1,
             1
         );
 
-        final Component vanillaScreenLabel = translatableComponentForPage("ui.eg_bedrock_books.config.key.open_vanilla_screen_key");
+        final Component turnBackwardPageLabel = translatableComponentForPage("ui.eg_bedrock_books.config.key.turn_backward_page");
         addLabeledOptionToLayout(
             new KeyBox(
                 0,
                 0,
-                ConfigOptions.VANILLA_BOOK_KEY.getPendingOrCurrentValue(),
-                ConfigOptions.VANILLA_BOOK_KEY::setPendingValue,
-                vanillaScreenLabel
+                ConfigOptions.MOVE_BACKWARD_PAGE_KEY.getPendingOrCurrentValue(),
+                ConfigOptions.MOVE_BACKWARD_PAGE_KEY::setPendingValue,
+                turnBackwardPageLabel
             ),
-            vanillaScreenLabel,
+            turnBackwardPageLabel,
             this.generalGridLayout,
             2,
+            1
+        );
+
+
+        final Component vanillaScreenKeybindEnabledLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.open_vanilla_screen_key");
+        final Tooltip vanillaScreenKeyTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.key.open_vanilla_screen_key.tooltip"));
+        final CheckBox vanillaScreenKeyEnabledWidget = new CheckBox(
+            0,
+            0,
+            ConfigOptions.VANILLA_BOOK_KEY_ENABLED.getPendingOrCurrentValue(),
+            ConfigOptions.VANILLA_BOOK_KEY_ENABLED::setPendingValue,
+            vanillaScreenKeybindEnabledLabel,
+            CHECKBOX_CONFIG,
+            CHECKBOX_UNCHECKED_CONFIG
+        );
+        vanillaScreenKeyEnabledWidget.setTooltip(vanillaScreenKeyTooltip);
+        addLabeledOptionToLayout(
+            vanillaScreenKeyEnabledWidget,
+            vanillaScreenKeybindEnabledLabel,
+            this.generalGridLayout,
+            3,
+            1
+        );
+
+        final Component vanillaScreenKeyLabel = translatableComponentForPage("ui.eg_bedrock_books.config.key.open_vanilla_screen_key");
+        final KeyBox vanillaScreenKeyInput = new KeyBox(
+            0,
+            0,
+            ConfigOptions.VANILLA_BOOK_KEY.getPendingOrCurrentValue(),
+            ConfigOptions.VANILLA_BOOK_KEY::setPendingValue,
+            vanillaScreenKeyLabel
+        );
+        vanillaScreenKeyInput.setTooltip(vanillaScreenKeyTooltip);
+        addLabeledOptionToLayout(
+            vanillaScreenKeyInput,
+            vanillaScreenKeyLabel,
+            this.generalGridLayout,
+            4,
             1
         );
 
