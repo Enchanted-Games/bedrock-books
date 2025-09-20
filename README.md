@@ -4,6 +4,9 @@ Bedrock Books is a mod that simply changes the book screen to look more like the
 
 _Note: this is not a fully 100% accurate port, some aspects have been slightly adapted and adjusted to better fit with how books work on Java Edition_
 
+<img width="2560" height="1381" alt="2025-09-20_15 25 57" src="https://github.com/user-attachments/assets/7baa9369-c6da-425a-b956-7e442c9a7b77" />
+
+
 ## Features
 
 - Fully client side, will work on any server modded or vanilla
