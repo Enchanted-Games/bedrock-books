@@ -141,7 +141,7 @@ public class ConfigOptions {
             root.add(option.getJsonKey(), option.toJson());
         }
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String encodedJson = gson.toJson(root);
 
         try (FileWriter writer = new FileWriter(getConfigFile())) {
