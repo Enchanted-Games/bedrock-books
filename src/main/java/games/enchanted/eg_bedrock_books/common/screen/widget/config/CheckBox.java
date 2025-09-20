@@ -1,8 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 
 import games.enchanted.eg_bedrock_books.common.screen.widget.TogglableSpriteButton;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -34,7 +32,6 @@ public class CheckBox extends TogglableSpriteButton {
         this.valueChange.onPress(this.getToggle());
     }
 
-    @Environment(EnvType.CLIENT)
     public interface ValueChange {
         void onPress(boolean value);
     }
