@@ -1,6 +1,7 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
@@ -123,6 +124,12 @@ public class KeyBox extends AbstractButton {
             int rightWidth = font.width("<");
             guiGraphics.drawString(font, "<", this.getX() + this.getWidth() + rightWidth / 2, this.getY() + font.lineHeight / 2, TEXT_COLOUR, false);
         }
+
+        //? if minecraft: >= 1.21.9 {
+        if (this.isHovered()) {
+            guiGraphics.requestCursor(this.isActive() ? CursorTypes.POINTING_HAND : CursorTypes.NOT_ALLOWED);
+        }
+        //? }
     }
 
     protected void drawKeyLabel(GuiGraphics guiGraphics, Component keyName, int minX, int minY, int maxX, int maxY) {

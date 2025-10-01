@@ -1,5 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget;
 
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import games.enchanted.eg_bedrock_books.common.duck.AbstractWidgetAdditions;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -34,6 +35,12 @@ public class CustomSpriteButton extends Button implements AbstractWidgetAddition
             this.getWidth(),
             this.getHeight()
         );
+        
+        //? if minecraft: >= 1.21.9 {
+        if (this.isHovered()) {
+            guiGraphics.requestCursor(this.isActive() ? CursorTypes.POINTING_HAND : CursorTypes.NOT_ALLOWED);
+        }
+        //? }
     }
 
     public void playDownSound(SoundManager handler) {
