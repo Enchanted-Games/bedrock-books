@@ -35,12 +35,12 @@ public class CustomSpriteButton extends Button implements AbstractWidgetAddition
             this.getWidth(),
             this.getHeight()
         );
-        
+
         //? if minecraft: >= 1.21.9 {
         if (this.isHovered()) {
             guiGraphics.requestCursor(this.isActive() ? CursorTypes.POINTING_HAND : CursorTypes.NOT_ALLOWED);
         }
-        //? }
+        //?}
     }
 
     public void playDownSound(SoundManager handler) {
