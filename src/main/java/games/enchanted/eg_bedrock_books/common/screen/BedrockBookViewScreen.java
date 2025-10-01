@@ -1,5 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.ComponentTextAreaView;
@@ -9,6 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -114,11 +117,25 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(
+        //? if minecraft: >= 1.21.9 {
+        MouseButtonEvent mouseButtonEvent, boolean doubleClick
+        //?} else {
+        /*double mouseX, double mouseY, int button
+         *///?}
+    ) {
         Style clickedStyle = getStyleAt(mouseX, mouseY, null);
+        //? if minecraft: >= 1.21.9 {
+        int button = mouseButtonEvent.button();
+        //?}
 
-        if (button == GLFW.GLFW_MOUSE_BUTTON_1 && clickedStyle != null && handleComponentClicked(clickedStyle)) return true;
-        return super.mouseClicked(mouseX, mouseY, button);
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && clickedStyle != null && handleComponentClicked(clickedStyle)) return true;
+
+        //? if minecraft: >= 1.21.9 {
+        return super.mouseClicked(mouseButtonEvent, doubleClick);
+        //?} else {
+        /*return super.mouseClicked(mouseX, mouseY, button);
+        *///?}
     }
 
     @Override

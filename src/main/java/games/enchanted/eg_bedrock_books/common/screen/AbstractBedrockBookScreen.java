@@ -1,5 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreenBehaviour;
@@ -11,6 +12,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.CommonComponents;
@@ -413,18 +418,40 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
 
     // general visuals and accessibility
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(
+        //? if minecraft: >= 1.21.9 {
+        KeyEvent keyEvent
+        //?} else {
+        /*int keyCode, int scanCode, int modifiers
+         *///?}
+    ) {
         assert this.minecraft != null;
+        //? if minecraft: >= 1.21.9 {
+        int keyCode = keyEvent.key();
+        InputWithModifiers inputWithModifiers = new MouseButtonInfo(InputConstants.MOUSE_BUTTON_LEFT, 0);
+        //?}
         if (keyCode == ConfigOptions.MOVE_BACKWARD_PAGE_KEY.getPendingOrCurrentValue().getValue() && this.turnLeftButton.visible) {
-            this.turnLeftButton.onPress();
+            this.turnLeftButton.onPress(
+                //? if minecraft: >= 1.21.9 {
+                inputWithModifiers
+                //?}
+            );
             this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
             return true;
         } else if (keyCode == ConfigOptions.MOVE_FORWARD_PAGE_KEY.getPendingOrCurrentValue().getValue() && this.turnRightButton.visible) {
-            this.turnRightButton.onPress();
+            this.turnRightButton.onPress(
+                //? if minecraft: >= 1.21.9 {
+                inputWithModifiers
+                //?}
+            );
             this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        //? if minecraft: >= 1.21.9 {
+        return super.keyPressed(keyEvent);
+        //?} else {
+        /*return super.keyPressed(keyCode, scanCode, modifiers);
+         *///?}
     }
 
     @Override

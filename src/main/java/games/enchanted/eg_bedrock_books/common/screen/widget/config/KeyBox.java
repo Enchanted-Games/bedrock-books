@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
+import games.enchanted.eg_bedrock_books.common.util.McUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,6 +12,8 @@ import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -53,21 +56,43 @@ public class KeyBox extends AbstractButton {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(
+        //? if minecraft: >= 1.21.9 {
+        KeyEvent keyEvent
+        //?} else {
+        /*int keyCode, int scanCode, int modifiers
+        *///?}
+    ) {
         if(this.acceptingKey) {
             this.acceptingKey = false;
+            //? if minecraft: >= 1.21.9 {
+            int keyCode = keyEvent.key();
+            int scanCode = keyEvent.scancode();
+            //?}
             if(keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_TAB) {
-                return super.keyPressed(keyCode, scanCode, modifiers);
+                //? if minecraft: >= 1.21.9 {
+                return super.keyPressed(keyEvent);
+                //?} else {
+                /*return super.keyPressed(keyCode, scanCode, modifiers);
+                *///?}
             }
-            this.selectedKey = InputConstants.getKey(keyCode, scanCode);
+            this.selectedKey = InputUtil.getKey(keyCode, scanCode);
             this.onKeyPress.keyPress(this.selectedKey);
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        //? if minecraft: >= 1.21.9 {
+        return super.keyPressed(keyEvent);
+        //?} else {
+        /*return super.keyPressed(keyCode, scanCode, modifiers);
+        *///?}
     }
 
     @Override
-    public void onPress() {
+    public void onPress(
+        //? if minecraft: >= 1.21.9 {
+        InputWithModifiers inputWithModifiers
+        //?}
+    ) {
         this.acceptingKey = !this.acceptingKey;
     }
 

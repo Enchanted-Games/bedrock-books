@@ -9,6 +9,8 @@ import games.enchanted.eg_bedrock_books.common.config.option.BoolOption;
 import games.enchanted.eg_bedrock_books.common.config.option.ConfigOption;
 import games.enchanted.eg_bedrock_books.common.config.option.IntOption;
 import games.enchanted.eg_bedrock_books.common.config.option.KeyOption;
+import games.enchanted.eg_bedrock_books.common.util.InputUtil;
+import games.enchanted.eg_bedrock_books.common.util.McUtil;
 import games.enchanted.eg_bedrock_books.platform.PlatformHelper;
 
 import java.io.*;
@@ -44,15 +46,15 @@ public class ConfigOptions {
         registerOption(CLOSE_BOOK_WHEN_RUNNING_COMMAND);
 
         MOVE_FORWARD_PAGE_KEY = new KeyOption(
-            InputConstants.getKey(InputConstants.KEY_PAGEDOWN, 0),
-            InputConstants.getKey(InputConstants.KEY_PAGEDOWN, 0),
+            InputUtil.getKey(InputConstants.KEY_PAGEDOWN),
+            InputUtil.getKey(InputConstants.KEY_PAGEDOWN),
             "move_forward_page_key"
         );
         registerOption(MOVE_FORWARD_PAGE_KEY);
 
         MOVE_BACKWARD_PAGE_KEY = new KeyOption(
-            InputConstants.getKey(InputConstants.KEY_PAGEUP, 0),
-            InputConstants.getKey(InputConstants.KEY_PAGEUP, 0),
+            InputUtil.getKey(InputConstants.KEY_PAGEUP),
+            InputUtil.getKey(InputConstants.KEY_PAGEUP),
             "move_backward_page_key"
         );
         registerOption(MOVE_BACKWARD_PAGE_KEY);
@@ -65,8 +67,8 @@ public class ConfigOptions {
         registerOption(VANILLA_BOOK_KEY_ENABLED);
 
         VANILLA_BOOK_KEY = new KeyOption(
-            InputConstants.getKey(InputConstants.KEY_LALT, 0),
-            InputConstants.getKey(InputConstants.KEY_LALT, 0),
+            InputUtil.getKey(InputConstants.KEY_LALT),
+            InputUtil.getKey(InputConstants.KEY_LALT),
             "vanilla_book_key"
         );
         registerOption(VANILLA_BOOK_KEY);
