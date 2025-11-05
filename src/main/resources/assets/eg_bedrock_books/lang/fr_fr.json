@@ -1,0 +1,33 @@
+{
+  "ui.eg_bedrock_books.lectern.bookmark_left_label": "Marquer la page de gauche",
+  "ui.eg_bedrock_books.lectern.bookmark_right_label": "Marquer la page de droite",
+  "ui.eg_bedrock_books.lectern.bookmark_tooltip": "La page marquée est celle que les autres joueurs verront, et celle utilisée par les pupitres pour la sortie redstone",
+
+  "ui.eg_bedrock_books.edit.open_edit_controls_label": "Afficher/Masquer les contrôles d’édition",
+  "ui.eg_bedrock_books.edit.move_page_back_label": "Déplacer la page vers l’arrière",
+  "ui.eg_bedrock_books.edit.add_page_label": "Insérer une page",
+  "ui.eg_bedrock_books.edit.delete_page_label": "Supprimer la page",
+  "ui.eg_bedrock_books.edit.move_page_forward_label": "Déplacer la page vers l’avant",
+
+  "ui.eg_bedrock_books.config.title": "Configuration de Bedrock Books",
+  "ui.eg_bedrock_books.config.reset": "Réinitialiser",
+  "ui.eg_bedrock_books.config.reset.title": "Réinitialiser la configuration ?",
+  "ui.eg_bedrock_books.config.reset.warning": "Cette action est IRRÉVERSIBLE. Toutes les options de configuration de Bedrock Books seront rétablies à leurs valeurs par défaut.",
+  "ui.eg_bedrock_books.config.page.general": "Options générales",
+  "ui.eg_bedrock_books.config.page.visual": "Options visuelles",
+  "ui.eg_bedrock_books.config.page.debug": "Options de débogage",
+
+  "ui.eg_bedrock_books.config.option.close_when_running_command": "Fermer lors de l’exécution d’une commande",
+  "ui.eg_bedrock_books.config.option.close_when_running_command.tooltip": "Faut-il fermer le livre actuel lorsqu’un texte déclenche une commande ? Activez cette option pour un comportement similaire à celui de Minecraft Vanilla.",
+  "ui.eg_bedrock_books.config.key.turn_forward_page": "Touche pour tourner la page en avant",
+  "ui.eg_bedrock_books.config.key.turn_backward_page": "Touche pour tourner la page en arrière",
+  "ui.eg_bedrock_books.config.option.open_vanilla_screen_key": "Touche pour ouvrir l’écran de livre Vanilla activée",
+  "ui.eg_bedrock_books.config.key.open_vanilla_screen_key.tooltip": "Si activée, maintenir cette touche en ouvrant un livre affichera l’écran Vanilla à la place de celui personnalisé par Bedrock Books.",
+  "ui.eg_bedrock_books.config.key.open_vanilla_screen_key": "Touche d’écran de livre Vanilla",
+  "ui.eg_bedrock_books.config.option.show_x_button": "Afficher le bouton « x »",
+  "ui.eg_bedrock_books.config.option.ribbon_height": "Hauteur du marque-page",
+
+  "ui.eg_bedrock_books.widget.checkbox.checked.narration": "est défini sur vrai",
+  "ui.eg_bedrock_books.widget.checkbox.unchecked.narration": "est défini sur faux",
+  "ui.eg_bedrock_books.widget.slider.narration": "est défini sur %s"
+}
