@@ -1,3 +1,4 @@
-# 1.0.1
+# 1.0.2
 
-- Ported to 1.21.9
+- Added French (fr_fr) translations thanks to MrCookie112 (github)
+- Fixed mod menu config button on fabric 1.21.10
