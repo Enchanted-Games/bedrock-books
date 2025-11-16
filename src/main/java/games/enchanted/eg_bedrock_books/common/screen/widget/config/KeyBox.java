@@ -1,7 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
@@ -12,8 +11,6 @@ import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.input.InputWithModifiers;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -23,6 +20,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
+
+//? if minecraft: >= 1.21.9 {
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.KeyEvent;
+//?}
 
 public class KeyBox extends AbstractButton {
     public static final int TEXT_COLOUR = 0xff987457;

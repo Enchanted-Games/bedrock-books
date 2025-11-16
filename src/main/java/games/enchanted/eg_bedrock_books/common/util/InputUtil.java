@@ -2,9 +2,11 @@ package games.enchanted.eg_bedrock_books.common.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.input.KeyEvent;
 import org.lwjgl.glfw.GLFW;
+
+//? if minecraft: >= 1.21.9 {
+import net.minecraft.client.input.KeyEvent;
+//?}
 
 public class InputUtil {
     public static boolean shouldOpenVanillaBook() {

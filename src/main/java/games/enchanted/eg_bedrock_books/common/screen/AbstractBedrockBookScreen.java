@@ -1,6 +1,5 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreenBehaviour;
@@ -12,10 +11,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.InputWithModifiers;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.CommonComponents;
@@ -25,10 +20,18 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.component.WritableBookContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//? if minecraft: >= 1.21.9 {
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
+import org.lwjgl.glfw.GLFW;
+//?}
 
 public abstract class AbstractBedrockBookScreen<PageContent, TextView extends TextAreaView<PageContent>> extends Screen {
     // book spacing

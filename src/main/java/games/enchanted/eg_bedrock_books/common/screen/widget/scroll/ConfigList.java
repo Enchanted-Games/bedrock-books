@@ -1,8 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget.scroll;
 
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
-import games.enchanted.eg_bedrock_books.common.mixin.accessor.AbstractScrollAreaAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -14,6 +12,11 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+//? if minecraft: >= 1.21.9 {
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import games.enchanted.eg_bedrock_books.common.mixin.accessor.AbstractScrollAreaAccessor;
+//?}
+
 import java.util.List;
 
 public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
@@ -22,7 +25,7 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
     private static final ResourceLocation SCROLLER_BACKGROUND_FILLED_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background_filled");
 
     public ConfigList(Minecraft minecraft, int width, int height, int x, int y) {
-        super(minecraft, width + 10, height, y, 20);
+        super(minecraft, width + 10, height, y, 70);
         this.setPosition(x, y);
     }
 
@@ -57,8 +60,15 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
     protected void renderListSeparators(GuiGraphics guiGraphics) {
     }
 
+
     @Override
-    protected void renderScrollbar(GuiGraphics graphics, int mouseX, int mouseY) {
+    protected void renderScrollbar(
+        GuiGraphics graphics
+        //? if minecraft: >= 1.21.9 {
+        , int mouseX,
+        int mouseY
+        //?}
+    ) {
         final int HANDLE_WIDTH = 14;
         final int HANDLE_HEIGHT = 6;
         final int BACKGROUND_WIDTH = 6;
@@ -96,7 +106,7 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
             if (this.isOverScrollbar(mouseX, mouseY)) {
                 graphics.requestCursor(((AbstractScrollAreaAccessor) this).eg_bedrock_books$isScrolling() ? CursorTypes.RESIZE_NS : CursorTypes.POINTING_HAND);
             }
-            //? }
+            //?}
         }
     }
 
@@ -124,16 +134,29 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
         }
 
         @Override
+        //? if minecraft: >= 1.21.9 {
         public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
-            this.label.setY(this.getContentY());
-            this.label.setX(this.getContentX());
+        //?} else if minecraft: < 1.21.9 {
+        /*public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTicks) {
+        *///?}
+            //? if minecraft: >= 1.21.9 {
+            int top = getContentY();
+            int left = getContentX();
+            int middleY = getContentYMiddle();
+            int right = getContentRight();
+            //?} else if minecraft: < 1.21.9 {
+            /*int middleY = top - (height / 2);
+            int right = (left + width);
+            *///?}
+            this.label.setY(top);
+            this.label.setX(left);
             this.label.render(guiGraphics, mouseX, mouseY, partialTicks);
-            this.child.setY(getContentYMiddle() - (GAP * 2));
-            this.child.setX(this.getContentRight() - this.child.getWidth() + 4);
+            this.child.setY(middleY - (GAP * 2));
+            this.child.setX(right - this.child.getWidth() + 4);
             this.child.render(guiGraphics, mouseX, mouseY, partialTicks);
         }
 
-        @Override
+//        @Override
         public int getHeight() {
             return Math.max(this.child.getHeight(), this.label.getHeight()) + GAP;
         }
@@ -147,12 +170,20 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
         }
 
         @Override
+        //? if minecraft: >= 1.21.9 {
         public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
-            this.label.setY(this.getContentY());
-            this.label.setX(this.getContentX());
+         //?} else if minecraft: < 1.21.9 {
+        /*public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTicks) {
+            *///?}
+            //? if minecraft: >= 1.21.9 {
+            int top = getContentY();
+            int left = getContentX();
+            //?}
+            this.label.setY(top);
+            this.label.setX(left);
             this.label.render(guiGraphics, mouseX, mouseY, partialTicks);
             this.child.setY(this.label.getBottom() + BETWEEN_WIDGET_GAP);
-            this.child.setX(this.getContentX());
+            this.child.setX(left);
             this.child.render(guiGraphics, mouseX, mouseY, partialTicks);
         }
 

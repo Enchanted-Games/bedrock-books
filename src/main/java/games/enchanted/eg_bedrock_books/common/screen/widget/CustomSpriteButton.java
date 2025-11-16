@@ -1,6 +1,5 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget;
 
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import games.enchanted.eg_bedrock_books.common.duck.AbstractWidgetAdditions;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -13,6 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
+
+//? if minecraft: >= 1.21.9 {
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
+//?}
 
 public class CustomSpriteButton extends Button implements AbstractWidgetAdditions {
     protected ButtonConfig buttonConfig;

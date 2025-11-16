@@ -1,11 +1,14 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 
 import games.enchanted.eg_bedrock_books.common.screen.widget.TogglableSpriteButton;
-import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
+
+//? if minecraft: >= 1.21.9 {
+import net.minecraft.client.input.InputWithModifiers;
+//?}
 
 public class CheckBox extends TogglableSpriteButton {
     protected static final int SIZE = 16;
