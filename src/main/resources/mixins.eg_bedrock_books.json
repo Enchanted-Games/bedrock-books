@@ -11,7 +11,8 @@
     "BookSignScreenMixin",
     "ClientPacketListenerMixin",
     "LocalPlayerMixin",
-    "MenuScreensMixin"
+    "MenuScreensMixin",
+    "accessor.AbstractScrollAreaAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

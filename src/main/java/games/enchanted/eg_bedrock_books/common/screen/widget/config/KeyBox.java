@@ -5,7 +5,6 @@ import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
-import games.enchanted.eg_bedrock_books.common.util.McUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,7 +28,7 @@ public class KeyBox extends AbstractButton {
     public static final int TEXT_COLOUR = 0xff987457;
     public static final int WIDTH = 52;
     public static final int HEIGHT = 16;
-    protected static final int INLINE_PADDING = 3;
+    protected static final int INLINE_PADDING = 4;
 
     public static final CustomSpriteButton.ButtonConfig DEFAULT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
