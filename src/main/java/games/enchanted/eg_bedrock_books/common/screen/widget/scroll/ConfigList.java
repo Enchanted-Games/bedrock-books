@@ -18,8 +18,8 @@ import java.util.List;
 
 public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
     private static final ResourceLocation SCROLLER_HANDLE_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_handle");
-    private static final ResourceLocation SCROLLER_BACKGROUND_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "widget/scroller_background");
-    private static final ResourceLocation SCROLLER_BACKGROUND_FILLED_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "widget/scroller_background_filled");
+    private static final ResourceLocation SCROLLER_BACKGROUND_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background");
+    private static final ResourceLocation SCROLLER_BACKGROUND_FILLED_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background_filled");
 
     public ConfigList(Minecraft minecraft, int width, int height, int x, int y) {
         super(minecraft, width + 10, height, y, 20);
@@ -70,19 +70,19 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
             int handleY = (int) ((this.getBottom() - top) * scrollAmount);
             graphics.blitSprite(
                 RenderPipelines.GUI_TEXTURED,
+                SCROLLER_BACKGROUND_SPRITE,
+                barX,
+                top,
+                BACKGROUND_WIDTH,
+                bottom - top
+            );
+            graphics.blitSprite(
+                RenderPipelines.GUI_TEXTURED,
                 SCROLLER_BACKGROUND_FILLED_SPRITE,
                 barX,
                 top,
                 BACKGROUND_WIDTH,
                 handleY
-            );
-            graphics.blitSprite(
-                RenderPipelines.GUI_TEXTURED,
-                SCROLLER_BACKGROUND_SPRITE,
-                barX,
-                handleY + top,
-                BACKGROUND_WIDTH,
-                bottom - (handleY + top)
             );
             graphics.blitSprite(
                 RenderPipelines.GUI_TEXTURED,
