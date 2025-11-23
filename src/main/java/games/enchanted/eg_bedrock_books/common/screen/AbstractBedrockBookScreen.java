@@ -433,7 +433,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         int keyCode = keyEvent.key();
         InputWithModifiers inputWithModifiers = new MouseButtonInfo(InputConstants.MOUSE_BUTTON_LEFT, 0);
         //?}
-        if (keyCode == ConfigOptions.MOVE_BACKWARD_PAGE_KEY.getPendingOrCurrentValue().getValue() && this.turnLeftButton.visible) {
+        if (keyCode == ConfigOptions.MOVE_BACKWARD_PAGE_KEY.getValue().getValue() && this.turnLeftButton.visible) {
             this.turnLeftButton.onPress(
                 //? if minecraft: >= 1.21.9 {
                 inputWithModifiers
@@ -441,7 +441,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             );
             this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
             return true;
-        } else if (keyCode == ConfigOptions.MOVE_FORWARD_PAGE_KEY.getPendingOrCurrentValue().getValue() && this.turnRightButton.visible) {
+        } else if (keyCode == ConfigOptions.MOVE_FORWARD_PAGE_KEY.getValue().getValue() && this.turnRightButton.visible) {
             this.turnRightButton.onPress(
                 //? if minecraft: >= 1.21.9 {
                 inputWithModifiers
