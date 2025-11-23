@@ -144,7 +144,6 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
         }
     }
 
-
     @Override
     public void setScrollAmount(double scrollAmount) {
         super.setScrollAmount(scrollAmount);
@@ -503,36 +502,7 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
             return ContainerEventHandler.super.nextFocusPath(navigationEvent);
         }
 
-        @Override
-        public boolean mouseClicked(
-            //? if minecraft: >= 1.21.9 {
-            MouseButtonEvent mouseButtonEvent, boolean doubleClick
-            //?} else {
-            /*double mouseX, double mouseY, int button
-            *///?}
-        ) {
-            for (GuiEventListener child : children()) {
-                if(child.mouseClicked(
-                    //? if minecraft: >= 1.21.9 {
-                    mouseButtonEvent, doubleClick
-                     //?} else {
-                    /*mouseX, mouseY, button
-                    *///?}
-                )) return true;
-            }
-            return ContainerEventHandler.super.mouseClicked(
-                //? if minecraft: >= 1.21.9 {
-                mouseButtonEvent, doubleClick
-                 //?} else {
-                /*mouseX, mouseY, button
-                *///?}
-             );
-        }
-
         public abstract void renderContent(final GuiGraphics graphics, int mouseX, int mouseY, boolean hovered, float partialTick);
-
-        @Override
-        public abstract @NotNull List<? extends GuiEventListener> children();
 
         public abstract List<? extends NarratableEntry> narratableChildren();
 

@@ -121,8 +121,8 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
         public @NotNull List<? extends GuiEventListener> children() {
             return List.of(label, child);
         }
-        @Override
 
+        @Override
         public @NotNull List<? extends NarratableEntry> narratableChildren() {
             return List.of(label, child);
         }

@@ -33,7 +33,6 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     protected static final int MAX_LAYOUT_HEIGHT = 140;
     protected static final int CENTER_PADDING = 24;
     protected static final int COLUMN_GAP = 8;
-    protected static final int ROW_GAP = 5;
 
     protected static final int PAGE_TEXT_COLOUR = 0xff987457;
 
@@ -253,13 +252,11 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         MultiLineTextWidget labelWidget = new MultiLineTextWidget(label, Minecraft.getInstance().font);
         labelWidget.setMaxWidth(Math.abs(widget.getWidth() - MAX_LAYOUT_WIDTH) - COLUMN_GAP);
         configList.addHorizontal(widget, labelWidget);
-        this.addWidget(widget);
     }
     protected void addStackedOption(ConfigList configList, AbstractWidget widget, Component label) {
         MultiLineTextWidget labelWidget = new MultiLineTextWidget(label, Minecraft.getInstance().font);
         labelWidget.setMaxWidth(MAX_LAYOUT_WIDTH - COLUMN_GAP);
         configList.addStacked(widget, labelWidget);
-        this.addWidget(widget);
     }
 
 

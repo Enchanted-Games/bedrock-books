@@ -29,6 +29,7 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
 
     protected final @Nullable Screen returnScreen;
     protected final boolean alwaysBlurBackground;
+    protected boolean saveWhenOnCloseCalled = false;
 
     protected ConfigScreenBehaviour(@Nullable Screen returnScreen, boolean alwaysBlurBackground) {
         super(CONFIG_TITLE, false);
@@ -59,12 +60,12 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
     }
 
     protected void cancelAndClose() {
-        ConfigOptions.clearAllPendingValues();
+        this.saveWhenOnCloseCalled = false;
         this.onClose();
     }
 
     protected void saveAndClose() {
-        ConfigOptions.saveIfAnyDirtyOptions();
+        this.saveWhenOnCloseCalled = true;
         this.onClose();
     }
 
@@ -84,6 +85,11 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
     public void onClose() {
         if(this.minecraft != null && this.returnScreen != null) {
             this.minecraft.setScreen(returnScreen);
+        }
+        if(this.saveWhenOnCloseCalled) {
+            ConfigOptions.saveIfAnyDirtyOptions();
+        } else {
+            ConfigOptions.clearAllPendingValues();
         }
     }
 
