@@ -14,9 +14,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.layouts.FrameLayout;
-import net.minecraft.client.gui.layouts.GridLayout;
-import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -193,7 +190,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         final IntegerSlider ribbonHeightWidget = new IntegerSlider(
             0,
             0,
-            MAX_LAYOUT_WIDTH,
+            MAX_LAYOUT_WIDTH - ConfigList.SCROLLBAR_WIDTH,
             16,
             ribbonHeightLabel,
             ConfigOptions.RIBBON_HEIGHT.getPendingOrCurrentValue(),
@@ -213,7 +210,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         // debug
         for (ConfigOption<Boolean> option : DEBUG_OPTIONS) {
             final Component optionLabel = literalComponentForPage(option.getJsonKey());
-            addStackedOption(
+            addHorizontalOption(
                 this.debugOptionList,
                 new CheckBox(
                     0,

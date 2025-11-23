@@ -66,9 +66,10 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
         child.setY(this.getNextChildY());
         child.setHeight(height);
         this.children.add(child);
+        this.repositionElements();
     }
 
-    private void repositionChildren() {
+    private void repositionElements() {
         int top = this.getY() - (int)this.scrollAmount();
 
         for (C child : this.children) {
@@ -144,7 +145,7 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
     @Override
     public void setScrollAmount(double scrollAmount) {
         super.setScrollAmount(scrollAmount);
-        this.repositionChildren();
+        this.repositionElements();
     }
 
     @Override
@@ -293,7 +294,7 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
     }
 
     public int getRowLeft() {
-        return this.getX();
+        return this.getX() + (scrollbarVisible() ? 0 : SCROLLBAR_WIDTH);
     }
 
     public int getRowRight() {

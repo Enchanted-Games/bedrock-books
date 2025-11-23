@@ -76,7 +76,7 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
                 return;
             }
             ConfigOptions.resetAndSaveAllOptions();
-            this.onClose();
+            Minecraft.getInstance().setScreen(new ConfigScreenVisual(this.returnScreen, this.alwaysBlurBackground));
         }, RESET_TITLE_COMPONENT, RESET_MESSAGE_COMPONENT);
         Minecraft.getInstance().setScreen(confirmScreen);
     }
