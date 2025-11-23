@@ -206,6 +206,22 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             ribbonHeightLabel
         );
 
+        final Component forceWhiteTextInHCLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.force_white_text_in_high_contrast");
+        final CheckBox forceWhiteTextInHCWidget = new CheckBox(
+            0,
+            0,
+            ConfigOptions.FORCE_WHITE_TEXT_IN_HIGH_CONTRAST.getPendingOrCurrentValue(),
+            ConfigOptions.FORCE_WHITE_TEXT_IN_HIGH_CONTRAST::setPendingValue,
+            forceWhiteTextInHCLabel,
+            CHECKBOX_CONFIG,
+            CHECKBOX_UNCHECKED_CONFIG
+        );
+        addHorizontalOption(
+            this.visualOptionList,
+            forceWhiteTextInHCWidget,
+            forceWhiteTextInHCLabel
+        );
+
 
         // debug
         for (ConfigOption<Boolean> option : DEBUG_OPTIONS) {

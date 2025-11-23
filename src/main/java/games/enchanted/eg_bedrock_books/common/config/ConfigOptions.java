@@ -10,7 +10,6 @@ import games.enchanted.eg_bedrock_books.common.config.option.ConfigOption;
 import games.enchanted.eg_bedrock_books.common.config.option.IntOption;
 import games.enchanted.eg_bedrock_books.common.config.option.KeyOption;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
-import games.enchanted.eg_bedrock_books.common.util.McUtil;
 import games.enchanted.eg_bedrock_books.platform.PlatformHelper;
 
 import java.io.*;
@@ -28,6 +27,7 @@ public class ConfigOptions {
     // visual
     public static final ConfigOption<Boolean> SHOW_X_BUTTON;
     public static final ConfigOption<Integer> RIBBON_HEIGHT;
+    public static final ConfigOption<Boolean> FORCE_WHITE_TEXT_IN_HIGH_CONTRAST;
 
     // debug
     public static final ConfigOption<Boolean> DEBUG_TEXT_BOUNDS;
@@ -87,6 +87,13 @@ public class ConfigOptions {
             "ribbon_height"
         );
         registerOption(RIBBON_HEIGHT);
+
+        FORCE_WHITE_TEXT_IN_HIGH_CONTRAST = new BoolOption(
+            true,
+            true,
+            "force_white_text_in_high_contrast"
+        );
+        registerOption(FORCE_WHITE_TEXT_IN_HIGH_CONTRAST);
 
 
         DEBUG_TEXT_BOUNDS = new BoolOption(

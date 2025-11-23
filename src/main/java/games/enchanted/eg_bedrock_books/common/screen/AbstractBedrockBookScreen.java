@@ -17,6 +17,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.component.WritableBookContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,9 +44,12 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     protected static final int CENTER_PADDING = 22;
 
     // text style
-    protected static final int CURSOR_COLOUR = 0xff000000;
-    protected static final int TEXT_COLOUR = 0xff000000;
-    protected static final int PAGE_INDICATOR_COLOUR = 0xffbca387;
+    private static final int CURSOR_COLOUR = 0xff000000;
+    private static final int HC_CURSOR_COLOUR = CommonColors.SOFT_YELLOW;
+    private static final int TEXT_COLOUR = 0xff000000;
+    private static final int HC_TEXT_COLOUR = 0xffffffff;
+    private static final int PAGE_INDICATOR_COLOUR = 0xffbca387;
+    private static final int HC_PAGE_INDICATOR_COLOUR = CommonColors.SOFT_YELLOW;
     protected static final boolean TEXT_SHADOW = false;
 
     // footer button spacing
@@ -473,7 +477,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.leftPageNumberMessage,
             (this.width / 2) - (CENTER_PADDING / 2) - (PAGE_EDIT_BOX_WIDTH / 2) - (leftPageNumberWidth / 2),
             pageNumberYPos,
-            PAGE_INDICATOR_COLOUR,
+            this.getPageIndicatorColour(),
             false
         );
 
@@ -483,7 +487,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.rightPageNumberMessage,
             (this.width / 2) + (CENTER_PADDING / 2) + (PAGE_EDIT_BOX_WIDTH / 2) - (rightPageNumberWidth / 2),
             pageNumberYPos,
-            PAGE_INDICATOR_COLOUR,
+            this.getPageIndicatorColour(),
             false
         );
 
@@ -519,6 +523,27 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         } else {
             this.renderTransparentBackground(guiGraphics);
         }
+    }
+
+    /**
+     * @return text colour as an ARGB packed int
+     */
+    protected int getTextColour() {
+        return ModConstants.isHighContrastPackActive() ? HC_TEXT_COLOUR : TEXT_COLOUR;
+    }
+
+    /**
+     * @return cursor colour as an ARGB packed int
+     */
+    protected int getCursorColour() {
+        return ModConstants.isHighContrastPackActive() ? HC_CURSOR_COLOUR : CURSOR_COLOUR;
+    }
+
+    /**
+     * @return page indicator colour
+     */
+    protected int getPageIndicatorColour() {
+        return ModConstants.isHighContrastPackActive() ? HC_PAGE_INDICATOR_COLOUR : PAGE_INDICATOR_COLOUR;
     }
 
     public enum PageMoveDirection {

@@ -73,8 +73,8 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
     @Override
     protected TextViewAndWidget<String, TextAreaView<String>> createTextWidgetAndView(int x, int y, PageSide side) {
         MultiLineEditBox editBox = MultiLineEditBox.builder()
-            .setTextColor(TEXT_COLOUR)
-            .setCursorColor(CURSOR_COLOUR)
+            .setTextColor(this.getTextColour())
+            .setCursorColor(this.getCursorColour())
             .setShowDecorations(false)
             .setShowBackground(false)
             .setTextShadow(TEXT_SHADOW)

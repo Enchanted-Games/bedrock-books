@@ -1,5 +1,7 @@
 package games.enchanted.eg_bedrock_books.common;
 
+import net.minecraft.client.Minecraft;
+
 public class ModConstants {
     public static final String MOD_NAME = "Bedrock Books";
     public static final String MOD_ID = "eg_bedrock_books";
@@ -12,4 +14,8 @@ public class ModConstants {
     //? if neoforge {
     /*public static final String TARGET_PLATFORM = "neoforge";
     *///?}
+
+    public static boolean isHighContrastPackActive() {
+        return Minecraft.getInstance().getResourcePackRepository().getSelectedIds().contains(HIGH_CONTRAST_PACK_ID);
+    }
 }
