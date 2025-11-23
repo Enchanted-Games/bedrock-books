@@ -246,18 +246,20 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     protected ConfigList createPageLayout(PageSide side) {
         int x = side == PageSide.LEFT ? (this.width / 2) - (CENTER_PADDING / 2) - MAX_LAYOUT_WIDTH : (this.width / 2) + (CENTER_PADDING / 2) + 4;
         int y = (this.height / 2) - MAX_LAYOUT_HEIGHT + 55;
-        return new ConfigList(this.minecraft, MAX_LAYOUT_WIDTH, MAX_LAYOUT_HEIGHT - 5, x, y);
+        return new ConfigList(x - ConfigList.SCROLLBAR_WIDTH / 4, y, MAX_LAYOUT_WIDTH + ConfigList.SCROLLBAR_WIDTH / 2, MAX_LAYOUT_HEIGHT - 5);
     }
 
     protected void addHorizontalOption(ConfigList configList, AbstractWidget widget, Component label) {
         MultiLineTextWidget labelWidget = new MultiLineTextWidget(label, Minecraft.getInstance().font);
         labelWidget.setMaxWidth(Math.abs(widget.getWidth() - MAX_LAYOUT_WIDTH) - COLUMN_GAP);
         configList.addHorizontal(widget, labelWidget);
+        this.addWidget(widget);
     }
     protected void addStackedOption(ConfigList configList, AbstractWidget widget, Component label) {
         MultiLineTextWidget labelWidget = new MultiLineTextWidget(label, Minecraft.getInstance().font);
         labelWidget.setMaxWidth(MAX_LAYOUT_WIDTH - COLUMN_GAP);
         configList.addStacked(widget, labelWidget);
+        this.addWidget(widget);
     }
 
 

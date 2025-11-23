@@ -18,48 +18,36 @@ import games.enchanted.eg_bedrock_books.common.mixin.accessor.AbstractScrollArea
 //?}
 
 import java.util.List;
+import java.util.Objects;
 
-public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
+public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> {
+    public static final int SCROLLBAR_WIDTH = 12;
     private static final ResourceLocation SCROLLER_HANDLE_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_handle");
     private static final ResourceLocation SCROLLER_BACKGROUND_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background");
     private static final ResourceLocation SCROLLER_BACKGROUND_FILLED_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background_filled");
 
-    public ConfigList(Minecraft minecraft, int width, int height, int x, int y) {
-        super(minecraft, width + 10, height, y, 70);
+    public ConfigList(int x, int y, int width, int height) {
+        super(x, y, width, height);
         this.setPosition(x, y);
     }
 
     public void addHorizontal(AbstractWidget widget, MultiLineTextWidget label) {
-        this.addEntry(new HorizontalEntry(widget, label));
+        this.addChild(new HorizontalEntry(widget, label));
     }
 
     public void addStacked(AbstractWidget widget, MultiLineTextWidget label) {
-        this.addEntry(new StackedEntry(widget, label));
+        this.addChild(new StackedEntry(widget, label));
     }
 
     @Override
-    public int getRowWidth() {
-        return this.width - 16;
+    protected int scrollbarWidth() {
+        return SCROLLBAR_WIDTH;
     }
 
     @Override
-    public int getRowLeft() {
-        return super.getRowLeft() - 10;
+    protected double scrollRate() {
+        return 10;
     }
-
-    @Override
-    protected int scrollBarX() {
-        return super.scrollBarX() - 3;
-    }
-
-    @Override
-    protected void renderListBackground(GuiGraphics guiGraphics) {
-    }
-
-    @Override
-    protected void renderListSeparators(GuiGraphics guiGraphics) {
-    }
-
 
     @Override
     protected void renderScrollbar(
@@ -110,11 +98,17 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
         }
     }
 
-    protected abstract static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
+
+    protected abstract static class Entry extends Child {
+        protected static final Margin MARGINS = new Margin(0, 3);
+
+        @Override
+        public Margin getMargins() {
+            return MARGINS;
+        }
     }
 
     protected static class HorizontalEntry extends Entry {
-        static final int GAP = 4;
         protected final AbstractWidget child;
         protected final MultiLineTextWidget label;
 
@@ -124,72 +118,58 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
         }
 
         @Override
-        public @NotNull List<? extends NarratableEntry> narratables() {
-            return List.of(label, child);
-        }
-
-        @Override
         public @NotNull List<? extends GuiEventListener> children() {
             return List.of(label, child);
         }
+        @Override
+
+        public @NotNull List<? extends NarratableEntry> narratableChildren() {
+            return List.of(label, child);
+        }
 
         @Override
-        //? if minecraft: >= 1.21.9 {
         public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
-        //?} else if minecraft: < 1.21.9 {
-        /*public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTicks) {
-        *///?}
-            //? if minecraft: >= 1.21.9 {
-            int top = getContentY();
             int left = getContentX();
             int middleY = getContentYMiddle();
             int right = getContentRight();
-            //?} else if minecraft: < 1.21.9 {
-            /*int middleY = top - (height / 2);
-            int right = (left + width);
-            *///?}
-            this.label.setY(top);
+
+            this.label.setY(middleY - this.label.getHeight() / 2);
             this.label.setX(left);
             this.label.render(guiGraphics, mouseX, mouseY, partialTicks);
-            this.child.setY(middleY - (GAP * 2));
-            this.child.setX(right - this.child.getWidth() + 4);
+
+            this.child.setY(middleY - this.child.getHeight() / 2);
+            this.child.setX(right - this.child.getWidth());
             this.child.render(guiGraphics, mouseX, mouseY, partialTicks);
         }
 
-//        @Override
-        public int getHeight() {
-            return Math.max(this.child.getHeight(), this.label.getHeight()) + GAP;
+        @Override
+        public int height() {
+            return Math.max(this.child.getHeight(), this.label.getHeight());
         }
     }
 
     protected static class StackedEntry extends HorizontalEntry {
-        static final int BETWEEN_WIDGET_GAP = 2;
-
         protected StackedEntry(AbstractWidget child, MultiLineTextWidget label) {
             super(child, label);
         }
 
         @Override
-        //? if minecraft: >= 1.21.9 {
         public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
-         //?} else if minecraft: < 1.21.9 {
-        /*public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTicks) {
-            *///?}
-            //? if minecraft: >= 1.21.9 {
             int top = getContentY();
             int left = getContentX();
-            //?}
+
             this.label.setY(top);
             this.label.setX(left);
             this.label.render(guiGraphics, mouseX, mouseY, partialTicks);
-            this.child.setY(this.label.getBottom() + BETWEEN_WIDGET_GAP);
+
+            this.child.setY(this.label.getBottom());
             this.child.setX(left);
             this.child.render(guiGraphics, mouseX, mouseY, partialTicks);
         }
 
         @Override
-        public int getHeight() {
-            return this.child.getHeight() + BETWEEN_WIDGET_GAP + this.label.getHeight() + GAP;
+        public int height() {
+            return this.child.getHeight() + this.label.getHeight() + getMargins().totalBlock();
         }
     }
 }
