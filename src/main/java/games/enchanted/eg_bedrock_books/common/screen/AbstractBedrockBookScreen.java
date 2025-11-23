@@ -28,7 +28,6 @@ import java.util.List;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
 import org.lwjgl.glfw.GLFW;
 //?}

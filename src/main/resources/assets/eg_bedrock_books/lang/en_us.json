@@ -1,4 +1,6 @@
 {
+  "pack.eg_bedrock_books.high_contrast.title": "Bedrock Books High Contrast",
+
   "ui.eg_bedrock_books.lectern.bookmark_left_label": "Bookmark left page",
   "ui.eg_bedrock_books.lectern.bookmark_right_label": "Bookmark right page",
   "ui.eg_bedrock_books.lectern.bookmark_tooltip": "The bookmarked page is the one other players will see, and the one lecterns will use for redstone output",
