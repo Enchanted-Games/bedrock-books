@@ -13,6 +13,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.gui.navigation.ScreenAxis;
 import net.minecraft.client.gui.navigation.ScreenDirection;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -25,10 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-
-//? if minecraft: >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-//?}
 
 public abstract class VerticalScrollContainerWidget<C extends VerticalScrollContainerWidget.Child> extends AbstractContainerWidget {
     private static final int DEFAULT_SCROLLBAR_WIDTH = 10;
@@ -243,10 +240,6 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
         return null;
     }
 
-    protected C getFocusedChild() {
-        return (C) this.getFocused();
-    }
-
     @Override
     public ComponentPath nextFocusPath(final FocusNavigationEvent navigationEvent) {
         if(!this.visible) {
@@ -259,7 +252,7 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
             return super.nextFocusPath(navigationEvent);
         }
 
-        C focused = this.getFocusedChild();
+        C focused = (C) this.getFocused();
         ScreenDirection navigationDirection = arrowNavigation.direction();
 
         if (navigationDirection.getAxis() == ScreenAxis.HORIZONTAL && focused != null) {
@@ -448,6 +441,16 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
 
         public void setMargins(Margin margins) {
             this.margins = margins;
+        }
+
+        @Override
+        public @NotNull ScreenRectangle getRectangle() {
+            return new ScreenRectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        }
+
+        @Override
+        public boolean isMouseOver(double mouseX, double mouseY) {
+            return this.getRectangle().containsPoint((int) mouseX, (int) mouseY);
         }
 
         @Override
