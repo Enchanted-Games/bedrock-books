@@ -32,6 +32,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     protected static final int COLUMN_GAP = 8;
 
     protected static final int PAGE_TEXT_COLOUR = 0xff987457;
+    protected static final int HC_PAGE_TEXT_COLOUR = 0xffffffff;
 
     public static final CustomSpriteButton.ButtonConfig CHECKBOX_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
@@ -190,7 +191,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         final IntegerSlider ribbonHeightWidget = new IntegerSlider(
             0,
             0,
-            MAX_LAYOUT_WIDTH - ConfigList.SCROLLBAR_WIDTH,
+            MAX_LAYOUT_WIDTH - (ConfigList.SCROLLBAR_WIDTH / 2),
             16,
             ribbonHeightLabel,
             ConfigOptions.RIBBON_HEIGHT.getPendingOrCurrentValue(),
@@ -206,20 +207,40 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             ribbonHeightLabel
         );
 
-        final Component forceWhiteTextInHCLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.force_white_text_in_high_contrast");
-        final CheckBox forceWhiteTextInHCWidget = new CheckBox(
+        final Component improveTextContrastInHCLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.improve_text_contrast_in_hc");
+        final Tooltip improveTextContrastInHCLabelTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.key.improve_text_contrast_in_hc.tooltip"));
+        final CheckBox improveTextContrastInHCWidget = new CheckBox(
             0,
             0,
-            ConfigOptions.FORCE_WHITE_TEXT_IN_HIGH_CONTRAST.getPendingOrCurrentValue(),
-            ConfigOptions.FORCE_WHITE_TEXT_IN_HIGH_CONTRAST::setPendingValue,
-            forceWhiteTextInHCLabel,
+            ConfigOptions.IMPROVE_TEXT_CONTRAST_IN_HC.getPendingOrCurrentValue(),
+            ConfigOptions.IMPROVE_TEXT_CONTRAST_IN_HC::setPendingValue,
+            improveTextContrastInHCLabel,
             CHECKBOX_CONFIG,
             CHECKBOX_UNCHECKED_CONFIG
         );
+        improveTextContrastInHCWidget.setTooltip(improveTextContrastInHCLabelTooltip);
         addHorizontalOption(
             this.visualOptionList,
-            forceWhiteTextInHCWidget,
-            forceWhiteTextInHCLabel
+            improveTextContrastInHCWidget,
+            improveTextContrastInHCLabel
+        );
+
+        final Component autoEnableHCPackLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.auto_enable_bedrock_books_hc_pack");
+        final Tooltip autoEnableHCPackTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.key.auto_enable_bedrock_books_hc_pack.tooltip"));
+        final CheckBox autoEnableHCPackWidget = new CheckBox(
+            0,
+            0,
+            ConfigOptions.AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK.getPendingOrCurrentValue(),
+            ConfigOptions.AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK::setPendingValue,
+            autoEnableHCPackLabel,
+            CHECKBOX_CONFIG,
+            CHECKBOX_UNCHECKED_CONFIG
+        );
+        autoEnableHCPackWidget.setTooltip(autoEnableHCPackTooltip);
+        addHorizontalOption(
+            this.visualOptionList,
+            autoEnableHCPackWidget,
+            autoEnableHCPackLabel
         );
 
 
@@ -248,11 +269,11 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     }
 
     protected Component translatableComponentForPage(String translationKey) {
-        return Component.translatable(translationKey).withStyle(Style.EMPTY.withColor(PAGE_TEXT_COLOUR).withShadowColor(0));
+        return Component.translatable(translationKey).withStyle(Style.EMPTY.withColor(getPageTextColour()).withShadowColor(0));
     }
 
     protected Component literalComponentForPage(String literal) {
-        return Component.literal(literal).withStyle(Style.EMPTY.withColor(PAGE_TEXT_COLOUR).withShadowColor(0));
+        return Component.literal(literal).withStyle(Style.EMPTY.withColor(getPageTextColour()).withShadowColor(0));
     }
 
     protected ConfigList createPageLayout(PageSide side) {
@@ -311,5 +332,9 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             this.visualOptionList.visible = false;
             this.debugOptionList.visible = true;
         }
+    }
+
+    protected int getPageTextColour() {
+        return ModConstants.isHighContrastPackActive() ? HC_PAGE_TEXT_COLOUR : PAGE_TEXT_COLOUR;
     }
 }

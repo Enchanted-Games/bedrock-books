@@ -27,7 +27,8 @@ public class ConfigOptions {
     // visual
     public static final ConfigOption<Boolean> SHOW_X_BUTTON;
     public static final ConfigOption<Integer> RIBBON_HEIGHT;
-    public static final ConfigOption<Boolean> FORCE_WHITE_TEXT_IN_HIGH_CONTRAST;
+    public static final ConfigOption<Boolean> IMPROVE_TEXT_CONTRAST_IN_HC;
+    public static final ConfigOption<Boolean> AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK;
 
     // debug
     public static final ConfigOption<Boolean> DEBUG_TEXT_BOUNDS;
@@ -88,12 +89,19 @@ public class ConfigOptions {
         );
         registerOption(RIBBON_HEIGHT);
 
-        FORCE_WHITE_TEXT_IN_HIGH_CONTRAST = new BoolOption(
+        IMPROVE_TEXT_CONTRAST_IN_HC = new BoolOption(
             true,
             true,
-            "force_white_text_in_high_contrast"
+            "improve_text_contrast_in_hc"
         );
-        registerOption(FORCE_WHITE_TEXT_IN_HIGH_CONTRAST);
+        registerOption(IMPROVE_TEXT_CONTRAST_IN_HC);
+
+        AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK = new BoolOption(
+            true,
+            true,
+            "auto_enable_bedrock_books_hc_pack"
+        );
+        registerOption(AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK);
 
 
         DEBUG_TEXT_BOUNDS = new BoolOption(

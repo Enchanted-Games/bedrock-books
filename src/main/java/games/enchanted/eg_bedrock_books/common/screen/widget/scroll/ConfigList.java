@@ -149,6 +149,8 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
     }
 
     protected static class StackedEntry extends HorizontalEntry {
+        final int gap = 2;
+
         protected StackedEntry(AbstractWidget child, MultiLineTextWidget label) {
             super(child, label);
         }
@@ -162,14 +164,14 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
             this.label.setX(left);
             this.label.render(guiGraphics, mouseX, mouseY, partialTicks);
 
-            this.child.setY(this.label.getBottom());
+            this.child.setY(this.label.getBottom() + gap);
             this.child.setX(left);
             this.child.render(guiGraphics, mouseX, mouseY, partialTicks);
         }
 
         @Override
         public int height() {
-            return this.child.getHeight() + this.label.getHeight() + getMargins().totalBlock();
+            return this.child.getHeight() + this.label.getHeight() + getMargins().totalBlock() - gap;
         }
     }
 }

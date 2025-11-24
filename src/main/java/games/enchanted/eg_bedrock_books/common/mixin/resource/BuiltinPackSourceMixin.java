@@ -1,6 +1,7 @@
 package games.enchanted.eg_bedrock_books.common.mixin.resource;
 
 import games.enchanted.eg_bedrock_books.common.Logging;
+import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.platform.PlatformHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -42,7 +43,7 @@ public class BuiltinPackSourceMixin {
                 (packPath, resourceSupplier) -> {
                     String packId = packPath.getFileName().toString();
                     packConsumer.accept(Pack.readMetaAndCreate(
-                        new PackLocationInfo("eg_bedrock_books:" + packId, Component.translatable("pack.eg_bedrock_books." + packId + ".title"), PackSource.BUILT_IN, Optional.empty()),
+                        new PackLocationInfo("eg_bedrock_books:" + packId, Component.translatable("pack.eg_bedrock_books." + packId + ".title"), ModConstants.BEDROCK_BOOKS_SOURCE, Optional.empty()),
                         resourceSupplier,
                         PackType.CLIENT_RESOURCES,
                         new PackSelectionConfig(false, Pack.Position.TOP, false)

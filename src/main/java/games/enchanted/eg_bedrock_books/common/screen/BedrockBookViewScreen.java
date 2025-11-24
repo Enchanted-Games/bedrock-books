@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 //? if minecraft: >= 1.21.9 {
 import net.minecraft.client.input.MouseButtonEvent;
@@ -98,7 +97,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     protected List<FormattedCharSequence> splitPage(int index) {
         Component page = this.getPageOrEmpty(index);
 
-        if(ConfigOptions.FORCE_WHITE_TEXT_IN_HIGH_CONTRAST.getValue() && ModConstants.isHighContrastPackActive()) {
+        if(ConfigOptions.IMPROVE_TEXT_CONTRAST_IN_HC.getValue() && ModConstants.isHighContrastPackActive()) {
             List<Component> modifiedPageElements = new ArrayList<>();
             page.toFlatList().forEach(component -> {
                 TextColor textColour = component.getStyle().getColor();

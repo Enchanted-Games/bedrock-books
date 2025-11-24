@@ -29,6 +29,7 @@ import net.minecraft.client.input.KeyEvent;
 
 public class KeyBox extends AbstractButton {
     public static final int TEXT_COLOUR = 0xff987457;
+    public static final int HC_TEXT_COLOUR = 0xffffffff;
     public static final int WIDTH = 52;
     public static final int HEIGHT = 16;
     protected static final int INLINE_PADDING = 4;
@@ -122,9 +123,9 @@ public class KeyBox extends AbstractButton {
         Font font = Minecraft.getInstance().font;
         if(this.acceptingKey) {
             int leftWidth = font.width(">");
-            guiGraphics.drawString(font, ">", this.getX() - leftWidth - leftWidth / 2, this.getY() + font.lineHeight / 2, TEXT_COLOUR, false);
+            guiGraphics.drawString(font, ">", this.getX() - leftWidth - leftWidth / 2, this.getY() + font.lineHeight / 2, this.getTextColour(), false);
             int rightWidth = font.width("<");
-            guiGraphics.drawString(font, "<", this.getX() + this.getWidth() + rightWidth / 2, this.getY() + font.lineHeight / 2, TEXT_COLOUR, false);
+            guiGraphics.drawString(font, "<", this.getX() + this.getWidth() + rightWidth / 2, this.getY() + font.lineHeight / 2, this.getTextColour(), false);
         }
 
         //? if minecraft: >= 1.21.9 {
@@ -136,7 +137,7 @@ public class KeyBox extends AbstractButton {
 
     protected void drawKeyLabel(GuiGraphics guiGraphics, Component keyName, int minX, int minY, int maxX, int maxY) {
         Font font = Minecraft.getInstance().font;
-        AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY + 1, TEXT_COLOUR);
+        AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY + 1, this.getTextColour());
 
         if(InputUtil.shouldShowDebugTextBound()) {
             guiGraphics.fill(minX, minY, maxX, maxY, 0xbb00ff00);
@@ -155,6 +156,10 @@ public class KeyBox extends AbstractButton {
 
     public boolean isListeningForInput() {
         return this.acceptingKey;
+    }
+
+    protected int getTextColour() {
+        return ModConstants.isHighContrastPackActive() ? HC_TEXT_COLOUR : TEXT_COLOUR;
     }
 
     public interface KeyPress {

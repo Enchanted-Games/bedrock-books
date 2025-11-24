@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
@@ -28,6 +29,10 @@ public class HighContrastOptionsMixin {
             tooltip,
             initialValue,
             (Consumer<Boolean>) value -> {
+                if(!ConfigOptions.AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK.getValue()) {
+                    onValueUpdate.accept(value);
+                    return;
+                }
                 PackRepository repo = Minecraft.getInstance().getResourcePackRepository();
                 boolean isSelected = repo.getSelectedIds().contains(ModConstants.HIGH_CONTRAST_PACK_ID);
                 if (!isSelected && value) {

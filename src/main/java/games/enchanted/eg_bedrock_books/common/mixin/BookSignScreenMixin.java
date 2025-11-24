@@ -19,6 +19,7 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.CommonColors;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -37,7 +38,11 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
     @Unique
     private static final int eg_bedrock_books$MAIN_TEXT_COLOUR = 0xfffaf3e6;
     @Unique
+    private static final int eg_bedrock_books$HC_MAIN_TEXT_COLOUR = 0xffffffff;
+    @Unique
     private static final int eg_bedrock_books$SECONDARY_TEXT_COLOUR = 0xfff0dbaf;
+    @Unique
+    private static final int eg_bedrock_books$HC_SECONDARY_TEXT_COLOUR = CommonColors.SOFT_YELLOW;
 
     @Unique
     private Screen eg_bedrock_books$returnScreen = null;
@@ -49,6 +54,15 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
     @Override
     public void eg_bedrock_books$setReturnScreen(Screen screen) {
         this.eg_bedrock_books$returnScreen = screen;
+    }
+
+    @Unique
+    private int eg_bedrock_books$getTextColour() {
+        return ModConstants.isHighContrastPackActive() ? eg_bedrock_books$HC_MAIN_TEXT_COLOUR : eg_bedrock_books$MAIN_TEXT_COLOUR;
+    }
+    @Unique
+    private int eg_bedrock_books$getSecondaryTextColour() {
+        return ModConstants.isHighContrastPackActive() ? eg_bedrock_books$HC_SECONDARY_TEXT_COLOUR : eg_bedrock_books$SECONDARY_TEXT_COLOUR;
     }
 
     @WrapOperation(
@@ -107,7 +121,7 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
             text,
             (this.width / 2) - textWidth / 2,
             (this.height / 2) - 86,
-            eg_bedrock_books$MAIN_TEXT_COLOUR,
+            eg_bedrock_books$getTextColour(),
             drawShadow
         );
     }
@@ -127,7 +141,7 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "init"
     )
     private void eg_bedrock_books$modifyInputColour(EditBox instance, int color, Operation<Void> original) {
-        original.call(instance, eg_bedrock_books$MAIN_TEXT_COLOUR);
+        original.call(instance, eg_bedrock_books$getTextColour());
     }
 
     // owner label
@@ -136,7 +150,7 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "<init>"
     )
     private MutableComponent eg_bedrock_books$modifyOwnerLabelColour(MutableComponent instance, ChatFormatting format, Operation<MutableComponent> original) {
-        return original.call(instance, format).withStyle(Style.EMPTY.withColor(eg_bedrock_books$SECONDARY_TEXT_COLOUR));
+        return original.call(instance, format).withStyle(Style.EMPTY.withColor(eg_bedrock_books$getSecondaryTextColour()));
     }
 
     @WrapOperation(
@@ -170,7 +184,7 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
             (this.width / 2) - lineWidth / 2,
             (this.height / 2) - 16,
             lineWidth,
-            eg_bedrock_books$MAIN_TEXT_COLOUR,
+            eg_bedrock_books$getTextColour(),
             drawShadow
         );
     }

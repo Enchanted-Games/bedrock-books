@@ -1,5 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 
+import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.duck.AbstractSliderButtonAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import net.minecraft.client.gui.Font;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class IntegerSlider extends AbstractSliderButton implements AbstractSliderButtonAdditions {
     public static final int TEXT_COLOUR = 0xff614128;
+    public static final int HC_TEXT_COLOUR = 0xffffffff;
 
     private final OnValueChange valueChange;
     private final int min;
@@ -63,7 +65,7 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
             font,
             Component.literal("" + getIntegerValue()).withStyle(Style.EMPTY
                 .withShadowColor(0)
-                .withColor(TEXT_COLOUR)
+                .withColor(this.getTextColour())
             ),
             minX,
             this.getY(),
@@ -80,6 +82,10 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
     @Override
     protected void applyValue() {
         this.valueChange.valueChanged(getIntegerValue());
+    }
+
+    protected int getTextColour() {
+        return ModConstants.isHighContrastPackActive() ? HC_TEXT_COLOUR : TEXT_COLOUR;
     }
 
     public interface OnValueChange {

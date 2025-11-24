@@ -1,6 +1,9 @@
 {
   "pack": {
-    "description": "",
+    "description": {
+      "translate": "pack.eg_bedrock_books.high_contrast.description",
+      "fallback": "Enhances the UI contrast of Bedrock Books"
+    },
     "pack_format": 15,
     "supported_formats": [15, 999999],
     "min_format": 15,

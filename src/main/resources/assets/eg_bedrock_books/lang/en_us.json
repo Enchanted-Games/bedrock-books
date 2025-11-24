@@ -1,5 +1,7 @@
 {
   "pack.eg_bedrock_books.high_contrast.title": "Bedrock Books High Contrast",
+  "pack.eg_bedrock_books.high_contrast.description": "Enhances the UI contrast of Bedrock Books",
+  "pack.source.eg_bedrock_books": " (BB)",
 
   "ui.eg_bedrock_books.lectern.bookmark_left_label": "Bookmark left page",
   "ui.eg_bedrock_books.lectern.bookmark_right_label": "Bookmark right page",
