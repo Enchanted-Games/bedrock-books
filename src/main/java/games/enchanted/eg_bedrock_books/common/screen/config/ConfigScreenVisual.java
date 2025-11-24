@@ -208,7 +208,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         );
 
         final Component improveTextContrastInHCLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.improve_text_contrast_in_hc");
-        final Tooltip improveTextContrastInHCLabelTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.key.improve_text_contrast_in_hc.tooltip"));
+        final Tooltip improveTextContrastInHCLabelTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.option.improve_text_contrast_in_hc.tooltip"));
         final CheckBox improveTextContrastInHCWidget = new CheckBox(
             0,
             0,
@@ -226,7 +226,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         );
 
         final Component autoEnableHCPackLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.auto_enable_bedrock_books_hc_pack");
-        final Tooltip autoEnableHCPackTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.key.auto_enable_bedrock_books_hc_pack.tooltip"));
+        final Tooltip autoEnableHCPackTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.option.auto_enable_bedrock_books_hc_pack.tooltip"));
         final CheckBox autoEnableHCPackWidget = new CheckBox(
             0,
             0,

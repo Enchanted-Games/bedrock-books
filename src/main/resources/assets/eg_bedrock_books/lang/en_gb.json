@@ -30,6 +30,10 @@
   "ui.eg_bedrock_books.config.key.open_vanilla_screen_key": "Vanilla book screen key",
   "ui.eg_bedrock_books.config.option.show_x_button": "Show 'x' button",
   "ui.eg_bedrock_books.config.option.ribbon_height": "Bookmark height",
+  "ui.eg_bedrock_books.config.option.improve_text_contrast_in_hc": "(HC) Improve text contrast",
+  "ui.eg_bedrock_books.config.option.improve_text_contrast_in_hc.tooltip": "When enabled, text colours in written books will adjusted to ensure they are legible.\nOnly applies when the Bedrock Books High Contrast resourcepack is enabled",
+  "ui.eg_bedrock_books.config.option.auto_enable_bedrock_books_hc_pack": "Auto enable High Contrast pack",
+  "ui.eg_bedrock_books.config.option.auto_enable_bedrock_books_hc_pack.tooltip": "When enabled, the Bedrock Books High Contrast resourcepack will be automatically enabled when toggling Minecraft's High Contrast accessibility option",
 
   "ui.eg_bedrock_books.widget.checkbox.checked.narration": "is set to true",
   "ui.eg_bedrock_books.widget.checkbox.unchecked.narration": "is set to false",
