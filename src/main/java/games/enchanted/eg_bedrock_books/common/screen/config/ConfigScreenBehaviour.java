@@ -3,7 +3,6 @@ package games.enchanted.eg_bedrock_books.common.screen.config;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.AbstractBedrockBookScreen;
-import games.enchanted.eg_bedrock_books.common.screen.BedrockBookEditScreen;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockBookViewScreen;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.DummyTextAreaView;

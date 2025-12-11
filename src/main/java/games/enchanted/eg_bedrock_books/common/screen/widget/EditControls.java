@@ -5,6 +5,7 @@ import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -88,18 +89,22 @@ public class EditControls implements Renderable, LayoutElement {
 
         this.moveBackButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.moveBackPressed().run(), MOVE_BACK_BUTTON_LABEL, MOVE_BACK_BUTTON);
         this.moveBackButton.visible = false;
+        this.moveBackButton.setTooltip(Tooltip.create(MOVE_BACK_BUTTON_LABEL));
         this.layout.addChild(this.moveBackButton);
 
         this.addButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.addPressed().run(), ADD_PAGE_BUTTON_LABEL, ADD_PAGE_BUTTON);
         this.addButton.visible = false;
+        this.addButton.setTooltip(Tooltip.create(ADD_PAGE_BUTTON_LABEL));
         this.layout.addChild(this.addButton);
 
         this.deleteButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.deletePressed().run(), DELETE_PAGE_BUTTON_LABEL, DELETE_PAGE_BUTTON);
         this.deleteButton.visible = false;
+        this.deleteButton.setTooltip(Tooltip.create(DELETE_PAGE_BUTTON_LABEL));
         this.layout.addChild(this.deleteButton);
 
         this.moveForwardButton = new CustomSpriteButton(0, 0, EDIT_BUTTON_SIZE, EDIT_BUTTON_SIZE, button -> this.buttonActions.moveForwardPressed().run(), MOVE_FORWARD_BUTTON_LABEL, MOVE_FORWARD_BUTTON);
         this.moveForwardButton.visible = false;
+        this.moveForwardButton.setTooltip(Tooltip.create(MOVE_FORWARD_BUTTON_LABEL));
         this.layout.addChild(this.moveForwardButton);
 
         this.layout.arrangeElements();
