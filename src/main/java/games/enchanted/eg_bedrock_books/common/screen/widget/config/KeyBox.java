@@ -16,7 +16,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
@@ -36,9 +36,9 @@ public class KeyBox extends AbstractButton {
 
     public static final CustomSpriteButton.ButtonConfig DEFAULT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/key_input_focus")
     );
 
     private final KeyPress onKeyPress;
@@ -101,7 +101,13 @@ public class KeyBox extends AbstractButton {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void
+    //? if minecraft: <= 1.21.10 {
+    /*renderWidget
+     *///?} else {
+    renderContents
+    //?}
+    (GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,
             this.isHovered() ? buttonConfig.hoverSprite() : this.isFocused() ? buttonConfig.focusedSprite() : buttonConfig.sprite(),
@@ -137,7 +143,11 @@ public class KeyBox extends AbstractButton {
 
     protected void drawKeyLabel(GuiGraphics guiGraphics, Component keyName, int minX, int minY, int maxX, int maxY) {
         Font font = Minecraft.getInstance().font;
-        AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY + 1, this.getTextColour());
+        //? if minecraft: <= 1.21.10 {
+        /*AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY + 1, this.getTextColour());
+        *///?} else {
+        this.renderScrollingStringOverContents(guiGraphics.textRendererForWidget(this, GuiGraphics.HoveredTextEffects.NONE), keyName, 1);
+        //?}
 
         if(InputUtil.shouldShowDebugTextBound()) {
             guiGraphics.fill(minX, minY, maxX, maxY, 0xbb00ff00);

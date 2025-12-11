@@ -101,11 +101,11 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
             //?}
         );
         if(InputUtil.shouldShowDebugWidgetBound()) {
-            //? if minecraft: >= 1.21.9 {
-            guiGraphics.submitOutline
-            //?} else {
-            /*guiGraphics.renderOutline
-            *///?}
+            //? if minecraft: >= 1.21.9 && < 1.21.11 {
+            /*guiGraphics.submitOutline
+            *///?} else {
+            guiGraphics.renderOutline
+            //?}
                 (this.getX(), this.getY(), this.width, this.height, 0xff9f7252);
         }
     }
@@ -122,19 +122,19 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
             if (child.getY() + child.getHeight() >= this.getY() && child.getY() <= this.getBottom()) {
                 if(InputUtil.shouldShowDebugWidgetBound()) {
                     // purple (physical bounds)
-                    //? if minecraft: >= 1.21.9 {
-                    guiGraphics.submitOutline
-                    //?} else {
-                    /*guiGraphics.renderOutline
-                    *///?}
+                    //? if minecraft: >= 1.21.9 && < 1.21.11 {
+                    /*guiGraphics.submitOutline
+                    *///?} else {
+                    guiGraphics.renderOutline
+                    //?}
                         (child.getX(), child.getY(), child.getWidth(), child.getHeight(), 0xffc57cb9);
 
                     // blue (content bounds)
-                    //? if minecraft: >= 1.21.9 {
-                    guiGraphics.submitOutline
-                    //?} else {
-                    /*guiGraphics.renderOutline
-                    *///?}
+                    //? if minecraft: >= 1.21.9 && < 1.21.11 {
+                    /*guiGraphics.submitOutline
+                    *///?} else {
+                    guiGraphics.renderOutline
+                    //?}
                         (child.getContentX(), child.getContentY(), child.getContentWidth(), child.getContentHeight(), 0xff56a8f5);
                 }
                 child.renderContent(guiGraphics, mouseX, mouseY, this.hoveredChild == child, partialTicks);

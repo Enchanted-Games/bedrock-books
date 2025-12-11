@@ -18,7 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.CommonColors;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,7 +33,7 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
     @Unique
     private static final int eg_bedrock_books$BACKGROUND_HEIGHT = 256;
     @Unique
-    private static final ResourceLocation eg_bedrock_books$BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/sign_background.png");
+    private static final Identifier eg_bedrock_books$BACKGROUND_TEXTURE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/sign_background.png");
 
     @Unique
     private static final int eg_bedrock_books$MAIN_TEXT_COLOUR = 0xfffaf3e6;
@@ -88,10 +88,10 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
 
     // background
     @WrapOperation(
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/ResourceLocation;IIFFIIII)V"),
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V"),
         method = "renderBackground"
     )
-    private void eg_bedrock_books$modifyBackgroundImage(GuiGraphics instance, RenderPipeline pipeline, ResourceLocation atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, Operation<Void> original) {
+    private void eg_bedrock_books$modifyBackgroundImage(GuiGraphics instance, RenderPipeline pipeline, Identifier atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, Operation<Void> original) {
         original.call(
             instance,
             RenderPipelines.GUI_TEXTURED,

@@ -11,7 +11,7 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,41 +24,41 @@ public class EditControls implements Renderable, LayoutElement {
     protected static final Component PENCIL_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.open_edit_controls_label");
     protected static final CustomSpriteButton.ButtonConfig PENCIL_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/edit_button_focus")
     );
 
     protected static final Component MOVE_BACK_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.move_page_back_label");
     protected static final CustomSpriteButton.ButtonConfig MOVE_BACK_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_backward_button_focus")
     );
 
     protected static final Component ADD_PAGE_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.add_page_label");
     protected static final CustomSpriteButton.ButtonConfig ADD_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/add_page_button_focus")
     );
 
     protected static final Component DELETE_PAGE_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.delete_page_label");
     protected static final CustomSpriteButton.ButtonConfig DELETE_PAGE_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/delete_page_button_focus")
     );
 
     protected static final Component MOVE_FORWARD_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.edit.move_page_forward_label");
     protected static final CustomSpriteButton.ButtonConfig MOVE_FORWARD_BUTTON = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/move_page_forward_button_focus")
     );
 
     protected int x;

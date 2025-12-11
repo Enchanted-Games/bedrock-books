@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.CommonColors;
 import net.minecraft.world.item.component.WritableBookContent;
@@ -66,33 +66,33 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     private static final Component PAGE_LEFT_BUTTON_LABEL = Component.translatable("book.page_button.previous");
     private static final CustomSpriteButton.ButtonConfig PAGE_LEFT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_backward_focus")
     );
     private static final Component PAGE_RIGHT_BUTTON_LABEL = Component.translatable("book.page_button.next");
     private static final CustomSpriteButton.ButtonConfig PAGE_RIGHT_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/page_forward_focus")
     );
     private static final int CLOSE_BUTTON_SIZE = 9;
     private static final Component CLOSE_BUTTON_LABEL = CommonComponents.GUI_DONE;
     private static final CustomSpriteButton.ButtonConfig CLOSE_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/close_focus")
     );
 
     private static final int CONFIG_BUTTON_SIZE = 24;
     private static final Component CONFIG_BUTTON_LABEL = Component.translatable("ui.eg_bedrock_books.config.title");
     private static final CustomSpriteButton.ButtonConfig CONFIG_BUTTON_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config_button_focus")
     );
 
     // pagination
@@ -496,7 +496,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         }
     }
 
-    protected abstract ResourceLocation getBackgroundTexture();
+    protected abstract Identifier getBackgroundTexture();
 
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {

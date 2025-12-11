@@ -13,7 +13,7 @@ import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuAccess<LecternMenu> {
-    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/lectern_background.png");
+    private static final Identifier BACKGROUND_TEXTURE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/lectern_background.png");
 
     protected static final int FOOTER_BUTTON_WIDTH = 120;
     protected static final int TEXT_OFFSET_LEFT = 7;
@@ -41,30 +41,30 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     Component LEFT_RIBBON_LABEL = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_left_label");
     protected static final CustomSpriteButton.ButtonConfig LEFT_RIBBON_SELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_selected_ribbon_focus")
     );
     protected static final CustomSpriteButton.ButtonConfig LEFT_RIBBON_UNSELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/left_page_unselected_ribbon_focus")
     );
 
     Component RIGHT_RIBBON_LABEL = Component.translatable("ui.eg_bedrock_books.lectern.bookmark_right_label");
-    public static final ResourceLocation RIGHT_RIBBON_SELECTED_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon");
+    public static final Identifier RIGHT_RIBBON_SELECTED_SPRITE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon");
     protected static final CustomSpriteButton.ButtonConfig RIGHT_RIBBON_SELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
         RIGHT_RIBBON_SELECTED_SPRITE,
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_selected_ribbon_focus")
     );
     protected static final CustomSpriteButton.ButtonConfig RIGHT_RIBBON_UNSELECTED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "book/lectern/right_page_unselected_ribbon_focus")
     );
 
     private final LecternMenu menu;
@@ -268,7 +268,7 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     }
 
     @Override
-    protected ResourceLocation getBackgroundTexture() {
+    protected Identifier getBackgroundTexture() {
         return BACKGROUND_TEXTURE;
     }
 

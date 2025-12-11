@@ -8,11 +8,12 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import games.enchanted.eg_bedrock_books.common.util.ColourUtil;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +26,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 
 public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, TextAreaView<Component>> {
     protected static final Component BOOK_VIEW_TITLE = Component.translatable("book.view.title");
-    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/view_background.png");;
+    private static final Identifier BACKGROUND_TEXTURE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/view_background.png");;
 
     protected static final int FOOTER_BUTTON_WIDTH = 200;
     protected static final int TEXT_OFFSET_LEFT = 4;
@@ -148,7 +149,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         int button = mouseButtonEvent.button();
         //?}
 
-        if (button == InputConstants.MOUSE_BUTTON_LEFT && clickedStyle != null && handleComponentClicked(clickedStyle)) return true;
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && clickedStyle != null && handleClickEvent(this.minecraft, clickedStyle.getClickEvent())) return true;
 
         //? if minecraft: >= 1.21.9 {
         return super.mouseClicked(mouseButtonEvent, doubleClick);
@@ -191,14 +192,47 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         int lineIndex = clampedRelativeY / minecraft.font.lineHeight;
         if (lineIndex >= 0 && lineIndex < (closestToLeftHorizontally ? this.leftPageSplitLines.size() : this.rightPageSplitLines.size())) {
             FormattedCharSequence line = (closestToLeftHorizontally ? this.leftPageSplitLines : this.rightPageSplitLines).get(lineIndex);
-            return minecraft.font.getSplitter().componentStyleAtWidth(line, clampedRelativeX);
+
+            //? if minecraft: <= 1.21.10 {
+            /*return minecraft.font.getSplitter().componentStyleAtWidth(line, clampedRelativeX);
+            *///?} else {
+            ActiveTextCollector.ClickableStyleFinder styleFinder = new ActiveTextCollector.ClickableStyleFinder(this.getFont(), (int) x, (int) y);
+            this.findClickableStylesInPages(styleFinder);
+            return styleFinder.result();
+            //?}
         }
 
         return null;
     }
 
-    @Override
-    protected void handleClickEvent(Minecraft minecraft, ClickEvent clickEvent) {
+    //? if minecraft: >= 1.21.11 {
+    protected void findClickableStylesInPages(ActiveTextCollector.ClickableStyleFinder styleFinder) {
+        visitPageText((text, x, y) -> styleFinder.accept(x, y, text), PageSide.LEFT);
+        visitPageText((text, x, y) -> styleFinder.accept(x, y, text), PageSide.RIGHT);
+    }
+    //? }
+
+    protected void visitBothPagesText(TextConsumer consumer) {
+        visitPageText(consumer, PageSide.LEFT);
+        visitPageText(consumer, PageSide.RIGHT);
+    }
+
+    protected void visitPageText(TextConsumer consumer, PageSide side) {
+        if(side == PageSide.LEFT) {
+            int leftLines = Math.min(PAGE_TEXT_HEIGHT / this.font.lineHeight, this.leftPageSplitLines.size());
+            for (int i = 0; i < leftLines; ++i) {
+                consumer.accept(this.leftPageSplitLines.get(i), this.leftPageX, this.leftPageY + i * this.font.lineHeight);
+            }
+        } else {
+            int rightLines = Math.min(PAGE_TEXT_HEIGHT / this.font.lineHeight, this.rightPageSplitLines.size());
+            for (int i = 0; i < rightLines; ++i) {
+                consumer.accept(this.rightPageSplitLines.get(i), this.rightPageX, this.rightPageY + i * this.font.lineHeight);
+            }
+        }
+    }
+
+    protected boolean handleClickEvent(Minecraft minecraft, @Nullable ClickEvent clickEvent) {
+        if(clickEvent == null) return false;
         switch (clickEvent) {
             case ClickEvent.RunCommand(String string):
                 if(ConfigOptions.CLOSE_BOOK_WHEN_RUNNING_COMMAND.getValue()) {
@@ -214,6 +248,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
             default:
                 defaultHandleGameClickEvent(clickEvent, minecraft, this);
         }
+        return true;
     }
 
     protected void closeServerContainer() {
@@ -223,29 +258,16 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        int leftLines = Math.min(PAGE_TEXT_HEIGHT / this.font.lineHeight, this.leftPageSplitLines.size());
-        for (int i = 0; i < leftLines; ++i) {
+        visitBothPagesText((text, x, y) -> {
             guiGraphics.drawString(
                 this.font,
-                this.leftPageSplitLines.get(i),
-                this.leftPageX,
-                this.leftPageY + i * this.font.lineHeight,
+                text,
+                x,
+                y,
                 this.getTextColour(),
                 TEXT_SHADOW
             );
-        }
-
-        int rightLines = Math.min(PAGE_TEXT_HEIGHT / this.font.lineHeight, this.rightPageSplitLines.size());
-        for (int i = 0; i < rightLines; ++i) {
-            guiGraphics.drawString(
-                this.font,
-                this.rightPageSplitLines.get(i),
-                this.rightPageX,
-                this.rightPageY + i * this.font.lineHeight,
-                this.getTextColour(),
-                TEXT_SHADOW
-            );
-        }
+        });
 
         guiGraphics.renderComponentHoverEffect(this.font, this.styleUnderMouseCursor, mouseX, mouseY);
 
@@ -260,7 +282,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     }
 
     @Override
-    protected ResourceLocation getBackgroundTexture() {
+    protected Identifier getBackgroundTexture() {
         return BACKGROUND_TEXTURE;
     }
 
@@ -273,5 +295,10 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     protected void setPageIndex(int index) {
         ensureEvenPageIndex(Math.clamp(index, 0, Math.max(0, getCurrentAmountOfPages() - 1)));
         updateVisibleContents();
+    }
+
+    @FunctionalInterface
+    protected interface TextConsumer {
+        void accept(FormattedCharSequence text, int x, int y);
     }
 }

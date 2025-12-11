@@ -16,7 +16,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,7 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
     protected static final Component RESET_BUTTON_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset");
     protected static final Component RESET_TITLE_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset.title").withStyle(Style.EMPTY.withBold(true));
     protected static final Component RESET_MESSAGE_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset.warning");
-    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/config_background.png");
+    private static final Identifier BACKGROUND_TEXTURE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/config_background.png");
 
     protected final @Nullable Screen returnScreen;
     protected final boolean alwaysBlurBackground;
@@ -126,7 +126,7 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
     }
 
     @Override
-    protected ResourceLocation getBackgroundTexture() {
+    protected Identifier getBackgroundTexture() {
         return BACKGROUND_TEXTURE;
     }
 

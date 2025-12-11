@@ -20,6 +20,12 @@ repositories {
         name = "Terraformers"
     }
 
+    // yalmm
+    maven {
+        name = "Gegy"
+        url = uri("https://maven.gegy.dev/releases/")
+    }
+
     mavenCentral()
     exclusiveContent {
         forRepository { maven("https://www.cursemaven.com") { name = "CurseForge" } }
@@ -143,6 +149,7 @@ class Env {
     val mcVersionCompatibleRange = versionProperty("deps.core.mc.compatible_range")
     val parchmentMcVersion = versionProperty("deps.parchment.mc_version")
     val parchmentMappingVersion = property("deps.parchment.version")
+    val mojbackwardMappingVersion = optionalStrProperty("deps.mojbackward.version")
 
     val loader = property("loom.platform").toString()
     val loaderPublishingPrefix = if (loader == "fabric") "Fabric" else if (loader == "neoforge") "NF" else "Unknown";
@@ -518,6 +525,9 @@ dependencies {
         loom.layered {
             officialMojangMappings()
             parchment("org.parchmentmc.data:parchment-${env.parchmentMcVersion.min}:${env.parchmentMappingVersion}@zip")
+            if (env.mojbackwardMappingVersion.isPresent) {
+                mappings("dev.lambdaurora:yalmm-mojbackward:${env.mojbackwardMappingVersion.get()}")
+            }
         }
     )
 

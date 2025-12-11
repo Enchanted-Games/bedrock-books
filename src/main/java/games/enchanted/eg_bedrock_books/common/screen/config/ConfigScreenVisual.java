@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,23 +36,23 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
 
     public static final CustomSpriteButton.ButtonConfig CHECKBOX_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_unchecked_focus")
     );
     public static final CustomSpriteButton.ButtonConfig CHECKBOX_UNCHECKED_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/checkbox_checked_focus")
     );
 
-    public static ResourceLocation SLIDER_BACKGROUND_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_background");
+    public static Identifier SLIDER_BACKGROUND_SPRITE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_background");
     public static final CustomSpriteButton.ButtonConfig SLIDER_HANDLE_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle_hover"),
-        ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle_focus")
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle_hover"),
+        Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle_focus")
     );
 
     protected static final List<ConfigOption<Boolean>> DEBUG_OPTIONS = List.of(

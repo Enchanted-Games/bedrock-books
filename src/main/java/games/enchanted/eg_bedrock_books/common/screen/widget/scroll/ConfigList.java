@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 //? if minecraft: >= 1.21.9 {
@@ -22,9 +22,9 @@ import java.util.Objects;
 
 public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> {
     public static final int SCROLLBAR_WIDTH = 12;
-    private static final ResourceLocation SCROLLER_HANDLE_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_handle");
-    private static final ResourceLocation SCROLLER_BACKGROUND_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background");
-    private static final ResourceLocation SCROLLER_BACKGROUND_FILLED_SPRITE = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background_filled");
+    private static final Identifier SCROLLER_HANDLE_SPRITE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_handle");
+    private static final Identifier SCROLLER_BACKGROUND_SPRITE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background");
+    private static final Identifier SCROLLER_BACKGROUND_FILLED_SPRITE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background_filled");
 
     public ConfigList(int x, int y, int width, int height) {
         super(x, y, width, height);

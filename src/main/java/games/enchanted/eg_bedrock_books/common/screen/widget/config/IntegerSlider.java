@@ -3,6 +3,7 @@ package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.duck.AbstractSliderButtonAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
@@ -10,7 +11,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class IntegerSlider extends AbstractSliderButton implements AbstractSliderButtonAdditions {
@@ -21,10 +22,10 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
     private final int min;
     private final int max;
 
-    private final ResourceLocation backgroundSprite;
+    private final Identifier backgroundSprite;
     private final CustomSpriteButton.ButtonConfig handleConfig;
 
-    public IntegerSlider(int x, int y, int width, int height, Component message, int initialValue, OnValueChange valueChange, int min, int max, ResourceLocation backgroundSprite, CustomSpriteButton.ButtonConfig handleConfig) {
+    public IntegerSlider(int x, int y, int width, int height, Component message, int initialValue, OnValueChange valueChange, int min, int max, Identifier backgroundSprite, CustomSpriteButton.ButtonConfig handleConfig) {
         super(x, y, width, height, message, (double) initialValue / (max - min));
         this.valueChange = valueChange;
         if(min >= max) {
@@ -38,12 +39,12 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
     }
 
     @Override
-    public ResourceLocation eg_bedrock_books$getSprite() {
+    public Identifier eg_bedrock_books$getSprite() {
         return this.backgroundSprite;
     }
 
     @Override
-    public ResourceLocation eg_bedrock_books$getHandleSprite() {
+    public Identifier eg_bedrock_books$getHandleSprite() {
         return this.isHovered() ? this.handleConfig.hoverSprite() : this.isFocused() ? this.handleConfig.focusedSprite() : this.handleConfig.sprite();
     }
 
@@ -56,7 +57,8 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
     protected void updateMessage() {
     }
 
-    @Override
+    //? if minecraft: <= 1.21.10 {
+    /*@Override
     protected void renderScrollingString(GuiGraphics guiGraphics, Font font, int width, int color) {
         int minX = this.getX() + width;
         int maxX = this.getX() + this.getWidth() - width;
@@ -74,6 +76,7 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
             -1
         );
     }
+    *///?}
 
     protected int getIntegerValue() {
         return (int) Math.round(this.value * (this.max - this.min));

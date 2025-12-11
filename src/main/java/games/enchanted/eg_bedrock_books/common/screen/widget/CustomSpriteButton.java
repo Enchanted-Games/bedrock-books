@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -29,7 +29,14 @@ public class CustomSpriteButton extends Button implements AbstractWidgetAddition
         this.buttonConfig = config;
     }
 
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    @Override
+    public void
+    //? if minecraft: <= 1.21.10 {
+        /*renderWidget
+    *///?} else {
+        renderContents
+    //?}
+    (GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,
             this.isHovered() ? buttonConfig.hoverSprite() : this.isFocused() ? buttonConfig.focusedSprite() : buttonConfig.sprite(),
@@ -57,6 +64,6 @@ public class CustomSpriteButton extends Button implements AbstractWidgetAddition
         return ScreenRectangle.empty();
     }
 
-    public record ButtonConfig(@Nullable Supplier<SoundInstance> soundInstance, ResourceLocation sprite, ResourceLocation hoverSprite, ResourceLocation focusedSprite) {
+    public record ButtonConfig(@Nullable Supplier<SoundInstance> soundInstance, Identifier sprite, Identifier hoverSprite, Identifier focusedSprite) {
     }
 }
