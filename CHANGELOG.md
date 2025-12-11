@@ -1,5 +1,6 @@
-# 1.0.2
+# 1.1
 
-- Added French (fr_fr) translations thanks to MrCookie112 (github)
-- Added scrollbars to config screen pages to avoid overflow issues
-- Fixed mod menu config button on fabric 1.21.10
+- Added High Contrast support
+- Updated to 1.21.11
+- Pressing ESC on the config screen now discards any unsaved options, just like the cancel button does
+- Added tooltips to the page edit buttons
