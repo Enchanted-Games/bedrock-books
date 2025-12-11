@@ -50,4 +50,4 @@ public class ClickableAndHoverTextCollector extends ActiveTextCollector.Clickabl
         return this.result;
     }
 }
-//? }
+//?}

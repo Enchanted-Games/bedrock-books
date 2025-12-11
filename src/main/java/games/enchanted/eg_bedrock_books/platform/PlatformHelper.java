@@ -1,10 +1,10 @@
 package games.enchanted.eg_bedrock_books.platform;
 
+import org.jetbrains.annotations.Nullable;
 //? if fabric {
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import org.jetbrains.annotations.Nullable;
 //?} else {
 /*import games.enchanted.eg_bedrock_books.neoforge.NeoForgeEntry;
 import net.neoforged.fml.loading.FMLPaths;

@@ -64,7 +64,7 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
     //? if minecraft: <= 1.21.10 {
     /*protected void renderScrollingString(GuiGraphics guiGraphics, Font font, int width, int color) {
     *///?} else {
-    protected void renderScrollingStringOverContents(final ActiveTextCollector output, final Component message, final int margin) {
+    public void renderScrollingStringOverContents(final ActiveTextCollector output, final Component message, final int margin) {
     //?}
         int minX = this.getX() + width;
         int maxX = this.getX() + this.getWidth() - width;
