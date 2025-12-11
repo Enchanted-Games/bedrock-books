@@ -146,7 +146,12 @@ public class KeyBox extends AbstractButton {
         //? if minecraft: <= 1.21.10 {
         /*AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY + 1, this.getTextColour());
         *///?} else {
-        this.renderScrollingStringOverContents(guiGraphics.textRendererForWidget(this, GuiGraphics.HoveredTextEffects.NONE), keyName, 1);
+        this.renderScrollingStringOverContents(guiGraphics.textRendererForWidget(
+            this,
+            GuiGraphics.HoveredTextEffects.NONE),
+            keyName.copy().withStyle(Style.EMPTY.withShadowColor(0).withColor(this.getTextColour())),
+            4
+        );
         //?}
 
         if(InputUtil.shouldShowDebugTextBound()) {

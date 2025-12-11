@@ -3,7 +3,6 @@ package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.duck.AbstractSliderButtonAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
-import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
@@ -13,6 +12,10 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
+
+//? if minecraft: >= 1.21.11 {
+import net.minecraft.client.gui.ActiveTextCollector;
+//?}
 
 public class IntegerSlider extends AbstractSliderButton implements AbstractSliderButtonAdditions {
     public static final int TEXT_COLOUR = 0xff614128;
@@ -57,12 +60,16 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
     protected void updateMessage() {
     }
 
+    @Override
     //? if minecraft: <= 1.21.10 {
-    /*@Override
-    protected void renderScrollingString(GuiGraphics guiGraphics, Font font, int width, int color) {
+    /*protected void renderScrollingString(GuiGraphics guiGraphics, Font font, int width, int color) {
+    *///?} else {
+    protected void renderScrollingStringOverContents(final ActiveTextCollector output, final Component message, final int margin) {
+    //?}
         int minX = this.getX() + width;
         int maxX = this.getX() + this.getWidth() - width;
-        renderScrollingString(
+        //? if minecraft: <= 1.21.10 {
+        /*renderScrollingString(
             guiGraphics,
             font,
             Component.literal("" + getIntegerValue()).withStyle(Style.EMPTY
@@ -75,8 +82,19 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
             this.getY() + this.getHeight(),
             -1
         );
+        *///?} else {
+        output.acceptScrollingWithDefaultCenter(
+            Component.literal("" + getIntegerValue()).withStyle(Style.EMPTY
+                .withShadowColor(0)
+                .withColor(this.getTextColour())
+            ),
+            maxX,
+            minX,
+            this.getY(),
+            this.getY() + this.getHeight()
+        );
+        //?}
     }
-    *///?}
 
     protected int getIntegerValue() {
         return (int) Math.round(this.value * (this.max - this.min));

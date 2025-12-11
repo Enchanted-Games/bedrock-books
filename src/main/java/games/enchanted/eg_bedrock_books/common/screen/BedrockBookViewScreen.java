@@ -8,7 +8,6 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import games.enchanted.eg_bedrock_books.common.util.ColourUtil;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
@@ -22,6 +21,10 @@ import java.util.List;
 
 //? if minecraft: >= 1.21.9 {
 import net.minecraft.client.input.MouseButtonEvent;
+//?}
+
+//? if minecraft: >= 1.21.11 {
+import net.minecraft.client.gui.ActiveTextCollector;
 //?}
 
 public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, TextAreaView<Component>> {
@@ -149,7 +152,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         int button = mouseButtonEvent.button();
         //?}
 
-        if (button == InputConstants.MOUSE_BUTTON_LEFT && clickedStyle != null && handleClickEvent(this.minecraft, clickedStyle.getClickEvent())) return true;
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && clickedStyle != null && eg_bedrock_books$handleClickEvents(this.minecraft, clickedStyle.getClickEvent())) return true;
 
         //? if minecraft: >= 1.21.9 {
         return super.mouseClicked(mouseButtonEvent, doubleClick);
@@ -210,7 +213,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         visitPageText((text, x, y) -> styleFinder.accept(x, y, text), PageSide.LEFT);
         visitPageText((text, x, y) -> styleFinder.accept(x, y, text), PageSide.RIGHT);
     }
-    //? }
+    //?}
 
     protected void visitBothPagesText(TextConsumer consumer) {
         visitPageText(consumer, PageSide.LEFT);
@@ -231,7 +234,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         }
     }
 
-    protected boolean handleClickEvent(Minecraft minecraft, @Nullable ClickEvent clickEvent) {
+    protected boolean eg_bedrock_books$handleClickEvents(Minecraft minecraft, @Nullable ClickEvent clickEvent) {
         if(clickEvent == null) return false;
         switch (clickEvent) {
             case ClickEvent.RunCommand(String string):
