@@ -24,6 +24,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 //?}
 
 //? if minecraft: >= 1.21.11 {
+import games.enchanted.eg_bedrock_books.common.screen.text.ClickableAndHoverTextCollector;
 import net.minecraft.client.gui.ActiveTextCollector;
 //?}
 
@@ -199,7 +200,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
             //? if minecraft: <= 1.21.10 {
             /*return minecraft.font.getSplitter().componentStyleAtWidth(line, clampedRelativeX);
             *///?} else {
-            ActiveTextCollector.ClickableStyleFinder styleFinder = new ActiveTextCollector.ClickableStyleFinder(this.getFont(), (int) x, (int) y);
+            ActiveTextCollector.ClickableStyleFinder styleFinder = new ClickableAndHoverTextCollector(this.getFont(), (int) x, (int) y);
             this.findClickableStylesInPages(styleFinder);
             return styleFinder.result();
             //?}
