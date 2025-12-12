@@ -37,7 +37,7 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
         this.returnScreen = returnScreen;
         this.alwaysBlurBackground = alwaysBlurBackground;
 
-        this.pages = List.of(getEmptyPageContent(), getEmptyPageContent(), getEmptyPageContent());
+        this.pages = List.of(getEmptyPageContent(), getEmptyPageContent(), getEmptyPageContent(), getEmptyPageContent());
     }
 
     @Override

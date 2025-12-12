@@ -21,9 +21,6 @@
   "ui.eg_bedrock_books.config.option.close_when_running_command.tooltip": "Faut-il fermer le livre actuel lorsqu’un texte déclenche une commande ? Activez cette option pour un comportement similaire à celui de Minecraft Vanilla.",
   "ui.eg_bedrock_books.config.key.turn_forward_page": "Touche pour tourner la page en avant",
   "ui.eg_bedrock_books.config.key.turn_backward_page": "Touche pour tourner la page en arrière",
-  "ui.eg_bedrock_books.config.option.open_vanilla_screen_key": "Touche pour ouvrir l’écran de livre Vanilla activée",
-  "ui.eg_bedrock_books.config.key.open_vanilla_screen_key.tooltip": "Si activée, maintenir cette touche en ouvrant un livre affichera l’écran Vanilla à la place de celui personnalisé par Bedrock Books.",
-  "ui.eg_bedrock_books.config.key.open_vanilla_screen_key": "Touche d’écran de livre Vanilla",
   "ui.eg_bedrock_books.config.option.show_x_button": "Afficher le bouton « x »",
   "ui.eg_bedrock_books.config.option.ribbon_height": "Hauteur du marque-page",
 

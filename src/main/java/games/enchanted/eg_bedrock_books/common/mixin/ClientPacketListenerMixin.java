@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockBookViewScreen;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
+import games.enchanted.eg_bedrock_books.common.util.ScreenUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
@@ -19,7 +20,7 @@ public class ClientPacketListenerMixin {
         method = "handleOpenBook"
     )
     private void eg_bedrock_books$modifyBookViewScreen(Minecraft instance, Screen old, Operation<Void> original, @Local BookViewScreen.BookAccess bookAccess) {
-        if(InputUtil.shouldOpenVanillaBook()) {
+        if(ScreenUtil.shouldOpenVanillaWrittenScreen()) {
             original.call(instance, old);
             return;
         }

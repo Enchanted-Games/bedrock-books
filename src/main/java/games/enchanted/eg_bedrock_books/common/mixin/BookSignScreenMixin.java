@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
+import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.duck.BookSignScreenAdditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -65,11 +66,21 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         return ModConstants.isHighContrastPackActive() ? eg_bedrock_books$HC_SECONDARY_TEXT_COLOUR : eg_bedrock_books$SECONDARY_TEXT_COLOUR;
     }
 
+    @Unique
+    private boolean eg_bedrock_books$skipModifications() {
+        return ConfigOptions.PREFER_VANILLA_SIGN_SCREEN.getValue();
+    }
+
     @WrapOperation(
         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"),
         method = "method_71541"
     )
     private void eg_bedrock_books$modifyReturnScreenIfPresent(Minecraft instance, Screen old, Operation<Void> original) {
+        if(eg_bedrock_books$skipModifications()) {
+            original.call(instance, old);
+            return;
+        }
+
         if(this.eg_bedrock_books$returnScreen != null) {
             original.call(instance, this.eg_bedrock_books$returnScreen);
             return;
@@ -83,6 +94,8 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "init"
     )
     private Button.Builder eg_bedrock_books$modifyButtons(Button.Builder instance, int x, int y, int width, int height, Operation<Button.Builder> original) {
+        if(eg_bedrock_books$skipModifications()) return original.call(instance, x, y, width, height);
+
         return original.call(instance, x, (this.height / 2) + 90, width, height);
     }
 
@@ -92,6 +105,11 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "renderBackground"
     )
     private void eg_bedrock_books$modifyBackgroundImage(GuiGraphics instance, RenderPipeline pipeline, Identifier atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, Operation<Void> original) {
+        if(eg_bedrock_books$skipModifications()) {
+            original.call(instance, pipeline, atlas, x, y, u, v, width, height, textureWidth, textureHeight);
+            return;
+        }
+
         original.call(
             instance,
             RenderPipelines.GUI_TEXTURED,
@@ -114,6 +132,11 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "render"
     )
     private void eg_bedrock_books$modifyEditTitleLabel(GuiGraphics instance, Font font, Component text, int x, int y, int color, boolean drawShadow, Operation<Void> original) {
+        if(eg_bedrock_books$skipModifications()) {
+            original.call(instance, font, text, x, y, color, drawShadow);
+            return;
+        }
+
         int textWidth = font.width(text);
         original.call(
             instance,
@@ -133,6 +156,8 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "init"
     )
     private EditBox eg_bedrock_books$modifyInputPosition(Font font, int x, int y, int width, int height, Component message, Operation<EditBox> original) {
+        if(eg_bedrock_books$skipModifications()) return original.call(font, x, y, width, height, message);
+
         return original.call(font, x, (this.height / 2) - 70, width, height, message);
     }
 
@@ -141,7 +166,7 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "init"
     )
     private void eg_bedrock_books$modifyInputColour(EditBox instance, int color, Operation<Void> original) {
-        original.call(instance, eg_bedrock_books$getTextColour());
+        original.call(instance, eg_bedrock_books$skipModifications() ? color : eg_bedrock_books$getTextColour());
     }
 
     // owner label
@@ -150,6 +175,8 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "<init>"
     )
     private MutableComponent eg_bedrock_books$modifyOwnerLabelColour(MutableComponent instance, ChatFormatting format, Operation<MutableComponent> original) {
+        if(eg_bedrock_books$skipModifications()) return original.call(instance, format);
+
         return original.call(instance, format).withStyle(Style.EMPTY.withColor(eg_bedrock_books$getSecondaryTextColour()));
     }
 
@@ -159,6 +186,11 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "render"
     )
     private void eg_bedrock_books$modifyOwnerLabel(GuiGraphics instance, Font font, Component text, int x, int y, int color, boolean drawShadow, Operation<Void> original) {
+        if(eg_bedrock_books$skipModifications()) {
+            original.call(instance, font, text, x, y, color, drawShadow);
+            return;
+        }
+
         int textWidth = font.width(text);
         original.call(
             instance,
@@ -177,6 +209,11 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
         method = "render"
     )
     private void eg_bedrock_books$modifyNoteText(GuiGraphics instance, Font font, FormattedText text, int x, int y, int lineWidth, int color, boolean drawShadow, Operation<Void> original) {
+        if(eg_bedrock_books$skipModifications()) {
+            original.call(instance, font, text, x, y, lineWidth, color, drawShadow);
+            return;
+        }
+
         original.call(
             instance,
             font,

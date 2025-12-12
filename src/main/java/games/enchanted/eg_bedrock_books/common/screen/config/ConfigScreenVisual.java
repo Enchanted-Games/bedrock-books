@@ -17,6 +17,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
@@ -55,6 +56,13 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/slider_handle_focus")
     );
 
+    protected static final List<ConfigOption<Boolean>> SCREEN_PREFERENCES = List.of(
+        ConfigOptions.PREFER_VANILLA_EDIT_SCREEN,
+        ConfigOptions.PREFER_VANILLA_WRITTEN_SCREEN,
+        ConfigOptions.PREFER_VANILLA_LECTERN_SCREEN,
+        ConfigOptions.PREFER_VANILLA_SIGN_SCREEN
+    );
+
     protected static final List<ConfigOption<Boolean>> DEBUG_OPTIONS = List.of(
         ConfigOptions.DEBUG_WIDGET_BOUNDS,
         ConfigOptions.DEBUG_TEXT_BOUNDS,
@@ -72,6 +80,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
 
     protected ConfigList generalOptionList;
     protected ConfigList visualOptionList;
+    protected ConfigList screenPreferencesOptionList;
     protected ConfigList debugOptionList;
 
     @Override
@@ -80,7 +89,8 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
 
         this.generalOptionList = createPageLayout(PageSide.LEFT);
         this.visualOptionList = createPageLayout(PageSide.RIGHT);
-        this.debugOptionList = createPageLayout(PageSide.LEFT);
+        this.screenPreferencesOptionList = createPageLayout(PageSide.LEFT);
+        this.debugOptionList = createPageLayout(PageSide.RIGHT);
 
         // general
         final Component closeOnCommandRunLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.close_when_running_command");
@@ -109,7 +119,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             ConfigOptions.MOVE_FORWARD_PAGE_KEY::setPendingValue,
             turnForwardPageLabel
         );
-        addHorizontalOption(
+        addStackedOption(
             this.generalOptionList,
             turnForwardPageWidget,
             turnForwardPageLabel
@@ -124,45 +134,10 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
             ConfigOptions.MOVE_BACKWARD_PAGE_KEY::setPendingValue,
             turnBackwardPageLabel
         );
-        addHorizontalOption(
+        addStackedOption(
             this.generalOptionList,
             turnBackwardPageWidget,
             turnBackwardPageLabel
-        );
-
-
-        final Component vanillaScreenKeybindEnabledLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.open_vanilla_screen_key");
-        final CheckBox vanillaScreenKeyEnabledWidget = new CheckBox(
-            0,
-            0,
-            ConfigOptions.VANILLA_BOOK_KEY_ENABLED.getPendingOrCurrentValue(),
-            ConfigOptions.VANILLA_BOOK_KEY_ENABLED::setPendingValue,
-            vanillaScreenKeybindEnabledLabel,
-            CHECKBOX_CONFIG,
-            CHECKBOX_UNCHECKED_CONFIG
-        );
-        final Tooltip vanillaScreenKeyTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.key.open_vanilla_screen_key.tooltip"));
-        vanillaScreenKeyEnabledWidget.setTooltip(vanillaScreenKeyTooltip);
-        addHorizontalOption(
-            this.generalOptionList,
-            vanillaScreenKeyEnabledWidget,
-            vanillaScreenKeybindEnabledLabel
-        );
-
-
-        final Component vanillaScreenKeyLabel = translatableComponentForPage("ui.eg_bedrock_books.config.key.open_vanilla_screen_key");
-        final KeyBox vanillaScreenKeyInput = new KeyBox(
-            0,
-            0,
-            ConfigOptions.VANILLA_BOOK_KEY.getPendingOrCurrentValue(),
-            ConfigOptions.VANILLA_BOOK_KEY::setPendingValue,
-            vanillaScreenKeyLabel
-        );
-        vanillaScreenKeyInput.setTooltip(vanillaScreenKeyTooltip);
-        addHorizontalOption(
-            this.generalOptionList,
-            vanillaScreenKeyInput,
-            vanillaScreenKeyLabel
         );
 
 
@@ -244,6 +219,42 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         );
 
 
+        // screen preferences
+        final Component screenToggleKeyLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.screen_toggle_key");
+        final Component screenToggleKeyTooltip = Component.translatable("ui.eg_bedrock_books.config.option.screen_toggle_key.tooltip");
+        final KeyBox screenToggleKeyInput = new KeyBox(
+            0,
+            0,
+            ConfigOptions.INVERSE_SCREEN_PREFERENCE_KEY.getPendingOrCurrentValue(),
+            ConfigOptions.INVERSE_SCREEN_PREFERENCE_KEY::setPendingValue,
+            screenToggleKeyLabel
+        );
+        screenToggleKeyInput.setTooltip(Tooltip.create(screenToggleKeyTooltip));
+        addStackedOption(
+            this.screenPreferencesOptionList,
+            screenToggleKeyInput,
+            screenToggleKeyLabel,
+            screenToggleKeyTooltip
+        );
+
+        for (ConfigOption<Boolean> option : SCREEN_PREFERENCES) {
+            final Component optionLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option." + option.getJsonKey());
+            addHorizontalOption(
+                this.screenPreferencesOptionList,
+                new CheckBox(
+                    0,
+                    0,
+                    option.getPendingOrCurrentValue(),
+                    option::setPendingValue,
+                    optionLabel,
+                    CHECKBOX_CONFIG,
+                    CHECKBOX_UNCHECKED_CONFIG
+                ),
+                optionLabel
+            );
+        }
+
+
         // debug
         for (ConfigOption<Boolean> option : DEBUG_OPTIONS) {
             final Component optionLabel = literalComponentForPage(option.getJsonKey());
@@ -265,6 +276,7 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
 
         this.addRenderableWidget(this.generalOptionList);
         this.addRenderableWidget(this.visualOptionList);
+        this.addRenderableWidget(this.screenPreferencesOptionList);
         this.addRenderableWidget(this.debugOptionList);
     }
 
@@ -283,13 +295,22 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     }
 
     protected void addHorizontalOption(ConfigList configList, AbstractWidget widget, Component label) {
+        addHorizontalOption(configList, widget, label, CommonComponents.EMPTY);
+    }
+    protected void addHorizontalOption(ConfigList configList, AbstractWidget widget, Component label, Component tooltip) {
         MultiLineTextWidget labelWidget = new MultiLineTextWidget(label, Minecraft.getInstance().font);
         labelWidget.setMaxWidth(Math.abs(widget.getWidth() - MAX_LAYOUT_WIDTH) - COLUMN_GAP);
+        labelWidget.setTooltip(Tooltip.create(tooltip));
         configList.addHorizontal(widget, labelWidget);
     }
+
     protected void addStackedOption(ConfigList configList, AbstractWidget widget, Component label) {
+        addStackedOption(configList, widget, label, CommonComponents.EMPTY);
+    }
+    protected void addStackedOption(ConfigList configList, AbstractWidget widget, Component label, Component tooltip) {
         MultiLineTextWidget labelWidget = new MultiLineTextWidget(label, Minecraft.getInstance().font);
         labelWidget.setMaxWidth(MAX_LAYOUT_WIDTH - COLUMN_GAP);
+        labelWidget.setTooltip(Tooltip.create(tooltip));
         configList.addStacked(widget, labelWidget);
     }
 
@@ -315,7 +336,8 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         return switch (index) {
             case 0 -> Component.translatable("ui.eg_bedrock_books.config.page.general");
             case 1 -> Component.translatable("ui.eg_bedrock_books.config.page.visual");
-            case 2 -> Component.translatable("ui.eg_bedrock_books.config.page.debug");
+            case 2 -> Component.translatable("ui.eg_bedrock_books.config.page.screen_preferences");
+            case 3 -> Component.translatable("ui.eg_bedrock_books.config.page.debug");
             default -> super.getPageIndicatorMessage(index);
         };
     }
@@ -326,10 +348,12 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         if(this.getCurrentLeftPageIndex() == 0) {
             this.generalOptionList.visible = true;
             this.visualOptionList.visible = true;
+            this.screenPreferencesOptionList.visible = false;
             this.debugOptionList.visible = false;
         } else {
             this.generalOptionList.visible = false;
             this.visualOptionList.visible = false;
+            this.screenPreferencesOptionList.visible = true;
             this.debugOptionList.visible = true;
         }
     }

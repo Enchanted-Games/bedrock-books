@@ -21,14 +21,19 @@ public class ConfigOptions {
     public static final ConfigOption<Boolean> CLOSE_BOOK_WHEN_RUNNING_COMMAND;
     public static final ConfigOption<InputConstants.Key> MOVE_FORWARD_PAGE_KEY;
     public static final ConfigOption<InputConstants.Key> MOVE_BACKWARD_PAGE_KEY;
-    public static final ConfigOption<Boolean> VANILLA_BOOK_KEY_ENABLED;
-    public static final ConfigOption<InputConstants.Key> VANILLA_BOOK_KEY;
 
     // visual
     public static final ConfigOption<Boolean> SHOW_X_BUTTON;
     public static final ConfigOption<Integer> RIBBON_HEIGHT;
     public static final ConfigOption<Boolean> IMPROVE_TEXT_CONTRAST_IN_HC;
     public static final ConfigOption<Boolean> AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK;
+
+    // screen preference
+    public static final ConfigOption<InputConstants.Key> INVERSE_SCREEN_PREFERENCE_KEY;
+    public static final ConfigOption<Boolean> PREFER_VANILLA_EDIT_SCREEN;
+    public static final ConfigOption<Boolean> PREFER_VANILLA_WRITTEN_SCREEN;
+    public static final ConfigOption<Boolean> PREFER_VANILLA_LECTERN_SCREEN;
+    public static final ConfigOption<Boolean> PREFER_VANILLA_SIGN_SCREEN;
 
     // debug
     public static final ConfigOption<Boolean> DEBUG_TEXT_BOUNDS;
@@ -39,102 +44,105 @@ public class ConfigOptions {
     private static final List<ConfigOption<?>> OPTIONS = new ArrayList<>();
 
     static {
-        CLOSE_BOOK_WHEN_RUNNING_COMMAND = new BoolOption(
+        CLOSE_BOOK_WHEN_RUNNING_COMMAND = registerOption(new BoolOption(
             true,
             true,
             "close_book_when_running_command"
-        );
-        registerOption(CLOSE_BOOK_WHEN_RUNNING_COMMAND);
+        ));
 
-        MOVE_FORWARD_PAGE_KEY = new KeyOption(
+        MOVE_FORWARD_PAGE_KEY = registerOption(new KeyOption(
             InputUtil.getKey(InputConstants.KEY_PAGEDOWN),
             InputUtil.getKey(InputConstants.KEY_PAGEDOWN),
             "move_forward_page_key"
-        );
-        registerOption(MOVE_FORWARD_PAGE_KEY);
+        ));
 
-        MOVE_BACKWARD_PAGE_KEY = new KeyOption(
+        MOVE_BACKWARD_PAGE_KEY = registerOption(new KeyOption(
             InputUtil.getKey(InputConstants.KEY_PAGEUP),
             InputUtil.getKey(InputConstants.KEY_PAGEUP),
             "move_backward_page_key"
-        );
-        registerOption(MOVE_BACKWARD_PAGE_KEY);
-
-        VANILLA_BOOK_KEY_ENABLED = new BoolOption(
-            false,
-            false,
-            "vanilla_book_key_enabled"
-        );
-        registerOption(VANILLA_BOOK_KEY_ENABLED);
-
-        VANILLA_BOOK_KEY = new KeyOption(
-            InputUtil.getKey(InputConstants.KEY_LALT),
-            InputUtil.getKey(InputConstants.KEY_LALT),
-            "vanilla_book_key"
-        );
-        registerOption(VANILLA_BOOK_KEY);
+        ));
 
 
-        SHOW_X_BUTTON = new BoolOption(
+        SHOW_X_BUTTON = registerOption(new BoolOption(
             true,
             true,
             "show_x_button"
-        );
-        registerOption(SHOW_X_BUTTON);
+        ));
 
-        RIBBON_HEIGHT = new IntOption(
+        RIBBON_HEIGHT = registerOption(new IntOption(
             76,
             76,
             "ribbon_height"
-        );
-        registerOption(RIBBON_HEIGHT);
+        ));
 
-        IMPROVE_TEXT_CONTRAST_IN_HC = new BoolOption(
+        IMPROVE_TEXT_CONTRAST_IN_HC = registerOption(new BoolOption(
             true,
             true,
             "improve_text_contrast_in_hc"
-        );
-        registerOption(IMPROVE_TEXT_CONTRAST_IN_HC);
+        ));
 
-        AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK = new BoolOption(
+        AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK = registerOption(new BoolOption(
             true,
             true,
             "auto_enable_bedrock_books_hc_pack"
-        );
-        registerOption(AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK);
+        ));
 
 
-        DEBUG_TEXT_BOUNDS = new BoolOption(
+        INVERSE_SCREEN_PREFERENCE_KEY = registerOption(new KeyOption(
+            InputUtil.getKey(InputConstants.KEY_LALT),
+            InputUtil.getKey(InputConstants.KEY_LALT),
+            "inverse_screen_preference_key"
+        ));
+        PREFER_VANILLA_EDIT_SCREEN = registerOption(new BoolOption(
+            false,
+            false,
+            "prefer_vanilla_edit_screen"
+        ));
+        PREFER_VANILLA_WRITTEN_SCREEN = registerOption(new BoolOption(
+            false,
+            false,
+            "prefer_vanilla_written_screen"
+        ));
+        PREFER_VANILLA_LECTERN_SCREEN = registerOption(new BoolOption(
+            false,
+            false,
+            "prefer_vanilla_lectern_screen"
+        ));
+        PREFER_VANILLA_SIGN_SCREEN = registerOption(new BoolOption(
+            false,
+            false,
+            "prefer_vanilla_sign_screen"
+        ));
+
+
+        DEBUG_TEXT_BOUNDS = registerOption(new BoolOption(
             false,
             false,
             "debug_text_bounds"
-        );
-        registerOption(DEBUG_TEXT_BOUNDS);
+        ));
 
-        DEBUG_WIDGET_BOUNDS = new BoolOption(
+        DEBUG_WIDGET_BOUNDS = registerOption(new BoolOption(
             false,
             false,
             "debug_widget_bounds"
-        );
-        registerOption(DEBUG_WIDGET_BOUNDS);
+        ));
 
-        DEBUG_CONTAINER_DATA = new BoolOption(
+        DEBUG_CONTAINER_DATA = registerOption(new BoolOption(
             false,
             false,
             "debug_container_data"
-        );
-        registerOption(DEBUG_CONTAINER_DATA);
+        ));
 
-        DEBUG_VARIABLES = new BoolOption(
+        DEBUG_VARIABLES = registerOption(new BoolOption(
             false,
             false,
             "debug_variables"
-        );
-        registerOption(DEBUG_VARIABLES);
+        ));
     }
 
-    private static void registerOption(ConfigOption<?> option) {
+    private static <T> ConfigOption<T> registerOption(ConfigOption<T> option) {
         OPTIONS.add(option);
+        return option;
     }
 
     private static final String FILE_NAME = ModConstants.MOD_ID + ".json";

@@ -9,9 +9,8 @@ import net.minecraft.client.input.KeyEvent;
 //?}
 
 public class InputUtil {
-    public static boolean shouldOpenVanillaBook() {
-        if(!ConfigOptions.VANILLA_BOOK_KEY_ENABLED.getValue()) return false;
-        InputConstants.Key key = ConfigOptions.VANILLA_BOOK_KEY.getValue();
+    public static boolean vanillaBookKeyHeld() {
+        InputConstants.Key key = ConfigOptions.INVERSE_SCREEN_PREFERENCE_KEY.getValue();
         return InputConstants.isKeyDown(McUtil.getWindow(), key.getValue());
     }
 

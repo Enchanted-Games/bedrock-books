@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockLecternScreen;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
+import games.enchanted.eg_bedrock_books.common.util.ScreenUtil;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -23,7 +24,7 @@ public class MenuScreensMixin {
             return;
         }
         original.call(menuType, (MenuScreens.ScreenConstructor<M, S>) (menu, inventory, component) -> {
-            if(InputUtil.shouldOpenVanillaBook()) {
+            if(ScreenUtil.shouldOpenVanillaLecternScreen()) {
                 return screenConstructor.create(menu, inventory, component);
             }
             return (S) new BedrockLecternScreen((LecternMenu) menu);
