@@ -362,19 +362,6 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
 
 
     @Override
-    public boolean shouldCloseOnEsc() {
-        var magicLambdaThing = new Object() {
-            boolean canClose = true;
-        };
-        this.getConfigLists().forEach(configList -> configList.visitChildren(widget -> {
-            if(widget instanceof ScreenCloseOverride screenCloseOverride && screenCloseOverride.preventScreenClose()) {
-                magicLambdaThing.canClose = false;
-            }
-        }));
-        return magicLambdaThing.canClose;
-    }
-
-    @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
@@ -421,6 +408,23 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
         return ModConstants.isHighContrastPackActive() ? HC_PAGE_TEXT_COLOUR : PAGE_TEXT_COLOUR;
     }
 
+
+    public boolean isChildPreventingInputs() {
+        var magicLambdaThing = new Object() {
+            boolean preventingInput = false;
+        };
+        this.getConfigLists().forEach(configList -> configList.visitChildren(widget -> {
+            if(widget instanceof ScreenCloseOverride screenCloseOverride && screenCloseOverride.preventScreenClose()) {
+                magicLambdaThing.preventingInput = true;
+            }
+        }));
+        return magicLambdaThing.preventingInput;
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return !this.isChildPreventingInputs();
+    }
 
     protected void cancelAndClose() {
         this.saveWhenOnCloseCalled = false;
@@ -506,5 +510,17 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
 
     public static void openConfigScreen(@Nullable Screen returnScreen) {
         Minecraft.getInstance().setScreen(makeScreen(returnScreen));
+    }
+
+    @Override
+    protected boolean canTurnForwardPage() {
+        if(this.isChildPreventingInputs()) return false;
+        return super.canTurnForwardPage();
+    }
+
+    @Override
+    protected boolean canTurnBackPage() {
+        if(this.isChildPreventingInputs()) return false;
+        return super.canTurnBackPage();
     }
 }

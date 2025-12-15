@@ -68,7 +68,7 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
         /*int keyCode, int scanCode, int modifiers
         *///?}
     ) {
-        if(this.acceptingKey) {
+        if(this.isListeningForInput()) {
             this.acceptingKey = false;
             //? if minecraft: >= 1.21.9 {
             int keyCode = keyEvent.key();
@@ -95,7 +95,9 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
         InputWithModifiers inputWithModifiers
         //?}
     ) {
-        this.acceptingKey = !this.acceptingKey;
+        if(!this.isListeningForInput()) {
+            this.acceptingKey = true;
+        }
     }
 
     @Override
@@ -116,7 +118,7 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
         );
 
         Component keyLabel = this.selectedKey.getDisplayName();
-        keyLabel = keyLabel.copy().withStyle(keyLabel.getStyle().withItalic(this.acceptingKey));
+        keyLabel = keyLabel.copy().withStyle(keyLabel.getStyle().withItalic(this.isListeningForInput()));
         drawKeyLabel(
             guiGraphics,
             keyLabel,
@@ -127,7 +129,7 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
         );
 
         Font font = Minecraft.getInstance().font;
-        if(this.acceptingKey) {
+        if(this.isListeningForInput()) {
             int leftWidth = font.width(">");
             guiGraphics.drawString(font, ">", this.getX() - leftWidth - leftWidth / 2, this.getY() + font.lineHeight / 2, this.getTextColour(), false);
             int rightWidth = font.width("<");
@@ -172,7 +174,7 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
     }
 
     public boolean isListeningForInput() {
-        return this.acceptingKey;
+        return this.acceptingKey && this.isFocused();
     }
 
     @Override

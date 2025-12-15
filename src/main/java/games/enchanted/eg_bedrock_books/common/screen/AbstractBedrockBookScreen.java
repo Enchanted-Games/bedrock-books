@@ -405,10 +405,18 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         updateVisibleContents();
     }
 
+    protected boolean canTurnForwardPage() {
+        return this.turnRightButton.visible;
+    }
+
     protected void turnBackPage() {
         ensureEvenPageIndex(Math.max(this.currentLeftPageIndex - 2, 0));
         resetEditControls();
         updateVisibleContents();
+    }
+
+    protected boolean canTurnBackPage() {
+        return this.turnLeftButton.visible;
     }
 
     protected int getCurrentAmountOfPages() {
@@ -435,7 +443,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         int keyCode = keyEvent.key();
         InputWithModifiers inputWithModifiers = new MouseButtonInfo(InputConstants.MOUSE_BUTTON_LEFT, 0);
         //?}
-        if (keyCode == ConfigOptions.MOVE_BACKWARD_PAGE_KEY.getValue().getValue() && this.turnLeftButton.visible) {
+        if (keyCode == ConfigOptions.MOVE_BACKWARD_PAGE_KEY.getValue().getValue() && this.canTurnBackPage()) {
             this.turnLeftButton.onPress(
                 //? if minecraft: >= 1.21.9 {
                 inputWithModifiers
@@ -443,7 +451,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             );
             this.turnLeftButton.playDownSound(this.minecraft.getSoundManager());
             return true;
-        } else if (keyCode == ConfigOptions.MOVE_FORWARD_PAGE_KEY.getValue().getValue() && this.turnRightButton.visible) {
+        } else if (keyCode == ConfigOptions.MOVE_FORWARD_PAGE_KEY.getValue().getValue() && this.canTurnForwardPage()) {
             this.turnRightButton.onPress(
                 //? if minecraft: >= 1.21.9 {
                 inputWithModifiers
