@@ -3,6 +3,8 @@ package games.enchanted.eg_bedrock_books.common.screen.config;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.config.option.ConfigOption;
+import games.enchanted.eg_bedrock_books.common.screen.AbstractBedrockBookScreen;
+import games.enchanted.eg_bedrock_books.common.screen.BedrockBookViewScreen;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockLecternScreen;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.ScreenCloseOverride;
@@ -10,11 +12,15 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.config.CheckBox;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.IntegerSlider;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
 import games.enchanted.eg_bedrock_books.common.screen.widget.scroll.ConfigList;
+import games.enchanted.eg_bedrock_books.common.screen.widget.text.DummyTextAreaView;
+import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -23,11 +29,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ConfigScreenVisual extends ConfigScreenBehaviour {
+public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView<String>> {
     protected static final int MAX_LAYOUT_WIDTH = 120;
     protected static final int MAX_LAYOUT_HEIGHT = 140;
     protected static final int CENTER_PADDING = 24;
@@ -35,6 +42,12 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
 
     protected static final int PAGE_TEXT_COLOUR = 0xff987457;
     protected static final int HC_PAGE_TEXT_COLOUR = 0xffffffff;
+
+    protected static final Component CONFIG_TITLE = Component.translatable("ui.eg_bedrock_books.config.title");
+    protected static final Component RESET_BUTTON_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset");
+    protected static final Component RESET_TITLE_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset.title").withStyle(Style.EMPTY.withBold(true));
+    protected static final Component RESET_MESSAGE_COMPONENT = Component.translatable("ui.eg_bedrock_books.config.reset.warning");
+    private static final Identifier BACKGROUND_TEXTURE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/book/config_background.png");
 
     public static final CustomSpriteButton.ButtonConfig CHECKBOX_CONFIG = new CustomSpriteButton.ButtonConfig(
         () -> SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F),
@@ -71,12 +84,20 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         ConfigOptions.DEBUG_VARIABLES
     );
 
-    protected ConfigScreenVisual(@Nullable Screen returnScreen, boolean alwaysBlurBackground) {
-        super(returnScreen, alwaysBlurBackground);
+    protected final @Nullable Screen returnScreen;
+    protected final boolean alwaysBlurBackground;
+    protected boolean saveWhenOnCloseCalled = false;
+
+    protected ConfigScreen(@Nullable Screen returnScreen, boolean alwaysBlurBackground) {
+        super(CONFIG_TITLE, false);
+        this.returnScreen = returnScreen;
+        this.alwaysBlurBackground = alwaysBlurBackground;
+
+        this.pages = List.of(getEmptyPageContent(), getEmptyPageContent(), getEmptyPageContent(), getEmptyPageContent());
     }
 
-    protected ConfigScreenVisual(@Nullable Screen returnScreen) {
-        super(returnScreen, false);
+    protected ConfigScreen(@Nullable Screen returnScreen) {
+        this(returnScreen, false);
     }
 
     protected ConfigList generalOptionList;
@@ -285,6 +306,26 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         this.addRenderableWidget(this.debugOptionList);
     }
 
+    @Override
+    protected void makeFooterButtons() {
+        this.footerButtonLayout.addChild(
+            Button.builder(CommonComponents.GUI_CANCEL, button -> this.cancelAndClose())
+                .width(FOOTER_BUTTON_WIDTH)
+                .build()
+        );
+        this.footerButtonLayout.addChild(
+            Button.builder(RESET_BUTTON_COMPONENT, button -> this.resetWithConfirmation())
+                .width(FOOTER_BUTTON_WIDTH)
+                .build()
+        );
+        this.footerButtonLayout.addChild(
+            Button.builder(SAVE_BUTTON_COMPONENT, button -> this.saveAndClose())
+                .width(FOOTER_BUTTON_WIDTH)
+                .build()
+        );
+        this.footerButtonLayout.setPosition((this.width / 2) - (FOOTER_BUTTON_WIDTH * 3 + FOOTER_BUTTON_SPACING * 2) / 2, (this.height / 2) + 90);
+    }
+
     protected Component translatableComponentForPage(String translationKey) {
         return Component.translatable(translationKey).withStyle(Style.EMPTY.withColor(getPageTextColour()).withShadowColor(0));
     }
@@ -378,5 +419,92 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
 
     protected int getPageTextColour() {
         return ModConstants.isHighContrastPackActive() ? HC_PAGE_TEXT_COLOUR : PAGE_TEXT_COLOUR;
+    }
+
+
+    protected void cancelAndClose() {
+        this.saveWhenOnCloseCalled = false;
+        this.onClose();
+    }
+
+    protected void saveAndClose() {
+        this.saveWhenOnCloseCalled = true;
+        this.onClose();
+    }
+
+    protected void resetWithConfirmation() {
+        ConfirmScreen confirmScreen = new ConfirmScreen(confirmed -> {
+            Minecraft.getInstance().setScreen(this);
+            if(!confirmed) {
+                return;
+            }
+            ConfigOptions.resetAndSaveAllOptions();
+            Minecraft.getInstance().setScreen(new ConfigScreen(this.returnScreen, this.alwaysBlurBackground));
+        }, RESET_TITLE_COMPONENT, RESET_MESSAGE_COMPONENT);
+        Minecraft.getInstance().setScreen(confirmScreen);
+    }
+
+    @Override
+    public void onClose() {
+        if(this.minecraft != null && this.returnScreen != null) {
+            this.minecraft.setScreen(returnScreen);
+        }
+        if(this.saveWhenOnCloseCalled) {
+            ConfigOptions.saveIfAnyDirtyOptions();
+        } else {
+            ConfigOptions.clearAllPendingValues();
+        }
+        if(this.returnScreen instanceof BedrockBookViewScreen viewScreen) {
+            viewScreen.refreshPageContent();
+        }
+    }
+
+    @Override
+    protected void addConfigButton() {
+    }
+
+    @Override
+    protected TextViewAndWidget<String, TextAreaView<String>> createTextWidgetAndView(int x, int y, PageSide side) {
+        return new TextViewAndWidget<>(new DummyTextAreaView(), null);
+    }
+
+    @Override
+    protected String getEmptyPageContent() {
+        return "";
+    }
+
+    @Override
+    public @NotNull Component getNarrationMessage() {
+        return CONFIG_TITLE;
+    }
+
+    @Override
+    protected Identifier getBackgroundTexture() {
+        return BACKGROUND_TEXTURE;
+    }
+
+    @Override
+    protected void renderMinecraftBackgrounds(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        if(!this.alwaysBlurBackground) {
+            super.renderMinecraftBackgrounds(guiGraphics, mouseX, mouseY, partialTick);
+            return;
+        }
+        if (this.minecraft != null && this.minecraft.level == null) {
+            this.renderPanorama(guiGraphics, partialTick);
+        }
+        this.renderBlurredBackground(guiGraphics);
+        this.renderMenuBackground(guiGraphics);
+    }
+
+    public static Screen makeScreenForModMenu(@Nullable Screen returnScreen) {
+        return new ConfigScreen(returnScreen, true);
+    }
+
+    public static Screen makeScreen(@Nullable Screen returnScreen) {
+        return new ConfigScreen(returnScreen);
+    }
+
+    public static void openConfigScreen(@Nullable Screen returnScreen) {
+        Minecraft.getInstance().setScreen(makeScreen(returnScreen));
     }
 }

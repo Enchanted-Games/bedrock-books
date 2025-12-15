@@ -1,8 +1,9 @@
 //? if neoforge {
 /*package games.enchanted.eg_bedrock_books.neoforge;
 
+import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.ModEntry;
-import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreenBehaviour;
+import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
@@ -12,7 +13,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 /^*
  * This is the entry point for your mod's forge side.
  ^/
-@Mod(value = "eg_bedrock_books", dist = Dist.CLIENT)
+@Mod(value = ModConstants.MOD_ID, dist = Dist.CLIENT)
 public class NeoForgeEntry {
     public static ModContainer CONTAINER = null;
 
@@ -20,7 +21,7 @@ public class NeoForgeEntry {
         ModEntry.init();
         CONTAINER = modContainer;
 
-        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, parent) -> ConfigScreenBehaviour.makeScreenForModMenu(parent));
+        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, parent) -> ConfigScreen.makeScreenForModMenu(parent));
     }
 }
 *///?}

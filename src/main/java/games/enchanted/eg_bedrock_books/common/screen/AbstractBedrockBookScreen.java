@@ -2,7 +2,7 @@ package games.enchanted.eg_bedrock_books.common.screen;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
-import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreenBehaviour;
+import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreen;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.EditControls;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
@@ -30,7 +30,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonInfo;
-import org.lwjgl.glfw.GLFW;
 //?}
 
 public abstract class AbstractBedrockBookScreen<PageContent, TextView extends TextAreaView<PageContent>> extends Screen {
@@ -241,7 +240,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.height - CONFIG_BUTTON_SIZE - 4,
             CONFIG_BUTTON_SIZE,
             CONFIG_BUTTON_SIZE,
-            (button) -> ConfigScreenBehaviour.openConfigScreen(this),
+            (button) -> ConfigScreen.openConfigScreen(this),
             CONFIG_BUTTON_LABEL,
             CONFIG_BUTTON_CONFIG
         );
