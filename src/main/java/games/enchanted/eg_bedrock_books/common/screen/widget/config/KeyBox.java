@@ -115,9 +115,11 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
             this.getHeight()
         );
 
+        Component keyLabel = this.selectedKey.getDisplayName();
+        keyLabel = keyLabel.copy().withStyle(keyLabel.getStyle().withItalic(this.acceptingKey));
         drawKeyLabel(
             guiGraphics,
-            this.selectedKey.getDisplayName(),
+            keyLabel,
             this.getX() + INLINE_PADDING,
             this.getY(),
             this.getX() + this.getWidth() - INLINE_PADDING,
