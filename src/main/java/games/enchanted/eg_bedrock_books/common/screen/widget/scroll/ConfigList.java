@@ -19,6 +19,7 @@ import games.enchanted.eg_bedrock_books.common.mixin.accessor.AbstractScrollArea
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> {
     public static final int SCROLLBAR_WIDTH = 12;
@@ -37,6 +38,11 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
 
     public void addStacked(AbstractWidget widget, MultiLineTextWidget label) {
         this.addChild(new StackedEntry(widget, label));
+    }
+
+    @Override
+    public void visitChildren(Consumer<AbstractWidget> visitor) {
+        this.children().forEach(child -> child.widgetChildren().forEach(visitor));
     }
 
     @Override
@@ -128,6 +134,11 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
         }
 
         @Override
+        public List<? extends AbstractWidget> widgetChildren() {
+            return List.of(label, child);
+        }
+
+        @Override
         public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
             int left = getContentX();
             int middleY = getContentYMiddle();
@@ -165,7 +176,7 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
             this.label.render(guiGraphics, mouseX, mouseY, partialTicks);
 
             this.child.setY(this.label.getBottom() + gap);
-            this.child.setX(left);
+            this.child.setX(left - (child.getWidth() / 2) + (getWidth() / 2));
             this.child.render(guiGraphics, mouseX, mouseY, partialTicks);
         }
 

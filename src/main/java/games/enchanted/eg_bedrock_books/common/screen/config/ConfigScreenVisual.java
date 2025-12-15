@@ -5,6 +5,7 @@ import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.config.option.ConfigOption;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockLecternScreen;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
+import games.enchanted.eg_bedrock_books.common.screen.widget.ScreenCloseOverride;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.CheckBox;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.IntegerSlider;
 import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
@@ -82,6 +83,10 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
     protected ConfigList visualOptionList;
     protected ConfigList screenPreferencesOptionList;
     protected ConfigList debugOptionList;
+
+    protected List<ConfigList> getConfigLists() {
+        return List.of(this.generalOptionList, this.visualOptionList, this.screenPreferencesOptionList, this.debugOptionList);
+    }
 
     @Override
     protected void addWidgetsBetweenPages() {
@@ -314,6 +319,19 @@ public class ConfigScreenVisual extends ConfigScreenBehaviour {
         configList.addStacked(widget, labelWidget);
     }
 
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        var magicLambdaThing = new Object() {
+            boolean canClose = true;
+        };
+        this.getConfigLists().forEach(configList -> configList.visitChildren(widget -> {
+            if(widget instanceof ScreenCloseOverride screenCloseOverride && screenCloseOverride.preventScreenClose()) {
+                magicLambdaThing.canClose = false;
+            }
+        }));
+        return magicLambdaThing.canClose;
+    }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {

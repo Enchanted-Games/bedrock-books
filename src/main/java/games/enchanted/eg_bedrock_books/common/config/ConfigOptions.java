@@ -89,8 +89,8 @@ public class ConfigOptions {
 
 
         INVERSE_SCREEN_PREFERENCE_KEY = registerOption(new KeyOption(
-            InputUtil.getKey(InputConstants.KEY_LALT),
-            InputUtil.getKey(InputConstants.KEY_LALT),
+            InputConstants.UNKNOWN,
+            InputConstants.UNKNOWN,
             "inverse_screen_preference_key"
         ));
         PREFER_VANILLA_EDIT_SCREEN = registerOption(new BoolOption(

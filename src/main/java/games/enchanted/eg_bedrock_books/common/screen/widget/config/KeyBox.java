@@ -3,6 +3,7 @@ package games.enchanted.eg_bedrock_books.common.screen.widget.config;
 import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
+import games.enchanted.eg_bedrock_books.common.screen.widget.ScreenCloseOverride;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -27,10 +28,10 @@ import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
 //?}
 
-public class KeyBox extends AbstractButton {
+public class KeyBox extends AbstractButton implements ScreenCloseOverride {
     public static final int TEXT_COLOUR = 0xff987457;
     public static final int HC_TEXT_COLOUR = 0xffffffff;
-    public static final int WIDTH = 52;
+    public static final int WIDTH = 87;
     public static final int HEIGHT = 16;
     protected static final int INLINE_PADDING = 4;
 
@@ -74,13 +75,10 @@ public class KeyBox extends AbstractButton {
             int scanCode = keyEvent.scancode();
             //?}
             if(keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_TAB) {
-                //? if minecraft: >= 1.21.9 {
-                return super.keyPressed(keyEvent);
-                //?} else {
-                /*return super.keyPressed(keyCode, scanCode, modifiers);
-                *///?}
+                this.selectedKey = InputConstants.UNKNOWN;
+            } else {
+                this.selectedKey = InputUtil.getKey(keyCode, scanCode);
             }
-            this.selectedKey = InputUtil.getKey(keyCode, scanCode);
             this.onKeyPress.keyPress(this.selectedKey);
             return true;
         }
@@ -146,9 +144,11 @@ public class KeyBox extends AbstractButton {
         //? if minecraft: <= 1.21.10 {
         /*AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY + 1, this.getTextColour());
         *///?} else {
-        this.renderScrollingStringOverContents(guiGraphics.textRendererForWidget(
-            this,
-            GuiGraphics.HoveredTextEffects.NONE),
+        this.renderScrollingStringOverContents(
+            guiGraphics.textRendererForWidget(
+                this,
+                GuiGraphics.HoveredTextEffects.NONE
+            ),
             keyName.copy().withStyle(Style.EMPTY.withShadowColor(0).withColor(this.getTextColour())),
             4
         );
@@ -171,6 +171,11 @@ public class KeyBox extends AbstractButton {
 
     public boolean isListeningForInput() {
         return this.acceptingKey;
+    }
+
+    @Override
+    public boolean preventScreenClose() {
+        return this.isListeningForInput();
     }
 
     protected int getTextColour() {

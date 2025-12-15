@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractContainerWidget;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public abstract class VerticalScrollContainerWidget<C extends VerticalScrollContainerWidget.Child> extends AbstractContainerWidget {
@@ -48,7 +50,7 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
     }
 
     @Override
-    public @NotNull List<? extends GuiEventListener> children() {
+    public @NotNull List<? extends C> children() {
         return Collections.unmodifiableList(children);
     }
 
@@ -68,6 +70,8 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
         this.children.add(child);
         this.repositionElements();
     }
+
+    public abstract void visitChildren(Consumer<AbstractWidget> visitor);
 
     private void repositionElements() {
         int top = this.getY() - (int)this.scrollAmount();
@@ -507,6 +511,8 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
         }
 
         public abstract void renderContent(final GuiGraphics graphics, int mouseX, int mouseY, boolean hovered, float partialTick);
+
+        public abstract List<? extends AbstractWidget> widgetChildren();
 
         public abstract List<? extends NarratableEntry> narratableChildren();
 

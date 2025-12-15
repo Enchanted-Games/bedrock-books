@@ -117,14 +117,6 @@ public class ConfigScreenBehaviour extends AbstractBedrockBookScreen<String, Tex
     }
 
     @Override
-    public boolean shouldCloseOnEsc() {
-        if(this.getFocused() instanceof KeyBox keyBox && keyBox.isListeningForInput()) {
-            return false;
-        }
-        return super.shouldCloseOnEsc();
-    }
-
-    @Override
     protected Identifier getBackgroundTexture() {
         return BACKGROUND_TEXTURE;
     }
