@@ -72,9 +72,9 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
 
     protected static final List<ConfigOption<Boolean>> SCREEN_PREFERENCES = List.of(
         ConfigOptions.PREFER_VANILLA_EDIT_SCREEN,
+        ConfigOptions.PREFER_VANILLA_SIGN_SCREEN,
         ConfigOptions.PREFER_VANILLA_WRITTEN_SCREEN,
-        ConfigOptions.PREFER_VANILLA_LECTERN_SCREEN,
-        ConfigOptions.PREFER_VANILLA_SIGN_SCREEN
+        ConfigOptions.PREFER_VANILLA_LECTERN_SCREEN
     );
 
     protected static final List<ConfigOption<Boolean>> DEBUG_OPTIONS = List.of(
@@ -120,6 +120,7 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
 
         // general
         final Component closeOnCommandRunLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.close_when_running_command");
+        final Component closeOnCommandRunTooltip = Component.translatable("ui.eg_bedrock_books.config.option.close_when_running_command.tooltip");
         final CheckBox closeOnCommandRunWidget = new CheckBox(
             0,
             0,
@@ -129,11 +130,12 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
             CHECKBOX_CONFIG,
             CHECKBOX_UNCHECKED_CONFIG
         );
-        closeOnCommandRunWidget.setTooltip(Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.option.close_when_running_command.tooltip")));
+        closeOnCommandRunWidget.setTooltip(Tooltip.create(closeOnCommandRunTooltip));
         addHorizontalOption(
             this.generalOptionList,
             closeOnCommandRunWidget,
-            closeOnCommandRunLabel
+            closeOnCommandRunLabel,
+            closeOnCommandRunTooltip
         );
 
 
@@ -209,7 +211,7 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
         );
 
         final Component improveTextContrastInHCLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.improve_text_contrast_in_hc");
-        final Tooltip improveTextContrastInHCLabelTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.option.improve_text_contrast_in_hc.tooltip"));
+        final Component improveTextContrastInHCLabelTooltip = Component.translatable("ui.eg_bedrock_books.config.option.improve_text_contrast_in_hc.tooltip");
         final CheckBox improveTextContrastInHCWidget = new CheckBox(
             0,
             0,
@@ -219,15 +221,16 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
             CHECKBOX_CONFIG,
             CHECKBOX_UNCHECKED_CONFIG
         );
-        improveTextContrastInHCWidget.setTooltip(improveTextContrastInHCLabelTooltip);
+        improveTextContrastInHCWidget.setTooltip(Tooltip.create(improveTextContrastInHCLabelTooltip));
         addHorizontalOption(
             this.visualOptionList,
             improveTextContrastInHCWidget,
-            improveTextContrastInHCLabel
+            improveTextContrastInHCLabel,
+            improveTextContrastInHCLabelTooltip
         );
 
         final Component autoEnableHCPackLabel = translatableComponentForPage("ui.eg_bedrock_books.config.option.auto_enable_bedrock_books_hc_pack");
-        final Tooltip autoEnableHCPackTooltip = Tooltip.create(Component.translatable("ui.eg_bedrock_books.config.option.auto_enable_bedrock_books_hc_pack.tooltip"));
+        final Component autoEnableHCPackTooltip = Component.translatable("ui.eg_bedrock_books.config.option.auto_enable_bedrock_books_hc_pack.tooltip");
         final CheckBox autoEnableHCPackWidget = new CheckBox(
             0,
             0,
@@ -237,11 +240,12 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
             CHECKBOX_CONFIG,
             CHECKBOX_UNCHECKED_CONFIG
         );
-        autoEnableHCPackWidget.setTooltip(autoEnableHCPackTooltip);
+        autoEnableHCPackWidget.setTooltip(Tooltip.create(autoEnableHCPackTooltip));
         addHorizontalOption(
             this.visualOptionList,
             autoEnableHCPackWidget,
-            autoEnableHCPackLabel
+            autoEnableHCPackLabel,
+            autoEnableHCPackTooltip
         );
 
 
