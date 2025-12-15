@@ -31,7 +31,7 @@ import net.minecraft.client.input.KeyEvent;
 public class KeyBox extends AbstractButton implements ScreenCloseOverride {
     public static final int TEXT_COLOUR = 0xff987457;
     public static final int HC_TEXT_COLOUR = 0xffffffff;
-    public static final int WIDTH = 87;
+    public static final int WIDTH = 88;
     public static final int HEIGHT = 16;
     protected static final int INLINE_PADDING = 4;
 
