@@ -15,7 +15,7 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.scroll.ConfigList;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.DummyTextAreaView;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
@@ -366,8 +366,8 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
 
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
         if(this.getCurrentLeftPageIndex() == 0) {
             guiGraphics.blitSprite(
@@ -492,16 +492,16 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
     }
 
     @Override
-    protected void renderMinecraftBackgrounds(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractMinecraftBackgrounds(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         if(!this.alwaysBlurBackground) {
-            super.renderMinecraftBackgrounds(guiGraphics, mouseX, mouseY, partialTick);
+            super.extractMinecraftBackgrounds(guiGraphics, mouseX, mouseY, partialTick);
             return;
         }
         if (this.minecraft != null && this.minecraft.level == null) {
-            this.renderPanorama(guiGraphics, partialTick);
+            this.extractPanorama(guiGraphics, partialTick);
         }
-        this.renderBlurredBackground(guiGraphics);
-        this.renderMenuBackground(guiGraphics);
+        this.extractBlurredBackground(guiGraphics);
+        this.extractMenuBackground(guiGraphics);
     }
 
     public static Screen makeScreenForModMenu(@Nullable Screen returnScreen) {

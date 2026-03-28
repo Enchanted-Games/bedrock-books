@@ -1,15 +1,13 @@
-//? if minecraft: >= 1.21.11 {
 package games.enchanted.eg_bedrock_books.common.screen.text;
 
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.TextAlignment;
-import net.minecraft.client.gui.render.state.GuiTextRenderState;
+import net.minecraft.client.renderer.state.gui.GuiTextRenderState;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import org.jspecify.annotations.Nullable;
-
 
 import java.util.function.Consumer;
 
@@ -50,4 +48,3 @@ public class ClickableAndHoverTextCollector extends ActiveTextCollector.Clickabl
         return this.result;
     }
 }
-//?}

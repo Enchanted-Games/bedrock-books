@@ -15,7 +15,7 @@
   "icon": "${icon}",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "${group}.${id}.fabric.FabricClientEntry"
     ],
     "modmenu": [

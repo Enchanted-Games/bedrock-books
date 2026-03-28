@@ -1,5 +1,6 @@
 package games.enchanted.eg_bedrock_books.common.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.config.ConfigScreen;
@@ -7,10 +8,13 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.EditControls;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.CommonComponents;
@@ -24,13 +28,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//? if minecraft: >= 1.21.9 {
-import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.input.InputWithModifiers;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonInfo;
-//?}
 
 public abstract class AbstractBedrockBookScreen<PageContent, TextView extends TextAreaView<PageContent>> extends Screen {
     // book spacing
@@ -473,13 +470,13 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
         final int pageNumberYPos = (this.height / 2) - PAGE_EDIT_BOX_HEIGHT + 35;
 
         final int leftPageNumberWidth = this.font.width(this.leftPageNumberMessage);
-        guiGraphics.drawString(
+        guiGraphics.text(
             this.font,
             this.leftPageNumberMessage,
             (this.width / 2) - (CENTER_PADDING / 2) - (PAGE_EDIT_BOX_WIDTH / 2) - (leftPageNumberWidth / 2),
@@ -489,7 +486,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         );
 
         final int rightPageNumberWidth = this.font.width(this.rightPageNumberMessage);
-        guiGraphics.drawString(
+        guiGraphics.text(
             this.font,
             this.rightPageNumberMessage,
             (this.width / 2) + (CENTER_PADDING / 2) + (PAGE_EDIT_BOX_WIDTH / 2) - (rightPageNumberWidth / 2),
@@ -499,15 +496,15 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         );
 
         if(InputUtil.shouldShowDebugVariables()) {
-            guiGraphics.drawString(font, "leftPageIndex: " + this.getCurrentLeftPageIndex(), 0, 56, -1);
+            guiGraphics.text(font, "leftPageIndex: " + this.getCurrentLeftPageIndex(), 0, 56, -1);
         }
     }
 
     protected abstract Identifier getBackgroundTexture();
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderMinecraftBackgrounds(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.extractMinecraftBackgrounds(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(
             RenderPipelines.GUI_TEXTURED,
             getBackgroundTexture(),
@@ -522,13 +519,13 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
         );
     }
 
-    protected void renderMinecraftBackgrounds(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if (this.minecraft != null && this.minecraft.level == null) {
-            this.renderPanorama(guiGraphics, partialTick);
-            this.renderBlurredBackground(guiGraphics);
-            this.renderMenuBackground(guiGraphics);
+    protected void extractMinecraftBackgrounds(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        if (this.minecraft.level == null) {
+            this.extractPanorama(guiGraphics, partialTick);
+            this.extractBlurredBackground(guiGraphics);
+            this.extractMenuBackground(guiGraphics);
         } else {
-            this.renderTransparentBackground(guiGraphics);
+            this.extractTransparentBackground(guiGraphics);
         }
     }
 

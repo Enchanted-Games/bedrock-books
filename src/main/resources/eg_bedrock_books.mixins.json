@@ -1,7 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "mixinextras": {"minVersion": "0.5.0"},
+  "mixinextras": {
+    "minVersion": "0.5.0"
+  },
   "package": "games.enchanted.eg_bedrock_books.common.mixin",
   "compatibilityLevel": "JAVA_${java_ver}",
   "mixins": [
@@ -15,6 +17,7 @@
     "LocalPlayerMixin",
     "MenuScreensMixin",
     "accessor.AbstractScrollAreaAccessor",
+    "accessor.GuiGraphicsAccessor",
     "resource.HighContrastOptionsMixin"
   ],
   "injectors": {

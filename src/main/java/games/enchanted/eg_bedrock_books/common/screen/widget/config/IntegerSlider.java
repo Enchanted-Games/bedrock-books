@@ -4,7 +4,7 @@ import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.duck.AbstractSliderButtonAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -61,28 +61,9 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
     }
 
     @Override
-    //? if minecraft: <= 1.21.10 {
-    /*protected void renderScrollingString(GuiGraphics guiGraphics, Font font, int width, int color) {
-    *///?} else {
-    public void renderScrollingStringOverContents(final ActiveTextCollector output, final Component message, final int margin) {
-    //?}
+    public void extractScrollingStringOverContents(final ActiveTextCollector output, final Component message, final int margin) {
         int minX = this.getX() + width;
         int maxX = this.getX() + this.getWidth() - width;
-        //? if minecraft: <= 1.21.10 {
-        /*renderScrollingString(
-            guiGraphics,
-            font,
-            Component.literal("" + getIntegerValue()).withStyle(Style.EMPTY
-                .withShadowColor(0)
-                .withColor(this.getTextColour())
-            ),
-            minX,
-            this.getY(),
-            maxX,
-            this.getY() + this.getHeight(),
-            -1
-        );
-        *///?} else {
         output.acceptScrollingWithDefaultCenter(
             Component.literal("" + getIntegerValue()).withStyle(Style.EMPTY
                 .withShadowColor(0)
@@ -93,7 +74,6 @@ public class IntegerSlider extends AbstractSliderButton implements AbstractSlide
             this.getY(),
             this.getY() + this.getHeight()
         );
-        //?}
     }
 
     protected int getIntegerValue() {

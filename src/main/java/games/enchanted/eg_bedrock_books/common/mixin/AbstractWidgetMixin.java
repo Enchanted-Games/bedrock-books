@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class AbstractWidgetMixin {
     @WrapOperation(
         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/AbstractWidget;getRectangle()Lnet/minecraft/client/gui/navigation/ScreenRectangle;"),
-        method = "render"
+        method = "extractRenderState"
     )
     private ScreenRectangle eg_bedrock_books$overrideRectangle(AbstractWidget instance, Operation<ScreenRectangle> original) {
         if(this instanceof AbstractWidgetAdditions abstractWidgetAdditions) {

@@ -1,10 +1,10 @@
 package games.enchanted.eg_bedrock_books.common.screen.widget.scroll;
 
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import games.enchanted.eg_bedrock_books.common.mixin.accessor.AbstractScrollAreaAccessor;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -12,23 +12,33 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-//? if minecraft: >= 1.21.9 {
-import com.mojang.blaze3d.platform.cursor.CursorTypes;
-import games.enchanted.eg_bedrock_books.common.mixin.accessor.AbstractScrollAreaAccessor;
-//?}
-
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> {
     public static final int SCROLLBAR_WIDTH = 12;
+    public static final int SCROLL_RATE = 10;
     private static final Identifier SCROLLER_HANDLE_SPRITE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_handle");
     private static final Identifier SCROLLER_BACKGROUND_SPRITE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background");
     private static final Identifier SCROLLER_BACKGROUND_FILLED_SPRITE = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "config/scroller_background_filled");
 
     public ConfigList(int x, int y, int width, int height) {
-        super(x, y, width, height);
+        super(
+            x,
+            y,
+            width,
+            height,
+            // sprites here are unused, scrollbar is drawn manually for this widget
+            new ScrollbarSettings(
+                SCROLLER_HANDLE_SPRITE,
+                SCROLLER_HANDLE_SPRITE,
+                SCROLLER_BACKGROUND_SPRITE,
+                SCROLLBAR_WIDTH,
+                DEFAULT_SCROLLBAR_MIN_HEIGHT,
+                SCROLL_RATE,
+                false
+            )
+        );
         this.setPosition(x, y);
     }
 
@@ -46,27 +56,11 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
     }
 
     @Override
-    protected int scrollbarWidth() {
-        return SCROLLBAR_WIDTH;
-    }
-
-    @Override
-    protected double scrollRate() {
-        return 10;
-    }
-
-    @Override
-    protected void renderScrollbar(
-        GuiGraphics graphics
-        //? if minecraft: >= 1.21.9 {
-        , int mouseX,
-        int mouseY
-        //?}
-    ) {
+    protected void extractScrollbar(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         final int HANDLE_WIDTH = 14;
         final int HANDLE_HEIGHT = 6;
         final int BACKGROUND_WIDTH = 6;
-        if (this.scrollbarVisible()) {
+        if (this.scrollable()) {
             int top = this.getY();
             int bottom = this.getBottom();
             int barX = this.scrollBarX();
@@ -96,11 +90,9 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
                 HANDLE_WIDTH,
                 HANDLE_HEIGHT
             );
-            //? if minecraft: >= 1.21.9 {
             if (this.isOverScrollbar(mouseX, mouseY)) {
                 graphics.requestCursor(((AbstractScrollAreaAccessor) this).eg_bedrock_books$isScrolling() ? CursorTypes.RESIZE_NS : CursorTypes.POINTING_HAND);
             }
-            //?}
         }
     }
 
@@ -139,18 +131,18 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
         }
 
         @Override
-        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+        public void renderContent(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
             int left = getContentX();
             int middleY = getContentYMiddle();
             int right = getContentRight();
 
             this.label.setY(middleY - this.label.getHeight() / 2);
             this.label.setX(left);
-            this.label.render(guiGraphics, mouseX, mouseY, partialTicks);
+            this.label.extractRenderState(guiGraphics, mouseX, mouseY, partialTicks);
 
             this.child.setY(middleY - this.child.getHeight() / 2);
             this.child.setX(right - this.child.getWidth());
-            this.child.render(guiGraphics, mouseX, mouseY, partialTicks);
+            this.child.extractRenderState(guiGraphics, mouseX, mouseY, partialTicks);
         }
 
         @Override
@@ -167,17 +159,17 @@ public class ConfigList extends VerticalScrollContainerWidget<ConfigList.Entry> 
         }
 
         @Override
-        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+        public void renderContent(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, boolean hovered, float partialTicks) {
             int top = getContentY();
             int left = getContentX();
 
             this.label.setY(top);
             this.label.setX(left);
-            this.label.render(guiGraphics, mouseX, mouseY, partialTicks);
+            this.label.extractRenderState(guiGraphics, mouseX, mouseY, partialTicks);
 
             this.child.setY(this.label.getBottom() + gap);
             this.child.setX(left - (child.getWidth() / 2) + (getWidth() / 2));
-            this.child.render(guiGraphics, mouseX, mouseY, partialTicks);
+            this.child.extractRenderState(guiGraphics, mouseX, mouseY, partialTicks);
         }
 
         @Override

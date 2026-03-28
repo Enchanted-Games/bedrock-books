@@ -2,7 +2,7 @@ package games.enchanted.eg_bedrock_books.common.screen.widget;
 
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.Tooltip;
@@ -209,7 +209,7 @@ public class EditControls implements Renderable, LayoutElement {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         if(!InputUtil.shouldShowDebugWidgetBound()) return;
         guiGraphics.fillGradient(getRectangle().left(), getRectangle().top(), getRectangle().right(), getRectangle().bottom(), 0xaa00ffff, 0xaa00ffff);
         guiGraphics.fillGradient(this.layout.getX(), this.layout.getY(), this.layout.getX() + 12, this.layout.getY() + 12, 0xaa00ff00, 0xaa00ff00);

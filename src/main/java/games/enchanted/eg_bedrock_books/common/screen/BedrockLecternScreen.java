@@ -5,7 +5,7 @@ import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.CustomSpriteButton;
 import games.enchanted.eg_bedrock_books.common.screen.widget.TogglableSpriteButton;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
@@ -273,11 +273,11 @@ public class BedrockLecternScreen extends BedrockBookViewScreen implements MenuA
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
         if(InputUtil.shouldShowDebugContainerData()) {
-            guiGraphics.drawString(font, "containerIndex: " + this.menu.getPage(), 0, 64, -1);
+            guiGraphics.text(font, "containerIndex: " + this.menu.getPage(), 0, 64, -1);
         }
     }
 }

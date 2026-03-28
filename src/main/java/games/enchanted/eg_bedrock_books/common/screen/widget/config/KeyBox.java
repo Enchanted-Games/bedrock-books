@@ -7,9 +7,8 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.ScreenCloseOverride
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -22,11 +21,9 @@ import net.minecraft.sounds.SoundEvents;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
-//? if minecraft: >= 1.21.9 {
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
-//?}
 
 public class KeyBox extends AbstractButton implements ScreenCloseOverride {
     public static final int TEXT_COLOUR = 0xff987457;
@@ -61,19 +58,11 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
     }
 
     @Override
-    public boolean keyPressed(
-        //? if minecraft: >= 1.21.9 {
-        KeyEvent keyEvent
-        //?} else {
-        /*int keyCode, int scanCode, int modifiers
-        *///?}
-    ) {
+    public boolean keyPressed(KeyEvent keyEvent) {
         if(this.isListeningForInput()) {
             this.acceptingKey = false;
-            //? if minecraft: >= 1.21.9 {
             int keyCode = keyEvent.key();
             int scanCode = keyEvent.scancode();
-            //?}
             if(keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_TAB) {
                 this.selectedKey = InputConstants.UNKNOWN;
             } else {
@@ -82,32 +71,18 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
             this.onKeyPress.keyPress(this.selectedKey);
             return true;
         }
-        //? if minecraft: >= 1.21.9 {
         return super.keyPressed(keyEvent);
-        //?} else {
-        /*return super.keyPressed(keyCode, scanCode, modifiers);
-        *///?}
     }
 
     @Override
-    public void onPress(
-        //? if minecraft: >= 1.21.9 {
-        InputWithModifiers inputWithModifiers
-        //?}
-    ) {
+    public void onPress(InputWithModifiers inputWithModifiers) {
         if(!this.isListeningForInput()) {
             this.acceptingKey = true;
         }
     }
 
     @Override
-    protected void
-    //? if minecraft: <= 1.21.10 {
-    /*renderWidget
-     *///?} else {
-    renderContents
-    //?}
-    (GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractContents(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.blitSprite(
             RenderPipelines.GUI_TEXTURED,
             this.isHovered() ? buttonConfig.hoverSprite() : this.isFocused() ? buttonConfig.focusedSprite() : buttonConfig.sprite(),
@@ -131,32 +106,25 @@ public class KeyBox extends AbstractButton implements ScreenCloseOverride {
         Font font = Minecraft.getInstance().font;
         if(this.isListeningForInput()) {
             int leftWidth = font.width(">");
-            guiGraphics.drawString(font, ">", this.getX() - leftWidth - leftWidth / 2, this.getY() + font.lineHeight / 2, this.getTextColour(), false);
+            guiGraphics.text(font, ">", this.getX() - leftWidth - leftWidth / 2, this.getY() + font.lineHeight / 2, this.getTextColour(), false);
             int rightWidth = font.width("<");
-            guiGraphics.drawString(font, "<", this.getX() + this.getWidth() + rightWidth / 2, this.getY() + font.lineHeight / 2, this.getTextColour(), false);
+            guiGraphics.text(font, "<", this.getX() + this.getWidth() + rightWidth / 2, this.getY() + font.lineHeight / 2, this.getTextColour(), false);
         }
 
-        //? if minecraft: >= 1.21.9 {
         if (this.isHovered()) {
             guiGraphics.requestCursor(this.isActive() ? CursorTypes.POINTING_HAND : CursorTypes.NOT_ALLOWED);
         }
-        //?}
     }
 
-    protected void drawKeyLabel(GuiGraphics guiGraphics, Component keyName, int minX, int minY, int maxX, int maxY) {
-        Font font = Minecraft.getInstance().font;
-        //? if minecraft: <= 1.21.10 {
-        /*AbstractWidget.renderScrollingString(guiGraphics, font, keyName.copy().withStyle(Style.EMPTY.withShadowColor(0)), minX, minY, maxX, maxY + 1, this.getTextColour());
-        *///?} else {
-        this.renderScrollingStringOverContents(
+    protected void drawKeyLabel(GuiGraphicsExtractor guiGraphics, Component keyName, int minX, int minY, int maxX, int maxY) {
+        this.extractScrollingStringOverContents(
             guiGraphics.textRendererForWidget(
                 this,
-                GuiGraphics.HoveredTextEffects.NONE
+                GuiGraphicsExtractor.HoveredTextEffects.NONE
             ),
             keyName.copy().withStyle(Style.EMPTY.withShadowColor(0).withColor(this.getTextColour())),
             4
         );
-        //?}
 
         if(InputUtil.shouldShowDebugTextBound()) {
             guiGraphics.fill(minX, minY, maxX, maxY, 0xbb00ff00);

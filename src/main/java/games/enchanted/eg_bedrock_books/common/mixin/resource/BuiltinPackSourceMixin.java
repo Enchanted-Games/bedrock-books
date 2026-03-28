@@ -4,6 +4,7 @@ import games.enchanted.eg_bedrock_books.common.Logging;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.platform.PlatformHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
@@ -29,6 +30,8 @@ public class BuiltinPackSourceMixin {
         method = "listBundledPacks"
     )
     private void eg_bedrock_books$addBuiltinPacks(Consumer<Pack> packConsumer, CallbackInfo ci) {
+        if(!((BuiltInPackSource) (Object) this instanceof ClientPackSource)) return;
+
         Path jarPath = PlatformHelper.getModJarPath();
         if(jarPath == null) {
             Logging.error("Could not find resourcepacks from mod jar!");

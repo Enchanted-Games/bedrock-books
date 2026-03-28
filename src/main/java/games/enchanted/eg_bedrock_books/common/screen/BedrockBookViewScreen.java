@@ -3,14 +3,17 @@ package games.enchanted.eg_bedrock_books.common.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
+import games.enchanted.eg_bedrock_books.common.screen.text.ClickableAndHoverTextCollector;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.ComponentTextAreaView;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
 import games.enchanted.eg_bedrock_books.common.util.ColourUtil;
 import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.ActiveTextCollector;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
@@ -18,15 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//? if minecraft: >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-//?}
-
-//? if minecraft: >= 1.21.11 {
-import games.enchanted.eg_bedrock_books.common.screen.text.ClickableAndHoverTextCollector;
-import net.minecraft.client.gui.ActiveTextCollector;
-//?}
 
 public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, TextAreaView<Component>> {
     protected static final Component BOOK_VIEW_TITLE = Component.translatable("book.view.title");
@@ -100,7 +94,7 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     }
 
     protected List<FormattedCharSequence> splitPage(int index) {
-        Component page = this.getPageOrEmpty(index);
+        Component page = ComponentUtils.mergeStyles(this.getPageOrEmpty(index), this.getPageStyle());
 
         if(ConfigOptions.IMPROVE_TEXT_CONTRAST_IN_HC.getValue() && ModConstants.isHighContrastPackActive()) {
             List<Component> modifiedPageElements = new ArrayList<>();
@@ -123,6 +117,14 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         return CommonComponents.EMPTY;
     }
 
+    protected Style getPageStyle() {
+        Style style = Style.EMPTY.withColor(this.getTextColour());
+        if(!TEXT_SHADOW) {
+            style = style.withoutShadow();
+        }
+        return style;
+    }
+
     @Override
     protected void turnForwardPage() {
         super.turnForwardPage();
@@ -141,25 +143,13 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     }
 
     @Override
-    public boolean mouseClicked(
-        //? if minecraft: >= 1.21.9 {
-        MouseButtonEvent mouseButtonEvent, boolean doubleClick
-        //?} else {
-        /*double mouseX, double mouseY, int button
-         *///?}
-    ) {
+    public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
         Style clickedStyle = getStyleAt(mouseX, mouseY);
-        //? if minecraft: >= 1.21.9 {
         int button = mouseButtonEvent.button();
-        //?}
 
         if (button == InputConstants.MOUSE_BUTTON_LEFT && clickedStyle != null && eg_bedrock_books$handleClickEvents(this.minecraft, clickedStyle.getClickEvent())) return true;
 
-        //? if minecraft: >= 1.21.9 {
         return super.mouseClicked(mouseButtonEvent, doubleClick);
-        //?} else {
-        /*return super.mouseClicked(mouseX, mouseY, button);
-        *///?}
     }
 
     @Override
@@ -197,26 +187,20 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
         if (lineIndex >= 0 && lineIndex < (closestToLeftHorizontally ? this.leftPageSplitLines.size() : this.rightPageSplitLines.size())) {
             FormattedCharSequence line = (closestToLeftHorizontally ? this.leftPageSplitLines : this.rightPageSplitLines).get(lineIndex);
 
-            //? if minecraft: <= 1.21.10 {
-            /*return minecraft.font.getSplitter().componentStyleAtWidth(line, clampedRelativeX);
-            *///?} else {
             ActiveTextCollector.ClickableStyleFinder styleFinder = new ClickableAndHoverTextCollector(this.getFont(), (int) x, (int) y);
             this.findClickableStylesInPages(styleFinder);
             return styleFinder.result();
-            //?}
         }
 
         return null;
     }
 
-    //? if minecraft: >= 1.21.11 {
     protected void findClickableStylesInPages(ActiveTextCollector.ClickableStyleFinder styleFinder) {
         visitPageText((text, x, y) -> styleFinder.accept(x, y, text), PageSide.LEFT);
         visitPageText((text, x, y) -> styleFinder.accept(x, y, text), PageSide.RIGHT);
     }
-    //?}
 
-    protected void visitBothPagesText(TextConsumer consumer) {
+    protected void visitPages(TextConsumer consumer) {
         visitPageText(consumer, PageSide.LEFT);
         visitPageText(consumer, PageSide.RIGHT);
     }
@@ -259,29 +243,19 @@ public class BedrockBookViewScreen extends AbstractBedrockBookScreen<Component, 
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
-        visitBothPagesText((text, x, y) -> {
-            guiGraphics.drawString(
-                this.font,
-                text,
-                x,
-                y,
-                this.getTextColour(),
-                TEXT_SHADOW
-            );
-        });
-
-        guiGraphics.renderComponentHoverEffect(this.font, this.styleUnderMouseCursor, mouseX, mouseY);
+        ActiveTextCollector textCollector = guiGraphics.textRenderer(GuiGraphicsExtractor.HoveredTextEffects.TOOLTIP_AND_CURSOR);
+        visitPages((text, x, y) -> textCollector.accept(x, y, text));
 
         if(InputUtil.shouldShowDebugTextBound()) {
             guiGraphics.fillGradient(this.leftPageX - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageY - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageX + PAGE_TEXT_WIDTH + PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.leftPageY + PAGE_TEXT_HEIGHT + PAGE_CLICK_BOUNDS_EXTRA_PADDING, 0x22ff0000, 0x22ff0000);
             guiGraphics.fillGradient(this.rightPageX - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageY - PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageX + PAGE_TEXT_WIDTH + PAGE_CLICK_BOUNDS_EXTRA_PADDING, this.rightPageY + PAGE_TEXT_HEIGHT + PAGE_CLICK_BOUNDS_EXTRA_PADDING, 0x22ff0000, 0x22ff0000);
         }
         if(InputUtil.shouldShowDebugVariables()) {
-            guiGraphics.drawString(this.font, "style under cursor: ", 0, this.height - this.font.lineHeight * 2, -1);
-            guiGraphics.drawString(this.font, this.styleUnderMouseCursor == null ? "<none>" : this.styleUnderMouseCursor.toString(), 0, this.height - this.font.lineHeight, -1);
+            guiGraphics.text(this.font, "style under cursor: ", 0, this.height - this.font.lineHeight * 2, -1);
+            guiGraphics.text(this.font, this.styleUnderMouseCursor == null ? "<none>" : this.styleUnderMouseCursor.toString(), 0, this.height - this.font.lineHeight, -1);
         }
     }
 

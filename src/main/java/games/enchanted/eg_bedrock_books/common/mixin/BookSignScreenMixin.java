@@ -9,7 +9,7 @@ import games.enchanted.eg_bedrock_books.common.duck.BookSignScreenAdditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -73,7 +73,7 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
 
     @WrapOperation(
         at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"),
-        method = "method_71541"
+        method = "lambda$init$0"
     )
     private void eg_bedrock_books$modifyReturnScreenIfPresent(Minecraft instance, Screen old, Operation<Void> original) {
         if(eg_bedrock_books$skipModifications()) {
@@ -101,10 +101,10 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
 
     // background
     @WrapOperation(
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V"),
-        method = "renderBackground"
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V"),
+        method = "extractBackground"
     )
-    private void eg_bedrock_books$modifyBackgroundImage(GuiGraphics instance, RenderPipeline pipeline, Identifier atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, Operation<Void> original) {
+    private void eg_bedrock_books$modifyBackgroundImage(GuiGraphicsExtractor instance, RenderPipeline pipeline, Identifier atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, Operation<Void> original) {
         if(eg_bedrock_books$skipModifications()) {
             original.call(instance, pipeline, atlas, x, y, u, v, width, height, textureWidth, textureHeight);
             return;
@@ -128,10 +128,10 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
     // title label
     @WrapOperation(
         slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/BookSignScreen;EDIT_TITLE_LABEL:Lnet/minecraft/network/chat/Component;", opcode = Opcodes.GETSTATIC)),
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)V", ordinal = 0),
-        method = "render"
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)V", ordinal = 0),
+        method = "extractRenderState"
     )
-    private void eg_bedrock_books$modifyEditTitleLabel(GuiGraphics instance, Font font, Component text, int x, int y, int color, boolean drawShadow, Operation<Void> original) {
+    private void eg_bedrock_books$modifyEditTitleLabel(GuiGraphicsExtractor instance, Font font, Component text, int x, int y, int color, boolean drawShadow, Operation<Void> original) {
         if(eg_bedrock_books$skipModifications()) {
             original.call(instance, font, text, x, y, color, drawShadow);
             return;
@@ -182,10 +182,10 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
 
     @WrapOperation(
         slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/BookSignScreen;ownerText:Lnet/minecraft/network/chat/Component;", opcode = Opcodes.GETFIELD)),
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)V", ordinal = 0),
-        method = "render"
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)V", ordinal = 0),
+        method = "extractRenderState"
     )
-    private void eg_bedrock_books$modifyOwnerLabel(GuiGraphics instance, Font font, Component text, int x, int y, int color, boolean drawShadow, Operation<Void> original) {
+    private void eg_bedrock_books$modifyOwnerLabel(GuiGraphicsExtractor instance, Font font, Component text, int x, int y, int color, boolean drawShadow, Operation<Void> original) {
         if(eg_bedrock_books$skipModifications()) {
             original.call(instance, font, text, x, y, color, drawShadow);
             return;
@@ -205,10 +205,10 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
 
     // note text
     @WrapOperation(
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawWordWrap(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/FormattedText;IIIIZ)V"),
-        method = "render"
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;textWithWordWrap(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/FormattedText;IIIIZ)V"),
+        method = "extractRenderState"
     )
-    private void eg_bedrock_books$modifyNoteText(GuiGraphics instance, Font font, FormattedText text, int x, int y, int lineWidth, int color, boolean drawShadow, Operation<Void> original) {
+    private void eg_bedrock_books$modifyNoteText(GuiGraphicsExtractor instance, Font font, FormattedText text, int x, int y, int lineWidth, int color, boolean drawShadow, Operation<Void> original) {
         if(eg_bedrock_books$skipModifications()) {
             original.call(instance, font, text, x, y, lineWidth, color, drawShadow);
             return;
