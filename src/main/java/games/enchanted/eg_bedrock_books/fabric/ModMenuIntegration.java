@@ -1,4 +1,4 @@
-//? if fabric && modmenu {
+//? if fabric {
 package games.enchanted.eg_bedrock_books.fabric;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;

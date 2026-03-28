@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 /^*
  * This is the entry point for your mod's forge side.
  ^/
-@Mod(value = ModConstants.MOD_ID, dist = Dist.CLIENT)
+@Mod(value = ModConstants.MOD_ID)
 public class NeoForgeEntry {
     public static ModContainer CONTAINER = null;
 
