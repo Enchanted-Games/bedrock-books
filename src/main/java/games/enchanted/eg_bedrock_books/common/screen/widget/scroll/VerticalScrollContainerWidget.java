@@ -35,7 +35,7 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
     protected static final Identifier SCROLLER_BACKGROUND_SPRITE = Identifier.withDefaultNamespace("widget/scroller_background");
     protected static final int DEFAULT_SCROLLBAR_WIDTH = 10;
     protected static final int DEFAULT_SCROLLBAR_MIN_HEIGHT = 32;
-    protected static final int DEFAULT_SCROLL_RATE = 6;
+    protected static final int DEFAULT_SCROLL_RATE = 35;
 
     private final List<C> children = new ArrayList<>();
     @Nullable private C hoveredChild = null;
@@ -143,11 +143,6 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
     public void setScrollAmount(double scrollAmount) {
         super.setScrollAmount(scrollAmount);
         this.repositionElements();
-    }
-
-    @Override
-    protected double scrollRate() {
-        return 35;
     }
 
     @Override
@@ -287,7 +282,7 @@ public abstract class VerticalScrollContainerWidget<C extends VerticalScrollCont
     }
 
     public int getRowLeft() {
-        return this.getX() + (this.scrollable() ? 0 : this.scrollbarWidth());
+        return this.getX() + (this.scrollable() ? 0 : this.scrollbarWidth() / 2);
     }
 
     public int getRowRight() {
