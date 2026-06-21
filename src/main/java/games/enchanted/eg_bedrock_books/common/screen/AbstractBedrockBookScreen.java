@@ -237,7 +237,7 @@ public abstract class AbstractBedrockBookScreen<PageContent, TextView extends Te
             this.height - CONFIG_BUTTON_SIZE - 4,
             CONFIG_BUTTON_SIZE,
             CONFIG_BUTTON_SIZE,
-            (button) -> ConfigScreen.openConfigScreen(this),
+            (button) -> ConfigScreen.openConfigScreen(this.minecraft, this),
             CONFIG_BUTTON_LABEL,
             CONFIG_BUTTON_CONFIG
         );

@@ -17,20 +17,39 @@ import java.util.function.Consumer;
 
 @Mixin(Options.class)
 public class HighContrastOptionsMixin {
-    @Definition(id = "createBoolean", method = "Lnet/minecraft/client/OptionInstance;createBoolean(Ljava/lang/String;Lnet/minecraft/client/OptionInstance$TooltipSupplier;ZLjava/util/function/Consumer;)Lnet/minecraft/client/OptionInstance;")
+    //? if minecraft: <= 26.1 {
+    /*@Definition(id = "createBoolean", method = "Lnet/minecraft/client/OptionInstance;createBoolean(Ljava/lang/String;Lnet/minecraft/client/OptionInstance$TooltipSupplier;ZLjava/util/function/Consumer;)Lnet/minecraft/client/OptionInstance;")
+    *///? } else {
+    @Definition(id = "createBoolean", method = "Lnet/minecraft/client/OptionInstance;createBoolean(Ljava/lang/String;Lnet/minecraft/client/OptionInstance$TooltipSupplier;ZLnet/minecraft/client/OptionInstance$ValueUpdateListener;)Lnet/minecraft/client/OptionInstance;")
+    //? }
     @Expression("createBoolean('options.accessibility.high_contrast', ?, ?, ?)")
     @WrapOperation(
         at = @At("MIXINEXTRAS:EXPRESSION"),
         method = "<init>"
     )
-    private OptionInstance<Boolean> eg_bedrock_books$composeHighContrastPackChange(String caption, OptionInstance.TooltipSupplier<Boolean> tooltip, boolean initialValue, Consumer<Boolean> onValueUpdate, Operation<OptionInstance<Boolean>> original) {
+    private OptionInstance<Boolean> eg_bedrock_books$composeHighContrastPackChange(
+        String caption,
+        OptionInstance.TooltipSupplier<Boolean> tooltip,
+        boolean initialValue,
+        //? if minecraft: <= 26.1 {
+        /*Consumer<Boolean> onValueUpdate,
+        *///? } else {
+        OptionInstance.ValueUpdateListener<? super Boolean> onValueUpdate,
+        //? }
+        Operation<OptionInstance<Boolean>> original
+    ) {
         return original.call(
             caption,
             tooltip,
             initialValue,
-            (Consumer<Boolean>) value -> {
+            //? if minecraft: <= 26.1 {
+            /*(Consumer<Boolean>)
+            *///? } else {
+            (OptionInstance.ValueUpdateListener<? super Boolean>)
+            //? }
+            (Boolean value) -> {
                 if(!ConfigOptions.AUTO_ENABLE_BEDROCK_BOOKS_HC_PACK.getValue()) {
-                    onValueUpdate.accept(value);
+                    onValueUpdate./*? if minecraft: <= 26.1 { */ /*accept *//*? } else { */ valueChanged /*?}*/(value);
                     return;
                 }
                 PackRepository repo = Minecraft.getInstance().getResourcePackRepository();
@@ -40,7 +59,7 @@ public class HighContrastOptionsMixin {
                 } else if (isSelected && !value) {
                     repo.removePack(ModConstants.HIGH_CONTRAST_PACK_ID);
                 }
-                onValueUpdate.accept(value);
+                onValueUpdate./*? if minecraft: <= 26.1 { */ /*accept *//*? } else { */ valueChanged /*?}*/(value);
             }
         );
     }

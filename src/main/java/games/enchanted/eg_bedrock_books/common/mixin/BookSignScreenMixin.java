@@ -7,7 +7,6 @@ import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.config.ConfigOptions;
 import games.enchanted.eg_bedrock_books.common.duck.BookSignScreenAdditions;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -26,6 +25,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Slice;
+
+//? if minecraft: <= 26.1 {
+/*import net.minecraft.client.Minecraft;
+*///? } else {
+import net.minecraft.client.gui.Gui;
+//? }
 
 @Mixin(value = BookSignScreen.class, priority = 995)
 public class BookSignScreenMixin extends Screen implements BookSignScreenAdditions {
@@ -72,10 +77,25 @@ public class BookSignScreenMixin extends Screen implements BookSignScreenAdditio
     }
 
     @WrapOperation(
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"),
+        at = @At(
+            value = "INVOKE",
+            //? if minecraft: <= 26.1 {
+            /*target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"
+            *///? } else {
+            target = "Lnet/minecraft/client/gui/Gui;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"
+            //? }
+        ),
         method = "lambda$init$0"
     )
-    private void eg_bedrock_books$modifyReturnScreenIfPresent(Minecraft instance, Screen old, Operation<Void> original) {
+    private void eg_bedrock_books$modifyReturnScreenIfPresent(
+        //? if minecraft: <= 26.1 {
+        /*Minecraft instance,
+         *///? } else {
+        Gui instance,
+        //? }
+        Screen old,
+        Operation<Void> original
+    ) {
         if(eg_bedrock_books$skipModifications()) {
             original.call(instance, old);
             return;

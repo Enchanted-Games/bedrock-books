@@ -1,3 +1,3 @@
-# 1.1.1
+# 1.1.2
 
-- Updated to 26.1
+- Updated to 26.2

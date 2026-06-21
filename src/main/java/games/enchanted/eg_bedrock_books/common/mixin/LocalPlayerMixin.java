@@ -5,9 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.GameProfile;
 import games.enchanted.eg_bedrock_books.common.screen.BedrockBookEditScreen;
-import games.enchanted.eg_bedrock_books.common.util.InputUtil;
 import games.enchanted.eg_bedrock_books.common.util.ScreenUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -18,6 +16,12 @@ import net.minecraft.world.item.component.WritableBookContent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+//? if minecraft: <= 26.1 {
+/*import net.minecraft.client.Minecraft;
+*///? } else {
+import net.minecraft.client.gui.Gui;
+//? }
+
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     public LocalPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
@@ -25,10 +29,28 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     }
 
     @WrapOperation(
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"),
+        at = @At(
+            value = "INVOKE",
+            //? if minecraft: <= 26.1 {
+            /*target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"
+            *///? } else {
+            target = "Lnet/minecraft/client/gui/Gui;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"
+            //? }
+        ),
         method = "openItemGui"
     )
-    private void eg_bedrock_books$modifyBookScreen(Minecraft instance, Screen old, Operation<Void> original, ItemStack stack, InteractionHand hand, @Local WritableBookContent writableBookContent) {
+    private void eg_bedrock_books$modifyBookScreen(
+        //? if minecraft: <= 26.1 {
+        /*Minecraft instance,
+        *///? } else {
+        Gui instance,
+        //? }
+        Screen old,
+        Operation<Void> original,
+        ItemStack stack,
+        InteractionHand hand,
+        @Local WritableBookContent writableBookContent
+    ) {
         if(ScreenUtil.shouldOpenVanillaEditScreen()) {
             original.call(instance, old);
             return;

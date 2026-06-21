@@ -14,6 +14,7 @@ import games.enchanted.eg_bedrock_books.common.screen.widget.config.KeyBox;
 import games.enchanted.eg_bedrock_books.common.screen.widget.scroll.ConfigList;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.DummyTextAreaView;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
+import games.enchanted.eg_bedrock_books.common.util.ScreenUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -442,20 +443,20 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
 
     protected void resetWithConfirmation() {
         ConfirmScreen confirmScreen = new ConfirmScreen(confirmed -> {
-            Minecraft.getInstance().setScreen(this);
+            ScreenUtil.setScreen(this.minecraft, this);
             if(!confirmed) {
                 return;
             }
             ConfigOptions.resetAndSaveAllOptions();
-            Minecraft.getInstance().setScreen(new ConfigScreen(this.returnScreen, this.alwaysBlurBackground));
+            ScreenUtil.setScreen(this.minecraft, new ConfigScreen(this.returnScreen, this.alwaysBlurBackground));
         }, RESET_TITLE_COMPONENT, RESET_MESSAGE_COMPONENT);
-        Minecraft.getInstance().setScreen(confirmScreen);
+        ScreenUtil.setScreen(this.minecraft, confirmScreen);
     }
 
     @Override
     public void onClose() {
-        if(this.minecraft != null && this.returnScreen != null) {
-            this.minecraft.setScreen(returnScreen);
+        if(this.returnScreen != null) {
+            ScreenUtil.setScreen(this.minecraft, this.returnScreen);
         }
         if(this.saveWhenOnCloseCalled) {
             ConfigOptions.saveIfAnyDirtyOptions();
@@ -512,8 +513,8 @@ public class ConfigScreen extends AbstractBedrockBookScreen<String, TextAreaView
         return new ConfigScreen(returnScreen);
     }
 
-    public static void openConfigScreen(@Nullable Screen returnScreen) {
-        Minecraft.getInstance().setScreen(makeScreen(returnScreen));
+    public static void openConfigScreen(Minecraft minecraft, @Nullable Screen returnScreen) {
+        ScreenUtil.setScreen(minecraft, makeScreen(returnScreen));
     }
 
     @Override

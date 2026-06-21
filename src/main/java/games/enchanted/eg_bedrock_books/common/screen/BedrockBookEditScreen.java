@@ -4,6 +4,7 @@ import games.enchanted.eg_bedrock_books.common.ModConstants;
 import games.enchanted.eg_bedrock_books.common.duck.BookSignScreenAdditions;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.MultilineEditBoxView;
 import games.enchanted.eg_bedrock_books.common.screen.widget.text.TextAreaView;
+import games.enchanted.eg_bedrock_books.common.util.ScreenUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineEditBox;
@@ -57,12 +58,10 @@ public class BedrockBookEditScreen extends AbstractBedrockBookScreen<String, Tex
     @Override
     protected void makeFooterButtons() {
         this.footerButtonLayout.addChild(Button.builder(CommonComponents.GUI_CANCEL, button -> {
-            assert this.minecraft != null;
-            this.minecraft.setScreen(null);
+            ScreenUtil.setScreen(this.minecraft, null);
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SIGN_BUTTON_COMPONENT, button -> {
-            assert this.minecraft != null;
-            this.minecraft.setScreen(this.bookSignScreen);
+            ScreenUtil.setScreen(this.minecraft, this.bookSignScreen);
         }).width(FOOTER_BUTTON_WIDTH).build());
         this.footerButtonLayout.addChild(Button.builder(SAVE_BUTTON_COMPONENT, button -> {
             this.onClose();

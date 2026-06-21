@@ -6,6 +6,11 @@ plugins {
     id("maven-publish")
 }
 
+stonecutter {
+    val (version, loader) = current.project.split('-', limit = 2)
+    properties.tags(version, loader)
+}
+
 val minecraft = stonecutter.current.version
 val mcVersion = stonecutter.current.project.substringBeforeLast('-')
 
@@ -38,9 +43,6 @@ repositories {
 }
 
 dependencies {
-}
-
-stonecutter {
 }
 
 neoForge {

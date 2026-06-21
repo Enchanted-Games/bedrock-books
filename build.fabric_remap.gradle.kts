@@ -6,6 +6,11 @@ plugins {
     id("maven-publish")
 }
 
+stonecutter {
+    val (version, loader) = current.project.split('-', limit = 2)
+    properties.tags(version, loader)
+}
+
 val minecraft = stonecutter.current.version
 val mcVersion = stonecutter.current.project.substringBeforeLast('-')
 val classTweakerFilepath = "src/main/resources/${property("mod.id")}.classtweaker"
@@ -56,9 +61,6 @@ dependencies {
     } else {
         modCompileOnly("com.terraformersmc:modmenu:15.0.0-beta.3")
     }
-}
-
-stonecutter {
 }
 
 loom {

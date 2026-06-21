@@ -10,8 +10,12 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(AbstractWidget.class)
 public class AbstractWidgetMixin {
-    @WrapOperation(
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/AbstractWidget;getRectangle()Lnet/minecraft/client/gui/navigation/ScreenRectangle;"),
+    //? if minecraft: <= 26.1 {
+    /*@WrapOperation(
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/components/AbstractWidget;getRectangle()Lnet/minecraft/client/gui/navigation/ScreenRectangle;"
+        ),
         method = "extractRenderState"
     )
     private ScreenRectangle eg_bedrock_books$overrideRectangle(AbstractWidget instance, Operation<ScreenRectangle> original) {
@@ -20,4 +24,5 @@ public class AbstractWidgetMixin {
         }
         return original.call(instance);
     }
+    *///? }
 }
