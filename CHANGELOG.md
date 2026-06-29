@@ -1,3 +1,3 @@
-# 1.1.2
+# 1.2.0
 
-- Updated to 26.2
+- Added better compatibility with other mods that open a vanilla book view screen by directly contracting an instance of BookViewScreen
